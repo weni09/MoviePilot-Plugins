@@ -29,7 +29,7 @@ class ShortPlayCategory(_PluginBase):
     # 插件版本
     plugin_version = "1.0"
     # 插件作者
-    plugin_author = "jxxghp,longqiuyu,weni09"
+    plugin_author = "weni09"
     # 作者主页
     author_url = "https://github.com/weni09/MoviePilot-Plugins"
     # 插件配置项ID前缀
