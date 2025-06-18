@@ -1,14 +1,14 @@
 {
-    "ShortPlayCategory": {
-        "name": "短剧自动分类_改",
-        "description": "网络短剧自动整理到独立的分类目录。",
-        "labels": "文件整理",
+    "SeedCleaner": {
+        "name": "种子清理工",
+        "description": "清理transmission/qbittorrent种子和源文件。",
+        "labels": "插件工具",
         "version": "1.0",
-        "icon": "Amule_B.png",
+        "icon": "delete.jpg",
         "author": "weni09",
         "level": 1,
         "history": {
-            "v1.0": "基于官方短剧自动分类修复部分BUG，原作者：jxxghp,longqiuyu"
+            "v1.0": "初版种子清理工插件，使用Vue编写联邦远程模块"
         }
     }
 }
