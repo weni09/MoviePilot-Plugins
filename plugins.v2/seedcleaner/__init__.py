@@ -225,7 +225,6 @@ class SeedCleaner(_PluginBase):
         fields = [
             str(info["total_size"]),
             str(info["name"]),
-            str(info["piece_length"]),
             str(info["file_num"]),
             str(info["first_file"]),
             str(info["end_file"]),
