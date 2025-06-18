@@ -195,6 +195,7 @@ class SeedCleaner(_PluginBase):
                 torrent_info["total_size"] = info[b'length']
                 files.append((info[b'name'].decode(), info[b'length']))
             torrent_info["file_num"] = len(files)
+            files.sort(key=lambda x: x[0] + str(file[1]))
             torrent_info["first_file"] = list(files[0])
             torrent_info["end_file"] = list(files[-1])
             # 种子名称
