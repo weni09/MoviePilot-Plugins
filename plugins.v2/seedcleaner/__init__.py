@@ -356,7 +356,7 @@ class SeedCleaner(_PluginBase):
         save_path = self.get_data_path() / TORRENT_INFO_FILE_NAME
         json_handler = JsonHandler(save_path)
         if search_info.existingSeedData and json_handler.load_from_json():
-            logger.debug(f"从存量数据获取种子信息")
+            logger.info(f"从存量数据获取种子信息")
             self.torrent_info_dict = json_handler.load_from_json()
         else:
             self.scan_torrent_resume_file()
@@ -464,7 +464,7 @@ class SeedCleaner(_PluginBase):
         return False
 
     def start_clear(self, clear_info_list: List[ClearModel]):
-        logger.debug(f"开始清理,清理参数:{len(clear_info_list)}")
+        logger.info(f"开始清理,清理参数:{len(clear_info_list)},第一个:{clear_info_list[0]}")
         delete_path_set = set()
         for clear_info in clear_info_list:
             if clear_info.type == "torrent":
@@ -484,6 +484,7 @@ class SeedCleaner(_PluginBase):
                         delete_path_set.add(file_path)
             elif clear_info.type == "file":
                 delete_path_set.add(Path(clear_info.path))
+        logger.log("DEBUG", f"删除路径: {len(delete_path_set)},{delete_path_set[0]}")
         for path in delete_path_set:
             if path.exists():
                 try:
