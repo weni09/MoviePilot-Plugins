@@ -3,11 +3,12 @@
         "name": "种子清理工",
         "description": "清理transmission/qbittorrent种子和源文件。",
         "labels": "插件工具",
-        "version": "1.1.1",
+        "version": "1.1.2",
         "icon": "delete.png",
         "author": "weni09",
         "level": 1,
         "history": {
+            "v1.1.2": "增加配置的打印日志，方便排查问题",
             "v1.1.1": "修复：清理后重新扫描仍然存在种子信息的问题；测试qb种子识别问题;",
             "v1.1": "修复种子中文件列表排序问题造成的索引计算错误问题",
             "v1.0": "初版种子清理工插件，使用Vue编写联邦远程模块"

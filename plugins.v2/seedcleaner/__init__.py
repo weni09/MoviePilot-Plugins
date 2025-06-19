@@ -24,7 +24,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.1.1"
+    plugin_version = "1.1.2"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -43,7 +43,7 @@ class SeedCleaner(_PluginBase):
     def init_plugin(self, config: dict = None):
         if config:
             self._config = ConfigModel(**config)
-            logger.debug(f"初始化配置>>_config: {self._config}")
+            logger.info(f"初始化配置>>_config: {self._config}")
 
     def get_state(self) -> bool:
         return self._config.enable
@@ -236,6 +236,7 @@ class SeedCleaner(_PluginBase):
         def _do_scan(torrent_dir: Path, resume_dir: Path, client: str):
             for torrent_path in torrent_dir.glob("*.torrent"):
                 if not torrent_path.exists():
+                    logger.warning(f"[WARN] 种子文件不存在 {torrent_path},跳过")
                     continue
                 torrent_info = self._get_info_from_torrent(torrent_path)
                 if not torrent_info["info_hash"]:
@@ -257,16 +258,21 @@ class SeedCleaner(_PluginBase):
                 self.torrent_info_dict[torrent_info["info_hash"]] = torrent_info_all
 
         self.torrent_info_dict = {} # 每次执行扫描前置空
+        logger.info(f"开始扫描-当前配置: {self._config}")
         if self._config.qbittorrent_paths:
             qb_path_list = self._get_path_list(self._config.qbittorrent_paths)
             for qb_torrent_dir in qb_path_list:
                 if qb_torrent_dir.exists():
                     qb_resume_dir = qb_torrent_dir
+                    logger.info(f"QB种子目录:{qb_torrent_dir},{qb_torrent_dir.exists()},"
+                                f"resume目录:{qb_resume_dir},{qb_resume_dir.exists()}")
                     _do_scan(qb_torrent_dir, qb_resume_dir, DOWNLOADER_CONFIG["QB_NAME"])
         if self._config.transmission_paths:
             tr_path_list = self._get_path_list(self._config.transmission_paths)
             for tr_torrent_dir in tr_path_list:
                 tr_resume_dir = tr_torrent_dir.parent / "resume"
+                logger.info(f"TR种子目录:{tr_torrent_dir},{tr_torrent_dir.exists()},"
+                            f"resume目录:{tr_resume_dir},{tr_resume_dir.exists()}")
                 if tr_resume_dir.exists() and tr_torrent_dir.exists():
                     _do_scan(tr_torrent_dir, tr_resume_dir, DOWNLOADER_CONFIG["TR_NAME"])
 
