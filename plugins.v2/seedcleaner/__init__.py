@@ -22,7 +22,7 @@ class SeedCleaner(_PluginBase):
     # 插件描述
     plugin_desc = "清理transmission/qbittorrent种子和源文件"
     # 插件图标
-    plugin_icon = "delete.jpg"
+    plugin_icon = "delete.png"
     # 插件版本
     plugin_version = "1.1.1"
     # 插件作者
