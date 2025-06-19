@@ -398,6 +398,7 @@ class SeedCleaner(_PluginBase):
         else:
             missingFiles = []
         res_dict = {}
+        res_list = []
         self.unique_torrents = {}
         for key, torrent_info in torrent_all_info.items():
             torrent_info["removeOption"] = search_info.removeOption  # 种子信息添加删除选项
@@ -419,9 +420,9 @@ class SeedCleaner(_PluginBase):
                 if not self._is_tracer_match(TorrentInfoModel(**torrent_info), tracker_list) and key in res_dict.keys():
                     res_dict.pop(key)
             if len(res_dict) > 0 and key in res_dict.keys():
-                value = deepcopy(res_dict[key])
+                value = res_dict[key]
                 try:
-                    res_dict[key] = {
+                    res_list.append({
                         "type": "torrent",
                         "client": value.get("client", ""),
                         "data_missing": value.get("data_missing", False),
@@ -429,13 +430,13 @@ class SeedCleaner(_PluginBase):
                         "size": int(value.get("total_size", "0")) or 0,
                         "name": value.get("name", ""),
                         "removeOption": value.get("removeOption", ALL_SELECTED),
-                    }
+                    })
                 except AttributeError as e:
                     logger.error(f"处理种子信息出错: {key}")
                     continue
 
         # 结构统一化
-        combined = list(res_dict.values()) + missingFiles
+        combined = res_list + missingFiles
         total = len(combined)
         combined.sort(key=lambda x: x.get("hash", "").lower())
         paginated_combined = combined[(page - 1) * limit: page * limit]
@@ -443,7 +444,7 @@ class SeedCleaner(_PluginBase):
         res = {
             "combined_list": paginated_combined,
             "total": total,
-            "t_total": len(res_dict),
+            "t_total": len(res_list),
             "m_total": len(missingFiles),
             "page": page,
             "page_size": limit
