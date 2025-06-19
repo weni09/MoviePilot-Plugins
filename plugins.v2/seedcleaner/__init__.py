@@ -24,7 +24,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.jpg"
     # 插件版本
-    plugin_version = "1.1"
+    plugin_version = "1.1.1"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -235,6 +235,8 @@ class SeedCleaner(_PluginBase):
     def scan_torrent_resume_file(self):
         def _do_scan(torrent_dir: Path, resume_dir: Path, client: str):
             for torrent_path in torrent_dir.glob("*.torrent"):
+                if not torrent_path.exists():
+                    continue
                 torrent_info = self._get_info_from_torrent(torrent_path)
                 if not torrent_info["info_hash"]:
                     continue
@@ -247,13 +249,14 @@ class SeedCleaner(_PluginBase):
                 torrent_info_all = {
                                        "client": client,
                                        "torrent_path": str(torrent_path),
-                                       "resume_path": str(resume_path) if resume_path.exists() else None,
+                                       "resume_path": str(resume_path) if resume_path.exists() else "",
                                        "save_path": str(save_path),
                                        "data_missing": not data_path.exists()
                                    } | torrent_info
                 torrent_info_all["index"] = self._generate_index_hash(torrent_info)
                 self.torrent_info_dict[torrent_info["info_hash"]] = torrent_info_all
 
+        self.torrent_info_dict = {} # 每次执行扫描前置空
         if self._config.qbittorrent_paths:
             qb_path_list = self._get_path_list(self._config.qbittorrent_paths)
             for qb_torrent_dir in qb_path_list:
@@ -333,7 +336,7 @@ class SeedCleaner(_PluginBase):
         # 3. 构造预期的数据路径集合 expected_paths = save_path + name
         expected_paths = set()
         for record in self.torrent_info_dict.values():
-            save_path = Path(record["save_path"]) if record.get("save_path") else None
+            save_path = Path(record.get("save_path", ""))
             name = record.get("name")
             if save_path and name:
                 expected_path = save_path / name
@@ -367,7 +370,7 @@ class SeedCleaner(_PluginBase):
         查找 index 值在整个 file_info_dict 中唯一的种子信息
         :return: {info_hash: torrent_info} 的子集
         """
-        if len(self.unique_torrents)>0:
+        if len(self.unique_torrents) > 0:
             return self.unique_torrents
         # 1. 统计每个 index 出现的次数
         index_count = defaultdict(int)
@@ -389,13 +392,12 @@ class SeedCleaner(_PluginBase):
             torrent_all_info = self.torrent_info_dict
         else:
             torrent_all_info = self.get_all_torrent_info(search_info)
-        logger.debug(f"获取到所有种子信息: {torrent_all_info.values().__len__()}")
+        logger.info(f"获取到所有种子信息: {torrent_all_info.values().__len__()}")
         if search_info.missingOptions.seed:
             missingFiles = self.find_extra_data_list()
         else:
             missingFiles = []
         res_dict = {}
-        res_list = []
         self.unique_torrents = {}
         for key, torrent_info in torrent_all_info.items():
             torrent_info["removeOption"] = search_info.removeOption  # 种子信息添加删除选项
@@ -417,31 +419,31 @@ class SeedCleaner(_PluginBase):
                 if not self._is_tracer_match(TorrentInfoModel(**torrent_info), tracker_list) and key in res_dict.keys():
                     res_dict.pop(key)
             if len(res_dict) > 0 and key in res_dict.keys():
-                value = res_dict[key]
+                value = deepcopy(res_dict[key])
                 try:
-                    res_list.append({
+                    res_dict[key] = {
                         "type": "torrent",
                         "client": value.get("client", ""),
                         "data_missing": value.get("data_missing", False),
                         "hash": value.get("info_hash", ""),
                         "size": int(value.get("total_size", "0")) or 0,
                         "name": value.get("name", ""),
-                        "removeOption": value.get("removeOption", False),
-                    })
+                        "removeOption": value.get("removeOption", ALL_SELECTED),
+                    }
                 except AttributeError as e:
                     logger.error(f"处理种子信息出错: {key}")
                     continue
 
         # 结构统一化
-        combined = res_list + missingFiles
+        combined = list(res_dict.values()) + missingFiles
         total = len(combined)
         combined.sort(key=lambda x: x.get("hash", "").lower())
         paginated_combined = combined[(page - 1) * limit: page * limit]
-        logger.debug(f"扫描结果数量: {len(combined)}, 返回第 {page} 页")
+        logger.info(f"扫描结果数量: {len(combined)}, 返回第 {page} 页")
         res = {
             "combined_list": paginated_combined,
             "total": total,
-            "t_total": len(res_list),
+            "t_total": len(res_dict),
             "m_total": len(missingFiles),
             "page": page,
             "page_size": limit
@@ -464,7 +466,7 @@ class SeedCleaner(_PluginBase):
         return False
 
     def start_clear(self, clear_info_list: List[ClearModel]):
-        logger.info(f"开始清理,清理参数:{len(clear_info_list)},第一个:{clear_info_list[0]}")
+        logger.info(f"开始清理,预清理个数:{len(clear_info_list)}")
         delete_path_set = set()
         for clear_info in clear_info_list:
             if clear_info.type == "torrent":
@@ -484,7 +486,7 @@ class SeedCleaner(_PluginBase):
                         delete_path_set.add(file_path)
             elif clear_info.type == "file":
                 delete_path_set.add(Path(clear_info.path))
-        logger.log("DEBUG", f"删除路径: {len(delete_path_set)},{delete_path_set[0]}")
+        logger.info(f"删除路径数: {len(delete_path_set)}")
         for path in delete_path_set:
             if path.exists():
                 try:
@@ -500,6 +502,8 @@ class SeedCleaner(_PluginBase):
                         "success": False,
                         "message": f"删除文件(夹)失败: {e}"
                     }
+            else:
+                logger.warning(f"文件(夹)不存在: {path}")
         return {
             "success": True,
             "message": "OK"
