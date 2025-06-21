@@ -92,8 +92,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
         alert("请填写所有必填字段");
         return;
       }
-      if (!newDl.host.startsWith("http://") || !newDl.host.startsWith("https://)")) {
+      if (!newDl.host.startsWith("http://") && !newDl.host.startsWith("https://)")) {
         alert("请填写正确的下载器地址: http:// 或 https:// 开头");
+        return;
       }
       const exists = editableConfig.downloaders.custom.some((d) => d.name === newDl.name);
       if (exists) {
@@ -561,6 +562,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-38d5e725"]]);
+const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-cb54fa19"]]);
 
 export { ConfigComponent as default };
