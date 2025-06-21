@@ -14,15 +14,15 @@ class DownloaderInfoModel(BaseModel):
 
 
 class DownloaderModel(BaseModel):
-    system: List[DownloaderInfoModel] = []
-    custom: List[DownloaderInfoModel] = []
+    system: List[DownloaderInfoModel] = [DownloaderInfoModel()]
+    custom: List[DownloaderInfoModel] = [DownloaderInfoModel()]
 
 
 class ConfigModel(BaseModel):
     enable: bool = True
     exclude_paths: str = ""
     extra_dir_paths: str = ""
-    downloaders: DownloaderModel = None
+    downloaders: DownloaderModel = DownloaderModel()
 
 
 class MissingOptions(BaseModel):
