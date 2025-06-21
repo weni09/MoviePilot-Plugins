@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Optional, Union, Literal
 from urllib.parse import urlparse
 
 from transmission_rpc import Client
@@ -18,7 +18,15 @@ class TransmissionHandler:
     def connect(self, host='localhost', port=9091, username: str = "", password: str = ""):
         """连接到Transmission"""
         try:
+            protocol: Literal["http", "https"] = "http"
+            if host.startswith(("http://", "https://")):
+                parsed_url = urlparse(host)
+                scheme = parsed_url.scheme
+                if scheme in ("http", "https"):
+                    protocol = scheme
+                host = parsed_url.hostname or host
             self.client = Client(
+                protocol=protocol,
                 host=host,
                 port=port,
                 username=username,
@@ -30,7 +38,7 @@ class TransmissionHandler:
                 f"RPC-API最小支持版本:{self.client.get_session().rpc_version_minimum}")
             return True
         except Exception as e:
-            logger.err(f"连接{TRANSMISSION}:{host}:{port}失败: {e}")
+            logger.error(f"连接{TRANSMISSION}:{host}:{port}失败: {e}")
             return False
 
     def disconnect(self):

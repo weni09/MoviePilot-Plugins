@@ -1,42 +1,42 @@
 
-.plugin-config[data-v-cb54fa19] {
+.plugin-config[data-v-066d88c2] {
   margin: 0 auto;
   padding: 0.5rem;
 }
-.bg-primary-lighten-5[data-v-cb54fa19] {
+.bg-primary-lighten-5[data-v-066d88c2] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-cb54fa19] {
+.border[data-v-066d88c2] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.config-card[data-v-cb54fa19] {
+.config-card[data-v-066d88c2] {
   background-image: linear-gradient(to right, rgba(var(--v-theme-surface), 0.98), rgba(var(--v-theme-surface), 0.95)),
   repeating-linear-gradient(45deg, rgba(var(--v-theme-primary), 0.03), rgba(var(--v-theme-primary), 0.03) 10px, transparent 10px, transparent 20px);
   background-attachment: fixed;
   box-shadow: 0 1px 2px rgba(var(--v-border-color), 0.05) !important;
   transition: all 0.3s ease;
 }
-.config-card[data-v-cb54fa19]:hover {
+.config-card[data-v-066d88c2]:hover {
   box-shadow: 0 3px 6px rgba(var(--v-border-color), 0.1) !important;
 }
-.downloader-list[data-v-cb54fa19]{
+.downloader-list[data-v-066d88c2]{
   max-height: 17rem;
   overflow-y: scroll;
 }
-.setting-item[data-v-cb54fa19] {
+.setting-item[data-v-066d88c2] {
   border-radius: 8px;
   transition: all 0.2s ease;
   padding: 0.5rem;
   margin-bottom: 4px;
 }
-.setting-item[data-v-cb54fa19]:hover {
+.setting-item[data-v-066d88c2]:hover {
   background-color: rgba(var(--v-theme-primary), 0.03);
 }
-.small-switch[data-v-cb54fa19] {
+.small-switch[data-v-066d88c2] {
   transform: scale(0.8);
   margin-right: -8px;
 }
-.text-subtitle-1[data-v-cb54fa19] {
+.text-subtitle-1[data-v-066d88c2] {
   font-size: 1.1rem !important;
   font-weight: 500;
   margin-bottom: 2px;

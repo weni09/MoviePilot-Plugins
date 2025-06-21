@@ -22,7 +22,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.2.3"
+    plugin_version = "1.2.4"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -158,7 +158,7 @@ class SeedCleaner(_PluginBase):
                     res.system.append(DownloaderInfoModel(
                         name=downloader.get("name", ""),
                         type=downloader.get("type", ""),
-                        host=url.hostname,
+                        host=url.scheme + "://" + url.hostname,
                         port=url.port,
                         username=downloader['config'].get("username", ""),
                         password=downloader['config'].get("password", ""),

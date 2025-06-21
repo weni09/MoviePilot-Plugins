@@ -131,7 +131,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
         state.selectedSystemDownloaderNames = state.selectedSystemDownloaderNames.filter((name) => name !== deleteItem.name);
         editableConfig.downloaders.system.splice(index, 1);
       } else {
-        editableConfig.downloaders.custom.splice(index, 1);
+        console.log("删除自定义下载器:", index, type);
+        let _index = index - editableConfig.downloaders.system.length;
+        editableConfig.downloaders.custom.splice(_index, 1);
       }
     }
     const saveFullConfig = async () => {
@@ -562,6 +564,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-cb54fa19"]]);
+const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-066d88c2"]]);
 
 export { ConfigComponent as default };
