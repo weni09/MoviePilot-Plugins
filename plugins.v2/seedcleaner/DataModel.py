@@ -14,8 +14,8 @@ class DownloaderInfoModel(BaseModel):
 
 
 class DownloaderModel(BaseModel):
-    system: List[DownloaderInfoModel] = [DownloaderInfoModel()]
-    custom: List[DownloaderInfoModel] = [DownloaderInfoModel()]
+    system: List[DownloaderInfoModel] = []
+    custom: List[DownloaderInfoModel] = []
 
 
 class ConfigModel(BaseModel):
