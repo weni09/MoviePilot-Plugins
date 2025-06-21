@@ -142,19 +142,21 @@ class SeedCleaner(_PluginBase):
         获取系统下载器
         """
         try:
-            res = DownloaderModel(system=[], custom=[])
+            res = DownloaderModel()
             if config_type == DOWNLOADER_CONFIG_TYPE_SYSTEM:
                 system_downloaders = self.systemconfig.get("Downloaders")
                 if not system_downloaders:
                     return res
-                logger.debug(f"system_downloaders:{system_downloaders}")
+                logger.info(f"system_downloaders:{system_downloaders}")
                 for downloader in system_downloaders:
-                    url = urlparse(downloader['config'].get("host", ""))
+                    url = urlparse(downloader['config'].get("host"))
+                    host = url.hostname or "localhost"  # 默认值
+                    port = int(url.port) if url.port else 80
                     res.system.append(DownloaderInfoModel(
                         name=downloader.get("name", ""),
                         type=downloader.get("type", ""),
-                        host=url.hostname,
-                        port=url.port,
+                        host=host,
+                        port=port,
                         username=downloader['config'].get("username", ""),
                         password=downloader['config'].get("password", ""),
                     ))
