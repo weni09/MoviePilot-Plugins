@@ -1,19 +1,17 @@
 import hashlib
-import json
 import shutil
 from collections import defaultdict
-from copy import deepcopy
 from pathlib import Path
-from typing import List, Dict, Any, Tuple, Optional, Iterable
+from typing import Dict, Optional, Any
 from urllib.parse import urlparse
 
-from app.plugins import _PluginBase
 from app.log import logger
-from pydantic import BaseModel, Field
-import bencodepy
+from app.plugins import _PluginBase
+from app.plugins.seedcleaner.DataModel import *
 from app.plugins.seedcleaner.DefinedConsts import *
-from app.plugins.seedcleaner.DataModel import (ConfigModel, TorrentInfoModel, SearchModel, ClearModel)
 from app.plugins.seedcleaner.JsonHandler import JsonHandler
+from app.plugins.seedcleaner.QbittorrentHandler import QbittorrentHandler
+from app.plugins.seedcleaner.TransmissionHandler import TransmissionHandler
 
 
 class SeedCleaner(_PluginBase):
@@ -24,7 +22,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.1.2"
+    plugin_version = "1.2.0"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -37,21 +35,20 @@ class SeedCleaner(_PluginBase):
     auth_level = 1
 
     _config: ConfigModel = ConfigModel()
-    torrent_info_dict: Dict[str, Any] = {}
-    unique_torrents: Dict[str, Any] = {}
+    torrent_info_dict: Dict[str, TorrentModel] = {}
 
     def init_plugin(self, config: dict = None):
         if config:
             self._config = ConfigModel(**config)
-            logger.info(f"初始化配置>>_config: {self._config}")
+            logger.info(f"初始化配置_config: {self._config}")
 
     def get_state(self) -> bool:
         return self._config.enable
 
     # --- Instance methods for API endpoints ---
-    def _get_config(self) -> Dict[str, Any]:
+    def _get_config(self) -> ConfigModel:
         """API Endpoint: Returns current plugin configuration."""
-        return self._config.dict()
+        return self._config
 
     def _get_status(self) -> Dict[str, Any]:
         """API Endpoint: Returns current plugin status and history."""
@@ -59,27 +56,28 @@ class SeedCleaner(_PluginBase):
             "enabled": self._config.enable
         }
 
-    def _save_config(self, config_payload: dict) -> Dict[str, Any]:
+    def save_config(self, config_payload: ConfigModel) -> ResponseModel:
         """API Endpoint: Saves plugin configuration. Expects a dict payload."""
         logger.debug(f"{self.plugin_name}: 收到配置保存请求: {config_payload}")
         try:
-            self._config = ConfigModel(**config_payload)
+            self._config = config_payload
             # 保存配置
             self.update_config(self._config.dict())
             # 重新初始化插件
             self.init_plugin(self.get_config())
             logger.info(
-                f"{self.plugin_name}: 配置已保存并通过 init_plugin 重新初始化。当前内存状态: enable={self._config.enable}")
+                f"{self.plugin_name}: 配置已保存并通过 init_plugin 重新初始化。"
+                f"当前内存状态: enable={self._config.enable}")
             # 返回最终状态
-            return {"message": "配置保存成功", "saved_config": self._get_config()}
+            return ResponseSuccessModel(message="配置保存成功")
         except Exception as e:
             logger.error(f"{self.plugin_name}: 保存配置时发生错误: {e}", exc_info=True)
-            return {"message": f"配置保存失败: {e}", "error": True, "saved_config": self._get_config()}
+            return ResponseFailedModel(message=f"配置保存失败: {e}")
 
     def get_form(self) -> Tuple[Optional[List[dict]], Dict[str, Any]]:
         """Returns None for Vue form, but provides initial config data."""
         # This dict is passed as initialConfig to Config.vue by the host
-        return None, self._get_config()
+        return None, self._get_config().dict()
 
     def get_page(self) -> Optional[List[dict]]:
         """Vue mode doesn't use Vuetify page definitions."""
@@ -97,7 +95,7 @@ class SeedCleaner(_PluginBase):
             },
             {
                 "path": "/config",
-                "endpoint": self._save_config,
+                "endpoint": self.save_config,
                 "methods": ["POST"],
                 "auth": "bear",
                 "summary": "保存配置"
@@ -116,6 +114,13 @@ class SeedCleaner(_PluginBase):
                 "auth": "bear",
                 "summary": "清理种子和文件"
             },
+            {
+                "path": "/downloader",
+                "endpoint": self.get_downloader_config,
+                "methods": ["GET"],
+                "auth": "bear",
+                "summary": "获取下载器配置"
+            },
         ]
 
     @staticmethod
@@ -129,157 +134,99 @@ class SeedCleaner(_PluginBase):
         return []  # No commands defined for this plugin
 
     def stop_service(self):
-        logger.info(f"{self.plugin_name} 停止服务,当前插件无后台服务...")
+        logger.info(f"{self.plugin_name} 停止服务,当前插件无后台服务....")
+        return
+
+    def get_downloader_config(self, config_type: str = ALL_SELECTED) -> DownloaderModel:
+        """
+        获取系统下载器
+        """
+        res = DownloaderModel(system=[], custom=[])
+        if config_type == DOWNLOADER_CONFIG_TYPE_SYSTEM:
+            system_downloaders = self.systemconfig.get("Downloaders")
+            if not system_downloaders:
+                return res
+            logger.debug(f"system_downloaders:{system_downloaders}")
+            for downloader in system_downloaders:
+                url = urlparse(downloader['config'].get("host", ""))
+                res.system.append(DownloaderInfoModel(
+                    name=downloader.get("name", ""),
+                    type=downloader.get("type", ""),
+                    host=url.hostname,
+                    port=url.port,
+                    username=downloader['config'].get("username", ""),
+                    password=downloader['config'].get("password", ""),
+                ))
+        elif config_type == DOWNLOADER_CONFIG_TYPE_CUSTOM:
+            res.custom = self._config.downloaders.custom
+        else:
+            res.system = self._config.downloaders.system
+            res.custom = self._config.downloaders.custom
+        return res
 
     @staticmethod
     def _get_path_list(path_str: str = "", sep=";") -> List[Path]:
         path_str_list = path_str.split(sep)
         return [Path(path) for path in path_str_list if path]
 
-    def _get_tracker_domains(self, data: Iterable):
-        announce = data.get(b'announce')
-        announce_list = data.get(b'announce-list', [])
-
-        trackers = set()
-
-        def _get_domain(url):
-            try:
-                parsed = urlparse(url)
-                if parsed.hostname:
-                    return parsed.hostname
-                else:
-                    return ""
-            except Exception as e:
-                return ""
-
-        if announce:
-            domain = _get_domain(announce.decode())
-            trackers.add(domain)
-        if announce_list:
-            for tier in announce_list:
-                if isinstance(tier, list):
-                    for url in tier:
-                        domain = _get_domain(url.decode())
-                        trackers.add(domain)
-                else:
-                    domain = _get_domain(url.decode())
-                    trackers.add(domain)
-        return list(trackers)
-
-    def _get_info_from_torrent(self, torrent_path: Path) -> dict:
-        torrent_info = {"info_hash": "",
-                        "total_size": "",
-                        "name": "",
-                        "piece_length": 0,
-                        "file_num": 0,
-                        "first_file": [],
-                        "end_file": [],
-                        "trackers": []
-                        }
-        try:
-            with torrent_path.open('rb') as f:
-                data = bencodepy.decode(f.read())
-            trackers = self._get_tracker_domains(data)
-            torrent_info["trackers"] = trackers
-            info = data[b'info']
-            encoded_info = bencodepy.encode(info, encoding="utf-8")
-            torrent_info["info_hash"] = hashlib.sha1(encoded_info).hexdigest()
-            # 总大小
-            files = []
-            if b'files' in info:
-                torrent_info["total_size"] = sum(f[b'length'] for f in info[b'files'])
-                for file in info[b'files']:
-                    path = "/".join(p.decode() for p in file[b'path'])
-                    files.append((path, file[b'length']))
-            else:
-                torrent_info["total_size"] = info[b'length']
-                files.append((info[b'name'].decode(), info[b'length']))
-            torrent_info["file_num"] = len(files)
-            files.sort(key=lambda x: x[0] + str(x[1]))
-            torrent_info["first_file"] = list(files[0])
-            torrent_info["end_file"] = list(files[-1])
-            # 种子名称
-            torrent_info["name"] = info[b'name'].decode('utf-8', errors='ignore')
-            torrent_info["piece_length"] = info[b'piece length']
-        except Exception as e:
-            logger.error(f"[ERROR] 解析种子失败 {torrent_path}: {e}")
-        return torrent_info
-
-    def _parse_resume_file(self, resume_path: Path, client: str) -> Path | None:
-        try:
-            with resume_path.open('rb') as f:
-                data = bencodepy.decode(f.read())
-            if client == DOWNLOADER_CONFIG["QB_NAME"] and b'save_path' in data:
-                return Path(data[b'save_path'].decode('utf-8'))
-            if client == DOWNLOADER_CONFIG["TR_NAME"] and b'destination' in data:
-                return Path(data[b'destination'].decode('utf-8'))
-        except Exception as e:
-            logger.warning(f"[WARN] 读取resume文件失败 {resume_path}: {e}")
-        return
-
-    def _generate_index_hash(self, info: dict) -> str:
+    @staticmethod
+    def _generate_index_hash(info: TorrentModel) -> str:
         """
             索引计算，用作惟一性判断
-            根据 total_size, name, piece_length, file_num, first_file, end_file 计算 hash 值
+            根据 total_size, name, file_count, first_file, end_file 计算 hash 值
         """
         fields = [
-            str(info["total_size"]),
-            str(info["name"]),
-            str(info["file_num"]),
-            str(info["first_file"]),
-            str(info["end_file"]),
+            str(info.total_size),
+            str(info.name),
+            str(info.file_count),
+            str(info.first_file),
+            str(info.end_file),
         ]
         combined = "|".join(fields)
-        return hashlib.sha1(combined.encode("utf-8")).hexdigest()
+        return hashlib.sha1(combined.encode("utf-8")).hexdigest().lower()
 
-    def scan_torrent_resume_file(self):
-        def _do_scan(torrent_dir: Path, resume_dir: Path, client: str):
-            for torrent_path in torrent_dir.glob("*.torrent"):
-                if not torrent_path.exists():
-                    logger.warning(f"[WARN] 种子文件不存在 {torrent_path},跳过")
+    def get_download_list(self) -> List[DownloaderInfoModel]:
+        downloaders = self._config.downloaders
+        all_downloaders = downloaders.system + downloaders.custom
+        url_list = []
+        res: List[DownloaderInfoModel] = []
+        if not all_downloaders:
+            return []
+        for downloader in all_downloaders:
+            url = f"{downloader.host}:{downloader.port}"
+            if url not in url_list:
+                res.append(downloader)
+                url_list.append(url)
+        return res
+
+    def add_index_for_torrents(self):
+        logger.info(f"为所有种子添加索引")
+        for _, value in self.torrent_info_dict.items():
+            if not value.index:
+                value.index = self._generate_index_hash(value)
+
+    def scan_all_torrents_by_downloader(self):  # 扫描所有种子信息从下载器中
+        downloader_list = self.get_download_list()
+        for dl in downloader_list:
+            try:
+                if dl.type == TRANSMISSION:
+                    downloader = TransmissionHandler(dl.name)
+                else:
+                    downloader = QbittorrentHandler(dl.name)
+                if not downloader.connect(dl.host, dl.port, dl.username, dl.password):
                     continue
-                torrent_info = self._get_info_from_torrent(torrent_path)
-                if not torrent_info["info_hash"]:
-                    continue
-                if client == DOWNLOADER_CONFIG["QB_NAME"]:
-                    resume_path = torrent_path.with_suffix(DOWNLOADER_CONFIG["QB_RESUME_SUFFIX"])
-                if client == DOWNLOADER_CONFIG["TR_NAME"]:
-                    resume_path = resume_dir / (torrent_path.stem + DOWNLOADER_CONFIG["TR_RESUME_SUFFIX"])
-                save_path = self._parse_resume_file(resume_path, client) if resume_path.exists() else None
-                data_path = save_path / torrent_info["name"]
-                torrent_info_all = {
-                                       "client": client,
-                                       "torrent_path": str(torrent_path),
-                                       "resume_path": str(resume_path) if resume_path.exists() else "",
-                                       "save_path": str(save_path),
-                                       "data_missing": not data_path.exists()
-                                   } | torrent_info
-                torrent_info_all["index"] = self._generate_index_hash(torrent_info)
-                self.torrent_info_dict[torrent_info["info_hash"]] = torrent_info_all
-
-        self.torrent_info_dict = {} # 每次执行扫描前置空
-        logger.info(f"开始扫描-当前配置: {self._config}")
-        if self._config.qbittorrent_paths:
-            qb_path_list = self._get_path_list(self._config.qbittorrent_paths)
-            for qb_torrent_dir in qb_path_list:
-                if qb_torrent_dir.exists():
-                    qb_resume_dir = qb_torrent_dir
-                    logger.info(f"QB种子目录:{qb_torrent_dir},{qb_torrent_dir.exists()},"
-                                f"resume目录:{qb_resume_dir},{qb_resume_dir.exists()}")
-                    _do_scan(qb_torrent_dir, qb_resume_dir, DOWNLOADER_CONFIG["QB_NAME"])
-        if self._config.transmission_paths:
-            tr_path_list = self._get_path_list(self._config.transmission_paths)
-            for tr_torrent_dir in tr_path_list:
-                tr_resume_dir = tr_torrent_dir.parent / "resume"
-                logger.info(f"TR种子目录:{tr_torrent_dir},{tr_torrent_dir.exists()},"
-                            f"resume目录:{tr_resume_dir},{tr_resume_dir.exists()}")
-                if tr_resume_dir.exists() and tr_torrent_dir.exists():
-                    _do_scan(tr_torrent_dir, tr_resume_dir, DOWNLOADER_CONFIG["TR_NAME"])
-
+                self.torrent_info_dict = self.torrent_info_dict | downloader.build_torrent_list()
+                downloader.disconnect()
+            except Exception as e:
+                raise Exception(f"{dl.name} 扫描种子失败：{e}")
+        self.add_index_for_torrents()
         save_path = self.get_data_path() / TORRENT_INFO_FILE_NAME
         logger.info(f"扫描种子信息完成,开始保存,保存路径:{save_path}")
         json_handler = JsonHandler(save_path)
-        json_handler.save_to_json(self.torrent_info_dict)
+        _save_torrent_info = {
+            k: v.dict() for k, v in self.torrent_info_dict.items()
+        }
+        json_handler.save_to_json(_save_torrent_info)
 
     def _is_exclude_path(self, path: str):
         exclude_path_list = self._get_path_list(self._config.exclude_paths)
@@ -292,13 +239,14 @@ class SeedCleaner(_PluginBase):
                 return True
             elif exclude_path.is_symlink():
                 return True
-            elif exclude_path.stat().st_nlin > 1:
+            elif exclude_path.stat().st_nlink > 1:
                 return True
             else:
                 continue
         return False
 
-    def _generate_mission_file_hash(self, p: Path) -> str:
+    @staticmethod
+    def _generate_mission_file_hash(p: Path) -> str:
         """
             缺失文件索引计算，用作ID
             根据 name,size,path  计算 hash 值
@@ -314,20 +262,22 @@ class SeedCleaner(_PluginBase):
             str(info["size"])
         ]
         combined = "|".join(fields)
-        return hashlib.sha1(combined.encode("utf-8")).hexdigest()
+        return hashlib.sha1(combined.encode("utf-8")).hexdigest().lower()
 
-    def find_extra_data_list(self) -> List[dict]:
+    def find_extra_data_list(self) -> List[Dict[str, Any]]:
         """
             找出有数据文件，但是不存在种子文件的数据文件路径
         :return:
         """
         # 1. 去重汇总 save_path
-        save_path_set = set()
+        save_path_list = []
         for record in self.torrent_info_dict.values():
-            save_path = record.get("save_path")
+            save_path = record.save_path
             if save_path:
-                save_path_set.add(Path(save_path))
-        save_path_list = list(save_path_set)
+                save_path_list.append(Path(save_path))
+        if self._config.extra_dir_paths:  # 设置了额外的目录
+            extra_dirs = self._get_path_list(self._config.extra_dir_paths)
+            save_path_list = list(set(save_path_list + extra_dirs))
         # 2. 收集 data_list（save_path 下第一层目录/文件）
         data_list = []
         for sp in save_path_list:
@@ -342,8 +292,8 @@ class SeedCleaner(_PluginBase):
         # 3. 构造预期的数据路径集合 expected_paths = save_path + name
         expected_paths = set()
         for record in self.torrent_info_dict.values():
-            save_path = Path(record.get("save_path", ""))
-            name = record.get("name")
+            save_path = Path(record.save_path)
+            name = record.name
             if save_path and name:
                 expected_path = save_path / name
                 expected_paths.add(expected_path)
@@ -351,11 +301,17 @@ class SeedCleaner(_PluginBase):
         # 4. 找出 data_list 中存在但不在 expected_paths 中的路径
         extra_paths = [p for p in data_list if p not in expected_paths]
         # 5、获取文件（夹）名和大小
-        extra_data_list = [
-            {"type": "file", "name": p.name, "size": p.stat().st_size, "path": str(p),
-             "hash": self._generate_mission_file_hash(p)} for
-            p in extra_paths]
-        return extra_data_list
+        missing_torrent_file_list = [
+            MissingTorrentFileModel(
+                type="file",
+                name=p.name,
+                size=p.stat().st_size,
+                path=str(p),
+                hash=self._generate_mission_file_hash(p)
+            ).dict() for p in extra_paths
+        ]
+        logger.info(f"获取到缺失种子的文件数：{len(missing_torrent_file_list)}")
+        return missing_torrent_file_list
 
     def get_all_torrent_info(self, search_info: SearchModel) -> dict:
         """
@@ -364,83 +320,93 @@ class SeedCleaner(_PluginBase):
         """
         save_path = self.get_data_path() / TORRENT_INFO_FILE_NAME
         json_handler = JsonHandler(save_path)
-        if search_info.existingSeedData and json_handler.load_from_json():
-            logger.info(f"从存量数据获取种子信息")
-            self.torrent_info_dict = json_handler.load_from_json()
-        else:
-            self.scan_torrent_resume_file()
-        return self.torrent_info_dict
+        try:
+            json_dict = json_handler.load_from_json()
+            if search_info.existingSeedData and json_dict:
+                logger.info(f"从存量数据获取种子信息: {len(json_dict)}")
+                for key, value in json_dict.items():
+                    self.torrent_info_dict[key] = TorrentModel(**value)
+            else:
+                self.scan_all_torrents_by_downloader()
+            return self.torrent_info_dict
+        except Exception as e:
+            logger.error(f"获取所有种子信息错误: {e}")
+            raise e
 
     def get_unique_index_torrents(self) -> dict:
         """
         查找 index 值在整个 file_info_dict 中唯一的种子信息
         :return: {info_hash: torrent_info} 的子集
         """
-        if len(self.unique_torrents) > 0:
-            return self.unique_torrents
         # 1. 统计每个 index 出现的次数
         index_count = defaultdict(int)
         for info_hash, record in self.torrent_info_dict.items():
-            index = record.get("index")
+            index = record.index
             if index:
                 index_count[index] += 1
 
         # 2. 筛选出 index 只出现一次的记录
+        unique_torrents = {}
         for info_hash, record in self.torrent_info_dict.items():
-            index = record.get("index")
+            index = record.index
             if index and index_count[index] == 1:
-                self.unique_torrents[info_hash] = record
-        return self.unique_torrents
+                unique_torrents[info_hash] = record
+        return unique_torrents
 
-    def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 100, pageChange: bool = False) -> dict:
+    def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 50,
+                   pageChange: bool = False,pageSizeChange: bool = False) -> ResponseModel:
         logger.info(f"开始扫描,扫描参数:{search_info.dict()},page:{page},limit:{limit},pageChange:{pageChange}")
-        if pageChange:
-            torrent_all_info = self.torrent_info_dict
-        else:
-            torrent_all_info = self.get_all_torrent_info(search_info)
-        logger.info(f"获取到所有种子信息: {torrent_all_info.values().__len__()}")
+        try:
+            if pageChange or pageSizeChange:
+                torrent_all_info = self.torrent_info_dict
+            else:
+                torrent_all_info = self.get_all_torrent_info(search_info)
+            logger.info(f"获取到所有种子信息: {torrent_all_info.values().__len__()}")
+        except Exception as e:
+            logger.error(f"{e}")
+            return ResponseFailedModel(message="获取种子信息失败")
         if search_info.missingOptions.seed:
             missingFiles = self.find_extra_data_list()
         else:
             missingFiles = []
         res_dict = {}
         res_list = []
-        self.unique_torrents = {}
+        unique_torrents = {}
+        if search_info.auxOption != ALL_SELECTED:  # 辅种选项不等于全部
+            unique_torrents = self.get_unique_index_torrents()
         for key, torrent_info in torrent_all_info.items():
-            torrent_info["removeOption"] = search_info.removeOption  # 种子信息添加删除选项
             if search_info.missingOptions.file:
-                if torrent_info["data_missing"]:
+                if torrent_info.data_missing:
                     res_dict[key] = torrent_info
             elif not search_info.missingOptions.seed and not search_info.missingOptions.file:
                 res_dict[key] = torrent_info
             if search_info.auxOption == NO_AUX:  # 无辅，删除不唯一的种子
-                unique_torrents = self.get_unique_index_torrents()
                 if key not in unique_torrents.keys() and key in res_dict.keys():
                     res_dict.pop(key)
             if search_info.auxOption == HAS_AUX:  # 有辅，删除唯一种子
-                unique_torrents = self.get_unique_index_torrents()
                 if key in unique_torrents.keys() and key in res_dict.keys():
                     res_dict.pop(key)
             if search_info.trackerInput:
                 tracker_list = search_info.trackerInput.split(";")
-                if not self._is_tracer_match(TorrentInfoModel(**torrent_info), tracker_list) and key in res_dict.keys():
+                if not self._is_tracer_match(torrent_info, tracker_list) and key in res_dict.keys():
                     res_dict.pop(key)
             if len(res_dict) > 0 and key in res_dict.keys():
                 value = res_dict[key]
                 try:
                     res_list.append({
                         "type": "torrent",
-                        "client": value.get("client", ""),
-                        "data_missing": value.get("data_missing", False),
-                        "hash": value.get("info_hash", ""),
-                        "size": int(value.get("total_size", "0")) or 0,
-                        "name": value.get("name", ""),
-                        "removeOption": value.get("removeOption", ALL_SELECTED),
+                        "client": value.client,
+                        "client_name": value.client_name,
+                        "data_missing": value.data_missing,
+                        "trackers": value.trackers,
+                        "hash": value.hash,
+                        "size": int(value.total_size) or 0,
+                        "name": value.name,
+                        "removeOption": search_info.removeOption  # 种子信息添加删除选项
                     })
                 except AttributeError as e:
                     logger.error(f"处理种子信息出错: {key}")
                     continue
-
         # 结构统一化
         combined = res_list + missingFiles
         total = len(combined)
@@ -455,10 +421,9 @@ class SeedCleaner(_PluginBase):
             "page": page,
             "page_size": limit
         }
-        # logger.debug(f"返回结果: {res}")
-        return res
+        return ResponseSuccessModel(message="扫描成功", data=res)
 
-    def _is_tracer_match(self, torrent_info: TorrentInfoModel, tracker_list: List[str]) -> bool:
+    def _is_tracer_match(self, torrent_info: TorrentModel, tracker_list: List[str]) -> bool:
         """
         判断种子的 Tracker 是否匹配 tracker_list 中的任意一个
         :param torrent_info: 种子信息
@@ -472,46 +437,67 @@ class SeedCleaner(_PluginBase):
                 return True
         return False
 
+    @staticmethod
+    def delete_file_by_path(path: Path):
+        """
+        删除文件
+        :param path: 文件(夹)路径
+        """
+        if not path.exists():
+            logger.warning(f"缺失种子: {str(path)} 文件(夹)不存在")
+            return True
+        try:
+            if path.is_file():
+                path.unlink()  # 删除文件
+                logger.info(f"缺失种子: 已删除源文件成功: {path}")
+            elif path.is_dir():
+                shutil.rmtree(path)  # 递归删除非空目录
+                logger.info(f"缺失种子: 删除文件夹成功: {path}")
+            return True
+        except Exception as e:
+            logger.error(f"缺失种子: 删除文件(夹)失败: {e}")
+            return False
+
+    def get_downloader_by_name(self, name: str):
+        """
+            根据下载器名称获取下载器配置信息
+        """
+        downloader_list = self._config.downloaders.system + self._config.downloaders.custom
+        for downloader in downloader_list:
+            if downloader.name == name:
+                return downloader
+        return
+
     def start_clear(self, clear_info_list: List[ClearModel]):
         logger.info(f"开始清理,预清理个数:{len(clear_info_list)}")
-        delete_path_set = set()
-        for clear_info in clear_info_list:
+        will_delete_torrent_dict = {}  # key为下载器名称，value为种子信息列表
+        will_delete_file_list = []
+        for clear_info in clear_info_list:  # 遍历所有清理信息,按下载器名和删除选项分类
             if clear_info.type == "torrent":
-                torrent_info = self.torrent_info_dict.get(clear_info.hash)
-                resume_path = Path(torrent_info.get("resume_path"))
-                torrent_path = Path(torrent_info.get("torrent_path"))
-                file_path = Path(torrent_info.get("save_path")) / torrent_info.get("name")
-                if clear_info.removeOption == ONLY_TORRENT:
-                    delete_path_set.add(resume_path)
-                    delete_path_set.add(torrent_path)
-                elif clear_info.removeOption == ONLY_DATA and not torrent_info.get("data_missing"):
-                    delete_path_set.add(file_path)
-                elif clear_info.removeOption == ALL_SELECTED:
-                    delete_path_set.add(resume_path)
-                    delete_path_set.add(torrent_path)
-                    if not torrent_info.get("data_missing"):
-                        delete_path_set.add(file_path)
+                if not will_delete_torrent_dict.get(clear_info.client_name):
+                    will_delete_torrent_dict[clear_info.client_name] = {}
+                if not will_delete_torrent_dict[clear_info.client_name].get(clear_info.removeOption):
+                    will_delete_torrent_dict[clear_info.client_name][clear_info.removeOption] = []
+                will_delete_torrent_dict[clear_info.client_name][clear_info.removeOption].append(clear_info.hash)
             elif clear_info.type == "file":
-                delete_path_set.add(Path(clear_info.path))
-        logger.info(f"删除路径数: {len(delete_path_set)}")
-        for path in delete_path_set:
-            if path.exists():
-                try:
-                    if path.is_file():
-                        path.unlink()  # 删除文件
-                        logger.info(f"删除文件成功: {path}")
-                    elif path.is_dir():
-                        shutil.rmtree(path)  # 递归删除非空目录
-                        logger.info(f"删除文件夹成功: {path}")
-                except Exception as e:
-                    logger.error(f"删除文件(夹)失败: {e}")
-                    return {
-                        "success": False,
-                        "message": f"删除文件(夹)失败: {e}"
-                    }
+                will_delete_file_list.append(Path(clear_info.path))
+        logger.debug(f"Will delete torrents: {will_delete_torrent_dict}; Will delete files: {will_delete_file_list}")
+        for downloader_name, clear_options in will_delete_torrent_dict.items():  # 按下载器批量删除种子
+            downloader_info = self.get_downloader_by_name(downloader_name)
+            if downloader_info.type == QBITTORRENT:
+                downloader = QbittorrentHandler(downloader_name)
             else:
-                logger.warning(f"文件(夹)不存在: {path}")
-        return {
-            "success": True,
-            "message": "OK"
-        }
+                downloader = TransmissionHandler(downloader_name)
+            downloader.connect(downloader_info.host, downloader_info.port, downloader_info.username,
+                               downloader_info.password)
+            for removeOption, hash_list in clear_options.items():
+                if not downloader.delete_torrent(hash_list, removeOption == ALL_SELECTED):
+                    downloader.disconnect()  # 断开连接
+                    return ResponseFailedModel(message="清理失败")
+            downloader.disconnect()  # 断开连接
+        for file_path in will_delete_file_list:  # 删除文件，仅对缺少种子的源文件进行删除
+            if self.delete_file_by_path(file_path):
+                continue
+            else:
+                return ResponseFailedModel(message="清理失败")
+        return ResponseSuccessModel(message="清理完成")

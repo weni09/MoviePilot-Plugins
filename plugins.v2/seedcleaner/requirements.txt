@@ -1,1 +1,2 @@
-bencodepy==0.9.5
+transmission-rpc==7.0.11
+qbittorrent-api==2025.5.0
