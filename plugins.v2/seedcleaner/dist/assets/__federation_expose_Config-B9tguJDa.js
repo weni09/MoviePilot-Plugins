@@ -88,9 +88,12 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
     }
     function addCustomDownloader() {
       const newDl = { ...state.customDownloader };
-      if (!newDl.name || !newDl.host || !newDl.port || !newDl.username || !newDl.password) {
+      if (!newDl.name || !newDl.host || !newDl.port) {
         alert("请填写所有必填字段");
         return;
+      }
+      if (!newDl.host.startsWith("http://") || !newDl.host.startsWith("https://)")) {
+        alert("请填写正确的下载器地址: http:// 或 https:// 开头");
       }
       const exists = editableConfig.downloaders.custom.some((d) => d.name === newDl.name);
       if (exists) {
@@ -288,7 +291,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                     _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.host,
                                       "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => state.customDownloader.host = $event),
-                                      label: "主机地址 (不带协议)",
+                                      label: "下载器地址 (带http://或https://)",
                                       variant: "outlined",
                                       density: "compact",
                                       class: "mb-2 text-caption"
@@ -350,7 +353,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                           default: _withCtx(() => [
                             _createVNode(_component_v_card, {
                               flat: "",
-                              class: "rounded border config-card"
+                              class: "rounded border config-card downloader-list"
                             }, {
                               default: _withCtx(() => [
                                 _createVNode(_component_v_card_title, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
@@ -558,6 +561,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-fac910a7"]]);
+const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-38d5e725"]]);
 
 export { ConfigComponent as default };

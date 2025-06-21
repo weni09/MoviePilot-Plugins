@@ -1,38 +1,42 @@
 
-.plugin-config[data-v-fac910a7] {
+.plugin-config[data-v-38d5e725] {
   margin: 0 auto;
   padding: 0.5rem;
 }
-.bg-primary-lighten-5[data-v-fac910a7] {
+.bg-primary-lighten-5[data-v-38d5e725] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-fac910a7] {
+.border[data-v-38d5e725] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.config-card[data-v-fac910a7] {
+.config-card[data-v-38d5e725] {
   background-image: linear-gradient(to right, rgba(var(--v-theme-surface), 0.98), rgba(var(--v-theme-surface), 0.95)),
   repeating-linear-gradient(45deg, rgba(var(--v-theme-primary), 0.03), rgba(var(--v-theme-primary), 0.03) 10px, transparent 10px, transparent 20px);
   background-attachment: fixed;
   box-shadow: 0 1px 2px rgba(var(--v-border-color), 0.05) !important;
   transition: all 0.3s ease;
 }
-.config-card[data-v-fac910a7]:hover {
+.config-card[data-v-38d5e725]:hover {
   box-shadow: 0 3px 6px rgba(var(--v-border-color), 0.1) !important;
 }
-.setting-item[data-v-fac910a7] {
+.downloader-list[data-v-38d5e725]{
+  max-height: 17rem;
+  overflow-y: scroll;
+}
+.setting-item[data-v-38d5e725] {
   border-radius: 8px;
   transition: all 0.2s ease;
   padding: 0.5rem;
   margin-bottom: 4px;
 }
-.setting-item[data-v-fac910a7]:hover {
+.setting-item[data-v-38d5e725]:hover {
   background-color: rgba(var(--v-theme-primary), 0.03);
 }
-.small-switch[data-v-fac910a7] {
+.small-switch[data-v-38d5e725] {
   transform: scale(0.8);
   margin-right: -8px;
 }
-.text-subtitle-1[data-v-fac910a7] {
+.text-subtitle-1[data-v-38d5e725] {
   font-size: 1.1rem !important;
   font-weight: 500;
   margin-bottom: 2px;
