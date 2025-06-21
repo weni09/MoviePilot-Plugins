@@ -3,7 +3,7 @@
         "name": "种子清理工",
         "description": "清理transmission/qbittorrent种子和源文件。",
         "labels": "插件工具",
-        "version": "v1.2.0",
+        "version": "1.2.0",
         "icon": "delete.png",
         "author": "weni09",
         "level": 1,
