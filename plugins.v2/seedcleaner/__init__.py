@@ -147,9 +147,12 @@ class SeedCleaner(_PluginBase):
                 system_downloaders = self.systemconfig.get("Downloaders")
                 if not system_downloaders:
                     return res
-                logger.info(f"system_downloaders: {system_downloaders}")
+                logger.debug(f"system_downloaders: {system_downloaders}")
                 for downloader in system_downloaders:
-                    url = urlparse(downloader['config'].get("host", "http://localhost:80"))
+                    host_str = downloader['config'].get("host", "localhost:80")
+                    if not host_str.startswith(("http://", "https://")):
+                        host_str = "http://" + host_str
+                    url = urlparse(host_str)
                     if not url.hostname or not url.port:
                         continue
                     res.system.append(DownloaderInfoModel(
