@@ -141,28 +141,32 @@ class SeedCleaner(_PluginBase):
         """
         获取系统下载器
         """
-        res = DownloaderModel(system=[], custom=[])
-        if config_type == DOWNLOADER_CONFIG_TYPE_SYSTEM:
-            system_downloaders = self.systemconfig.get("Downloaders")
-            if not system_downloaders:
-                return res
-            logger.debug(f"system_downloaders:{system_downloaders}")
-            for downloader in system_downloaders:
-                url = urlparse(downloader['config'].get("host", ""))
-                res.system.append(DownloaderInfoModel(
-                    name=downloader.get("name", ""),
-                    type=downloader.get("type", ""),
-                    host=url.hostname,
-                    port=url.port,
-                    username=downloader['config'].get("username", ""),
-                    password=downloader['config'].get("password", ""),
-                ))
-        elif config_type == DOWNLOADER_CONFIG_TYPE_CUSTOM:
-            res.custom = self._config.downloaders.custom
-        else:
-            res.system = self._config.downloaders.system
-            res.custom = self._config.downloaders.custom
-        return res
+        try:
+            res = DownloaderModel(system=[], custom=[])
+            if config_type == DOWNLOADER_CONFIG_TYPE_SYSTEM:
+                system_downloaders = self.systemconfig.get("Downloaders")
+                if not system_downloaders:
+                    return res
+                logger.debug(f"system_downloaders:{system_downloaders}")
+                for downloader in system_downloaders:
+                    url = urlparse(downloader['config'].get("host", ""))
+                    res.system.append(DownloaderInfoModel(
+                        name=downloader.get("name", ""),
+                        type=downloader.get("type", ""),
+                        host=url.hostname,
+                        port=url.port,
+                        username=downloader['config'].get("username", ""),
+                        password=downloader['config'].get("password", ""),
+                    ))
+            elif config_type == DOWNLOADER_CONFIG_TYPE_CUSTOM:
+                res.custom = self._config.downloaders.custom
+            else:
+                res.system = self._config.downloaders.system
+                res.custom = self._config.downloaders.custom
+            return res
+        except Exception as e:
+            logger.error(f"获取系统下载器配置失败:{e}", exc_info=True)
+
 
     @staticmethod
     def _get_path_list(path_str: str = "", sep=";") -> List[Path]:
