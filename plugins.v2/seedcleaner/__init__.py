@@ -147,11 +147,11 @@ class SeedCleaner(_PluginBase):
                 system_downloaders = self.systemconfig.get("Downloaders")
                 if not system_downloaders:
                     return res
-                logger.info(f"system_downloaders:{system_downloaders}")
+                logger.debug(f"system_downloaders:{system_downloaders}")
                 for downloader in system_downloaders:
-                    url = urlparse(downloader['config'].get("host"))
-                    host = url.hostname or "localhost"  # 默认值
-                    port = int(url.port) if url.port else 80
+                    url = urlparse(downloader['config'].get("host", "http://localhost:80"))
+                    host = url.hostname
+                    port = int(url.port)
                     res.system.append(DownloaderInfoModel(
                         name=downloader.get("name", ""),
                         type=downloader.get("type", ""),
@@ -168,7 +168,6 @@ class SeedCleaner(_PluginBase):
             return res
         except Exception as e:
             logger.error(f"获取系统下载器配置失败:{e}", exc_info=True)
-
 
     @staticmethod
     def _get_path_list(path_str: str = "", sep=";") -> List[Path]:
@@ -360,7 +359,7 @@ class SeedCleaner(_PluginBase):
         return unique_torrents
 
     def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 50,
-                   pageChange: bool = False,pageSizeChange: bool = False) -> ResponseModel:
+                   pageChange: bool = False, pageSizeChange: bool = False) -> ResponseModel:
         logger.info(f"开始扫描,扫描参数:{search_info.dict()},page:{page},limit:{limit},pageChange:{pageChange}")
         try:
             if pageChange or pageSizeChange:
