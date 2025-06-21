@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
-import { bp as createForm, a as useRender, H as forwardRefs, bq as makeFormProps, c as makeComponentProps, aO as VCard, aT as VCardTitle, z as VIcon, aS as VCardText, b5 as VRow, aV as VCol, af as VSelect, L as VTextField, aP as VCardActions, q as VBtn, N as VList, O as VListItem, b1 as VListItemTitle, T as VChip, b0 as VListItemSubtitle, ai as VDivider, am as VSpacer, r as VSnackbar, P as PLUGIN_ID } from './VSnackbar-BBT0ycYQ.js';
+import { bp as createForm, a as useRender, H as forwardRefs, bq as makeFormProps, c as makeComponentProps, aO as VCard, aT as VCardTitle, z as VIcon, aS as VCardText, b5 as VRow, aV as VCol, af as VSelect, L as VTextField, aP as VCardActions, q as VBtn, N as VList, O as VListItem, b1 as VListItemTitle, T as VChip, b0 as VListItemSubtitle, ai as VDivider, am as VSpacer, r as VSnackbar, P as PLUGIN_ID } from './VSnackbar-DPABEuvk.js';
 import { g as genericComponent, p as propsFactory } from './layout-I2YKawZF.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
 
