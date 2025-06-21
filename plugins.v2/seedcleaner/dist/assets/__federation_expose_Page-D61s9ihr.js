@@ -368,15 +368,16 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     const handlePageChange = (newPage) => {
       emit("update:scanParams", {
         pageSize: props.scanParams.pageSize,
-        page: newPage
+        page: newPage,
+        changed: "page"
       });
     };
     const handlePageSizeChange = (newPageSize) => {
-      if (newPageSize == props.scanParams.pageSize) return;
       emit("update:scanParams", {
         pageSize: newPageSize,
-        page: 1
+        page: 1,
         // 切换每页数量后跳转到第一页
+        changed: "pageSize"
       });
     };
     const clearSelectedScans = () => {
@@ -580,7 +581,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-7bad4631"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-51d47726"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -898,7 +899,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
     };
     const initData = () => {
       state.scanRes.combinedList = [];
-      state.scanRes.total = 0;
       state.scanRes.tTotal = 0;
       state.scanRes.mTotal = 0;
       scanResultsRef.value.clearSelectedScans();
@@ -907,7 +907,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       console.log("开始扫描", `扫描参数: ${toolbarRef.value.state},isPageChange: ${isPageChange}`);
       state.scaning = true;
       initData();
-      if (!isPageChange || isPageSizeChange) {
+      if (!isPageChange) {
         state.scanParams.page = 1;
       }
       let url = `plugin/${PLUGIN_ID}/scan?page=${state.scanParams.page}&limit=${state.scanParams.pageSize}&pageChange=${isPageChange}&pageSizeChange=${isPageSizeChange}`;
@@ -978,13 +978,13 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
     const handleScanParamsUpdate = (newScanParams) => {
       let isPageChanged = false;
       let isPageSizeChanged = false;
-      if (newScanParams.page != state.scanParams.page) {
+      if (newScanParams.changed === "page") {
         isPageChanged = true;
-      }
-      if (newScanParams.pageSize != state.scanParams.pageSize) {
+      } else if (newScanParams.changed === "pageSize") {
         isPageSizeChanged = true;
       }
-      state.scanParams = newScanParams;
+      state.scanParams.page = Number(newScanParams.page);
+      state.scanParams.pageSize = Number(newScanParams.pageSize);
       startScan(isPageChanged, isPageSizeChanged);
     };
     return (_ctx, _cache) => {
@@ -1191,6 +1191,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-efe3f4ba"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-61184529"]]);
 
 export { PageComponent as default };

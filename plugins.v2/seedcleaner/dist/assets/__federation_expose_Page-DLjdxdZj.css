@@ -20,11 +20,11 @@
   font-weight: 500;
   margin-bottom: 2px;
 }
-.size-column[data-v-7bad4631] {
+.size-column[data-v-51d47726] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
-.name-column[data-v-7bad4631] {
+.name-column[data-v-51d47726] {
   width: 40rem !important;
   max-width: 40rem !important;
 }
@@ -37,23 +37,23 @@
   width: 40rem !important;
   max-width: 40rem !important;
 }/* 覆盖vuetify样式 */
-.plugin-page[data-v-efe3f4ba] {
+.plugin-page[data-v-61184529] {
   margin: 0 auto;
   padding: 0.5rem;
 }
-.bg-primary-lighten-5[data-v-efe3f4ba] {
+.bg-primary-lighten-5[data-v-61184529] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-efe3f4ba] {
+.border[data-v-61184529] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle[data-v-efe3f4ba] {
+.text-subtitle[data-v-61184529] {
   font-weight: 500;
   margin-bottom: 2px;
 }
-.text-subtitle-1[data-v-efe3f4ba] {
+.text-subtitle-1[data-v-61184529] {
   font-size: 1.1rem !important;
 }
-.text-subtitle-2[data-v-efe3f4ba] {
+.text-subtitle-2[data-v-61184529] {
   font-size: 1rem !important;
 }
