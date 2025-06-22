@@ -362,6 +362,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         }
       }
     });
+    const showNotification = (text, color = "success") => {
+      state.snackbar.message = text;
+      state.snackbar.color = color;
+      state.snackbar.show = true;
+    };
     const deleteAllRecord = () => {
       state.selectedScans = [];
       emit("deleteAllRecord");
@@ -389,11 +394,6 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     };
     const clearSelectedScans = () => {
       state.selectedScans = [];
-    };
-    const showNotification = (text, color = "success") => {
-      state.snackbar.message = text;
-      state.snackbar.color = color;
-      state.snackbar.show = true;
     };
     const copyPath = async (path) => {
       if (navigator.clipboard && window.isSecureContext) {
@@ -653,7 +653,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-119bda9d"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-4e6d6da1"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
