@@ -2,6 +2,7 @@ import hashlib
 import os
 import shutil
 import subprocess
+import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Optional, Any
@@ -24,7 +25,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.2.6"
+    plugin_version = "1.2.7"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
