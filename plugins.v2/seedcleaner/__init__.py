@@ -25,7 +25,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.2.7"
+    plugin_version = "1.2.8"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -371,8 +371,11 @@ class SeedCleaner(_PluginBase):
         save_path = self.get_data_path() / TORRENT_INFO_FILE_NAME
         json_handler = JsonHandler(save_path)
         try:
-            json_dict = json_handler.load_from_json()
-            if search_info.existingSeedData and json_dict:
+            if search_info.existingSeedData:
+                json_dict = json_handler.load_from_json()
+                if not json_dict:
+                    self.scan_all_torrents_by_downloader()
+                    return self.torrent_info_dict
                 logger.info(f"从存量数据获取种子信息: {len(json_dict)}")
                 for key, value in json_dict.items():
                     self.torrent_info_dict[key] = TorrentModel(**value)

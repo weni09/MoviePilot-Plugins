@@ -8,6 +8,7 @@
 # ===================================================
 import json
 from pathlib import Path
+from app.log import logger
 
 
 class JsonHandler:
@@ -19,14 +20,16 @@ class JsonHandler:
             with self.save_path.open("w", encoding="utf-8") as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
         except Exception as e:
-            raise Exception(f"保存json文件失败: {e}")
+            logger.warning(f"保存json文件失败: {e}")
 
     def load_from_json(self) -> dict:
         try:
             if not self.save_path.exists():
-                raise Exception("json文件不存在")
+                logger.warning(f"json文件不存在:{self.save_path}")
+                return {}
             with self.save_path.open("r", encoding="utf-8") as f:
                 data = json.load(f)
             return data
         except Exception as e:
-            raise Exception(f"加载json文件失败: {e}")
+            logger.warning(f"加载json文件失败: {e}")
+            return {}
