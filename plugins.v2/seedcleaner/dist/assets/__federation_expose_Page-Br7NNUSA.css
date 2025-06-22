@@ -20,20 +20,20 @@
   font-weight: 500;
   margin-bottom: 2px;
 }
-.size-column[data-v-4e6d6da1] {
+.size-column[data-v-8f11e8cf] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
-.name-column[data-v-4e6d6da1] {
+.name-column[data-v-8f11e8cf] {
   width: 40rem !important;
   max-width: 40rem !important;
 }
 /* 覆盖vuetify样式 */
-.size-column[data-v-18954e78] {
+.size-column[data-v-6be8fe86] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
-.name-column[data-v-18954e78] {
+.name-column[data-v-6be8fe86] {
   width: 40rem !important;
   max-width: 40rem !important;
 }/* 覆盖vuetify样式 */

@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
-import { f as formatBytes, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-Bb1e_4Bq.js';
+import { f as formatBytes, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-BVR0Cihv.js';
 
 const {resolveComponent:_resolveComponent$3,createVNode:_createVNode$3,createElementVNode:_createElementVNode$3,withCtx:_withCtx$3,openBlock:_openBlock$3,createBlock:_createBlock$2} = await importShared('vue');
 
@@ -395,34 +395,12 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     const clearSelectedScans = () => {
       state.selectedScans = [];
     };
-    const copyPath = async (path) => {
-      if (navigator.clipboard && window.isSecureContext) {
-        try {
-          await navigator.clipboard.writeText(path);
-          showNotification("路径已复制到剪贴板");
-        } catch (err) {
-          console.error("复制路径失败", err);
-          showNotification("复制路径失败", "error");
-        }
+    const _copyPath = async (path) => {
+      showNotification("路径已复制到剪贴板");
+      if (await copyPath(path)) {
+        showNotification("路径已复制到剪贴板");
       } else {
-        try {
-          const textarea = document.createElement("textarea");
-          textarea.value = path;
-          textarea.style.position = "fixed";
-          document.body.appendChild(textarea);
-          textarea.focus();
-          textarea.select();
-          const successful = document.execCommand("copy");
-          document.body.removeChild(textarea);
-          if (successful) {
-            showNotification("路径已复制到剪贴板");
-          } else {
-            showNotification("复制路径失败", "error");
-          }
-        } catch (err) {
-          console.error("兼容方案:复制路径失败", err);
-          showNotification("复制路径失败", "error");
-        }
+        showNotification("复制路径失败", "error");
       }
     };
     __expose({
@@ -583,7 +561,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                                 _createVNode$2(_component_v_btn, {
                                   icon: "mdi-content-copy",
                                   size: "x-small",
-                                  onClick: _withModifiers$1(($event) => copyPath(item.path), ["stop"]),
+                                  onClick: _withModifiers$1(($event) => _copyPath(item.path), ["stop"]),
                                   style: { "margin-left": "8px" }
                                 }, null, 8, ["onClick"])
                               ], 16)
@@ -653,7 +631,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-4e6d6da1"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-8f11e8cf"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -738,34 +716,12 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
       state.snackbar.color = color;
       state.snackbar.show = true;
     };
-    const copyPath = async (path) => {
-      if (navigator.clipboard && window.isSecureContext) {
-        try {
-          await navigator.clipboard.writeText(path);
-          showNotification("路径已复制到剪贴板");
-        } catch (err) {
-          console.error("复制路径失败", err);
-          showNotification("复制路径失败", "error");
-        }
+    const _copyPath = async (path) => {
+      showNotification("路径已复制到剪贴板");
+      if (await copyPath(path)) {
+        showNotification("路径已复制到剪贴板");
       } else {
-        try {
-          const textarea = document.createElement("textarea");
-          textarea.value = path;
-          textarea.style.position = "fixed";
-          document.body.appendChild(textarea);
-          textarea.focus();
-          textarea.select();
-          const successful = document.execCommand("copy");
-          document.body.removeChild(textarea);
-          if (successful) {
-            showNotification("路径已复制到剪贴板");
-          } else {
-            showNotification("复制路径失败", "error");
-          }
-        } catch (err) {
-          console.error("兼容方案:复制路径失败", err);
-          showNotification("复制路径失败", "error");
-        }
+        showNotification("复制路径失败", "error");
       }
     };
     const getCleanupList = () => {
@@ -859,7 +815,7 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
                                 _createVNode$1(_component_v_btn, {
                                   icon: "mdi-content-copy",
                                   size: "x-small",
-                                  onClick: _withModifiers(($event) => copyPath(item.path), ["stop"]),
+                                  onClick: _withModifiers(($event) => _copyPath(item.path), ["stop"]),
                                   style: { "margin-left": "8px" }
                                 }, null, 8, ["onClick"])
                               ], 16)
@@ -957,7 +913,7 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
   }
 });
 
-const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-18954e78"]]);
+const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-6be8fe86"]]);
 
 const {defineComponent:_defineComponent} = await importShared('vue');
 
