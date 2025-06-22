@@ -1,5 +1,7 @@
 import hashlib
+import os
 import shutil
+import subprocess
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Optional, Any
@@ -22,7 +24,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.2.5"
+    plugin_version = "1.2.6"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -243,14 +245,8 @@ class SeedCleaner(_PluginBase):
         for exclude_path in exclude_path_list:
             if not exclude_path.exists():
                 continue
-            if str(exclude_path) in path:
+            if path.startswith(str(exclude_path)):
                 return True
-            elif exclude_path.is_symlink():
-                return True
-            elif exclude_path.stat().st_nlink > 1:
-                return True
-            else:
-                continue
         return False
 
     @staticmethod
@@ -272,6 +268,52 @@ class SeedCleaner(_PluginBase):
         combined = "|".join(fields)
         return hashlib.sha1(combined.encode("utf-8")).hexdigest().lower()
 
+    def get_directory_size(self, directory: Path) -> int:
+        """
+        根据系统平台选择不同的方式计算目录大小：
+        - Linux: 使用 du -sb 命令（速度快）
+        - Windows: 使用 Python 递归遍历（精确度高）
+        """
+        if not directory.exists() or not directory.is_dir():
+            return 0
+
+        if os.name == 'posix':  # Linux 或 macOS 为提高性能linux采用原生命令计算
+            try:
+                result = subprocess.run(
+                    ['du', '-sb', str(directory)],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.DEVNULL,
+                    check=True,
+                    text=True
+                )
+                size_str = result.stdout.split()[0]
+                return int(size_str)  # du -sb 返回 KB，转成字节
+            except Exception as e:
+                logger.warning(f"执行 du 命令失败，回退到 Python 方式: {e}")
+                return self._py_get_directory_size(directory)
+        else:  # Windows
+            return self._py_get_directory_size(directory)
+
+    @staticmethod
+    def _py_get_directory_size(directory: Path) -> int:
+        """
+        Python 原生递归统计目录大小（精确）
+        """
+        total_size = 0
+        for path in directory.rglob('*'):
+            if path.is_file():
+                total_size += path.stat().st_size
+        return total_size
+
+    def computed_file_dir_size(self, path: Path):
+        if path.is_file():
+            size = path.stat().st_size
+        elif path.is_dir():
+            size = self.get_directory_size(path)
+        else:
+            size = 0
+        return size
+
     def find_extra_data_list(self) -> List[Dict[str, Any]]:
         """
             找出有数据文件，但是不存在种子文件的数据文件路径
@@ -279,41 +321,40 @@ class SeedCleaner(_PluginBase):
         """
         # 1. 去重汇总 save_path
         save_path_list = []
+        expected_data_file_paths = set()  # 期望的数据文件路径
         for record in self.torrent_info_dict.values():
-            save_path = record.save_path
+            save_path = Path(record.save_path)
             if save_path:
-                save_path_list.append(Path(save_path))
+                save_path_list.append(save_path)
+                data_file = save_path / record.name
+                expected_data_file_paths.add(str(data_file))
         if self._config.extra_dir_paths:  # 设置了额外的目录
             extra_dirs = self._get_path_list(self._config.extra_dir_paths)
             save_path_list = list(set(save_path_list + extra_dirs))
+        logger.info(f"源文件保存路径列表: {save_path_list}")
         # 2. 收集 data_list（save_path 下第一层目录/文件）
-        data_list = []
+        data_list = set()
         for sp in save_path_list:
             if not sp.exists() or not sp.is_dir():
                 continue
             for item in sp.iterdir():
                 if self._is_exclude_path(str(item)):
                     continue
-                if item.is_dir() or item.suffix.lower() in VIDEO_SUFFIX_LIST:  # 可扩展视频类型
-                    data_list.append(item)
-
-        # 3. 构造预期的数据路径集合 expected_paths = save_path + name
-        expected_paths = set()
-        for record in self.torrent_info_dict.values():
-            save_path = Path(record.save_path)
-            name = record.name
-            if save_path and name:
-                expected_path = save_path / name
-                expected_paths.add(expected_path)
+                if item.is_dir() or item.suffix.lower() in VIDEO_SUFFIX_LIST:
+                    data_list.add(item)
+        data_list = list(data_list)
 
         # 4. 找出 data_list 中存在但不在 expected_paths 中的路径
-        extra_paths = [p for p in data_list if p not in expected_paths]
+        extra_paths = set()
+        for p in data_list:
+            if str(p) not in list(expected_data_file_paths):
+                extra_paths.add(p)
         # 5、获取文件（夹）名和大小
         missing_torrent_file_list = [
             MissingTorrentFileModel(
                 type="file",
                 name=p.name,
-                size=p.stat().st_size,
+                size=self.computed_file_dir_size(p),
                 path=str(p),
                 hash=self._generate_mission_file_hash(p)
             ).dict() for p in extra_paths
@@ -410,6 +451,7 @@ class SeedCleaner(_PluginBase):
                         "hash": value.hash,
                         "size": int(value.total_size) or 0,
                         "name": value.name,
+                        "path": str(Path(value.save_path) / value.name),
                         "removeOption": search_info.removeOption  # 种子信息添加删除选项
                     })
                 except AttributeError as e:

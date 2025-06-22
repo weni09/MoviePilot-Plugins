@@ -289,11 +289,12 @@ const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-8f89
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
-const {createElementVNode:_createElementVNode$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,createVNode:_createVNode$2,toDisplayString:_toDisplayString$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,renderList:_renderList$1,Fragment:_Fragment$1,createElementBlock:_createElementBlock$2,unref:_unref$1} = await importShared('vue');
+const {createElementVNode:_createElementVNode$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,createVNode:_createVNode$2,toDisplayString:_toDisplayString$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,renderList:_renderList$1,Fragment:_Fragment$1,createElementBlock:_createElementBlock$2,withModifiers:_withModifiers$1,mergeProps:_mergeProps$1,unref:_unref$1} = await importShared('vue');
 
 const _hoisted_1$2 = { class: "text-left" };
 const _hoisted_2$1 = { class: "name-column" };
-const _hoisted_3$1 = { class: "size-column" };
+const _hoisted_3$1 = { style: { "margin-left": "8px" } };
+const _hoisted_4$1 = { class: "size-column" };
 const {computed: computed$1,reactive: reactive$2} = await importShared('vue');
 const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   __name: "ScanResults",
@@ -323,7 +324,13 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     const props = __props;
     const emit = __emit;
     const state = reactive$2({
-      selectedScans: []
+      selectedScans: [],
+      snackbar: {
+        location: "top",
+        show: false,
+        message: "",
+        color: "success"
+      }
     });
     const totalComputed = computed$1(() => {
       let res = [];
@@ -383,6 +390,19 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     const clearSelectedScans = () => {
       state.selectedScans = [];
     };
+    const showNotification = (text, color = "success") => {
+      state.snackbar.message = text;
+      state.snackbar.color = color;
+      state.snackbar.show = true;
+    };
+    const copyPath = async (path) => {
+      try {
+        await navigator.clipboard.writeText(path);
+        showNotification("路径已复制到剪贴板");
+      } catch (err) {
+        showNotification("复制路径失败", "error");
+      }
+    };
     __expose({
       clearSelectedScans
     });
@@ -394,8 +414,10 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       const _component_v_pagination = _resolveComponent$2("v-pagination");
       const _component_v_card_title = _resolveComponent$2("v-card-title");
       const _component_v_checkbox = _resolveComponent$2("v-checkbox");
+      const _component_v_tooltip = _resolveComponent$2("v-tooltip");
       const _component_v_table = _resolveComponent$2("v-table");
       const _component_v_card_text = _resolveComponent$2("v-card-text");
+      const _component_v_snackbar = _resolveComponent$2("v-snackbar");
       const _component_v_card = _resolveComponent$2("v-card");
       return _openBlock$2(), _createBlock$1(_component_v_card, {
         flat: "",
@@ -404,7 +426,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         default: _withCtx$2(() => [
           _createVNode$2(_component_v_card_title, { class: "text-subtitle-1 d-flex align-center px-3 py-2 bg-primary-lighten-5" }, {
             default: _withCtx$2(() => [
-              _cache[6] || (_cache[6] = _createElementVNode$2("span", null, "扫描记录", -1)),
+              _cache[7] || (_cache[7] = _createElementVNode$2("span", null, "扫描记录", -1)),
               _createVNode$2(_component_v_btn, {
                 color: "primary",
                 onClick: deleteAllRecord,
@@ -412,11 +434,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 "prepend-icon": "mdi-magnify",
                 size: "small"
               }, {
-                default: _withCtx$2(() => _cache[4] || (_cache[4] = [
+                default: _withCtx$2(() => _cache[5] || (_cache[5] = [
                   _createTextVNode$2("清空记录 ")
                 ])),
                 _: 1,
-                __: [4]
+                __: [5]
               }),
               _createVNode$2(_component_v_btn, {
                 color: "success",
@@ -425,11 +447,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 "prepend-icon": "mdi-plus-box",
                 size: "small"
               }, {
-                default: _withCtx$2(() => _cache[5] || (_cache[5] = [
+                default: _withCtx$2(() => _cache[6] || (_cache[6] = [
                   _createTextVNode$2("添加到待清理 ")
                 ])),
                 _: 1,
-                __: [5]
+                __: [6]
               }),
               totalComputed.value != "" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
                 key: 0,
@@ -481,7 +503,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
               }, null, 8, ["modelValue", "length"])
             ]),
             _: 1,
-            __: [6]
+            __: [7]
           }),
           _createVNode$2(_component_v_card_text, { class: "pa-0" }, {
             default: _withCtx$2(() => [
@@ -501,10 +523,10 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                           "hide-details": ""
                         }, null, 8, ["modelValue"])
                       ]),
-                      _cache[7] || (_cache[7] = _createElementVNode$2("th", { class: "text-left name-column" }, "名称", -1)),
-                      _cache[8] || (_cache[8] = _createElementVNode$2("th", { class: "text-left" }, "Tracker", -1)),
-                      _cache[9] || (_cache[9] = _createElementVNode$2("th", { class: "text-left" }, "状态", -1)),
-                      _cache[10] || (_cache[10] = _createElementVNode$2("th", { class: "text-left size-column" }, "大小", -1))
+                      _cache[8] || (_cache[8] = _createElementVNode$2("th", { class: "text-left name-column" }, "名称", -1)),
+                      _cache[9] || (_cache[9] = _createElementVNode$2("th", { class: "text-left" }, "Tracker", -1)),
+                      _cache[10] || (_cache[10] = _createElementVNode$2("th", { class: "text-left" }, "状态", -1)),
+                      _cache[11] || (_cache[11] = _createElementVNode$2("th", { class: "text-left size-column" }, "大小", -1))
                     ])
                   ]),
                   _createElementVNode$2("tbody", null, [
@@ -520,20 +542,37 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                             "hide-details": ""
                           }, null, 8, ["modelValue", "value"])
                         ]),
+                        _createElementVNode$2("td", _hoisted_2$1, [
+                          _createVNode$2(_component_v_tooltip, { location: "bottom" }, {
+                            activator: _withCtx$2(({ props: props2 }) => [
+                              _createElementVNode$2("div", _mergeProps$1({ ref_for: true }, props2, { style: { "display": "flex", "align-items": "center" } }), [
+                                item.hasOwnProperty("client") && item.client ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                                  key: 0,
+                                  color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
+                                  size: "small",
+                                  "text-color": "white"
+                                }, {
+                                  default: _withCtx$2(() => [
+                                    _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
+                                  ]),
+                                  _: 2
+                                }, 1032, ["color"])) : _createCommentVNode$1("", true),
+                                _createElementVNode$2("span", _hoisted_3$1, _toDisplayString$2(item.name), 1),
+                                _createVNode$2(_component_v_btn, {
+                                  icon: "mdi-content-copy",
+                                  size: "x-small",
+                                  onClick: _withModifiers$1(($event) => copyPath(item.path), ["stop"]),
+                                  style: { "margin-left": "8px" }
+                                }, null, 8, ["onClick"])
+                              ], 16)
+                            ]),
+                            default: _withCtx$2(() => [
+                              _createElementVNode$2("span", null, _toDisplayString$2(item.path), 1)
+                            ]),
+                            _: 2
+                          }, 1024)
+                        ]),
                         item.type === "torrent" ? (_openBlock$2(), _createElementBlock$2(_Fragment$1, { key: 0 }, [
-                          _createElementVNode$2("td", _hoisted_2$1, [
-                            _createVNode$2(_component_v_chip, {
-                              color: item.client == "transmission" ? "primary" : "error",
-                              size: "small",
-                              "text-color": "white"
-                            }, {
-                              default: _withCtx$2(() => [
-                                _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
-                              ]),
-                              _: 2
-                            }, 1032, ["color"]),
-                            _createTextVNode$2(" " + _toDisplayString$2(item.name), 1)
-                          ]),
                           _createElementVNode$2("td", null, _toDisplayString$2(item.trackers.length > 0 ? item.trackers.join(", ") : "无 Tracker"), 1),
                           _createElementVNode$2("td", null, [
                             _createVNode$2(_component_v_chip, {
@@ -548,23 +587,22 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                             }, 1032, ["color"])
                           ])
                         ], 64)) : item.type === "file" ? (_openBlock$2(), _createElementBlock$2(_Fragment$1, { key: 1 }, [
-                          _createElementVNode$2("td", null, _toDisplayString$2(item.name), 1),
-                          _cache[12] || (_cache[12] = _createElementVNode$2("td", null, "无 Tracker", -1)),
+                          _cache[13] || (_cache[13] = _createElementVNode$2("td", null, "无 Tracker", -1)),
                           _createElementVNode$2("td", null, [
                             _createVNode$2(_component_v_chip, {
                               color: "warning",
                               size: "small",
                               "text-color": "white"
                             }, {
-                              default: _withCtx$2(() => _cache[11] || (_cache[11] = [
+                              default: _withCtx$2(() => _cache[12] || (_cache[12] = [
                                 _createTextVNode$2("缺失种子")
                               ])),
                               _: 1,
-                              __: [11]
+                              __: [12]
                             })
                           ])
                         ], 64)) : _createCommentVNode$1("", true),
-                        _createElementVNode$2("td", _hoisted_3$1, _toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
+                        _createElementVNode$2("td", _hoisted_4$1, _toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
                       ]);
                     }), 128))
                   ])
@@ -573,7 +611,19 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
               })
             ]),
             _: 1
-          })
+          }),
+          _createVNode$2(_component_v_snackbar, {
+            modelValue: state.snackbar.show,
+            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => state.snackbar.show = $event),
+            timeout: 3e3,
+            color: state.snackbar.color,
+            location: state.snackbar.location
+          }, {
+            default: _withCtx$2(() => [
+              _createTextVNode$2(_toDisplayString$2(state.snackbar.message), 1)
+            ]),
+            _: 1
+          }, 8, ["modelValue", "color", "location"])
         ]),
         _: 1
       });
@@ -581,15 +631,16 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-51d47726"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-103ef57b"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
-const {createElementVNode:_createElementVNode$1,toDisplayString:_toDisplayString$1,createTextVNode:_createTextVNode$1,resolveComponent:_resolveComponent$1,withCtx:_withCtx$1,createVNode:_createVNode$1,renderList:_renderList,Fragment:_Fragment,openBlock:_openBlock$1,createElementBlock:_createElementBlock$1,createCommentVNode:_createCommentVNode,unref:_unref,createBlock:_createBlock} = await importShared('vue');
+const {createElementVNode:_createElementVNode$1,toDisplayString:_toDisplayString$1,createTextVNode:_createTextVNode$1,resolveComponent:_resolveComponent$1,withCtx:_withCtx$1,createVNode:_createVNode$1,renderList:_renderList,Fragment:_Fragment,openBlock:_openBlock$1,createElementBlock:_createElementBlock$1,createBlock:_createBlock,createCommentVNode:_createCommentVNode,withModifiers:_withModifiers,mergeProps:_mergeProps,unref:_unref} = await importShared('vue');
 
 const _hoisted_1$1 = { class: "name-column" };
-const _hoisted_2 = { class: "size-column" };
-const _hoisted_3 = { class: "text-right" };
+const _hoisted_2 = { style: { "margin-left": "8px" } };
+const _hoisted_3 = { class: "size-column" };
+const _hoisted_4 = { class: "text-right" };
 const {computed,reactive: reactive$1} = await importShared('vue');
 const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
   __name: "CleanupList",
@@ -655,13 +706,22 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
       const newList = info.filter((item) => !existingHashes.has(item.hash));
       state.cleanupList.push(...newList);
       if (newList.length > 0) {
-        state.snackbar.color = "success";
-        state.snackbar.message = `成功添加 ${newList.length} 条记录到待清理`;
-        state.snackbar.show = true;
+        showNotification(`成功添加 ${newList.length} 条记录到待清理`);
       } else {
-        state.snackbar.color = "info";
-        state.snackbar.message = "没有新项目可添加，全部已存在";
-        state.snackbar.show = true;
+        showNotification("没有新项目可添加，全部已存在", "info");
+      }
+    };
+    const showNotification = (text, color = "success") => {
+      state.snackbar.message = text;
+      state.snackbar.color = color;
+      state.snackbar.show = true;
+    };
+    const copyPath = async (path) => {
+      try {
+        await navigator.clipboard.writeText(path);
+        showNotification("路径已复制到剪贴板");
+      } catch (err) {
+        showNotification("复制路径失败", "error");
       }
     };
     const getCleanupList = () => {
@@ -676,8 +736,8 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
       const _component_v_chip = _resolveComponent$1("v-chip");
       const _component_v_btn = _resolveComponent$1("v-btn");
       const _component_v_card_title = _resolveComponent$1("v-card-title");
-      const _component_v_icon = _resolveComponent$1("v-icon");
       const _component_v_tooltip = _resolveComponent$1("v-tooltip");
+      const _component_v_icon = _resolveComponent$1("v-icon");
       const _component_v_table = _resolveComponent$1("v-table");
       const _component_v_card_text = _resolveComponent$1("v-card-text");
       const _component_v_snackbar = _resolveComponent$1("v-snackbar");
@@ -736,20 +796,37 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
                       return _openBlock$1(), _createElementBlock$1("tr", {
                         key: item.hash
                       }, [
+                        _createElementVNode$1("td", _hoisted_1$1, [
+                          _createVNode$1(_component_v_tooltip, { location: "bottom" }, {
+                            activator: _withCtx$1(({ props }) => [
+                              _createElementVNode$1("div", _mergeProps({ ref_for: true }, props, { style: { "display": "flex", "align-items": "center" } }), [
+                                item.hasOwnProperty("client") && item.client ? (_openBlock$1(), _createBlock(_component_v_chip, {
+                                  key: 0,
+                                  color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
+                                  size: "small",
+                                  "text-color": "white"
+                                }, {
+                                  default: _withCtx$1(() => [
+                                    _createTextVNode$1(_toDisplayString$1((item.client || "").slice(0, 2)), 1)
+                                  ]),
+                                  _: 2
+                                }, 1032, ["color"])) : _createCommentVNode("", true),
+                                _createElementVNode$1("span", _hoisted_2, _toDisplayString$1(item.name), 1),
+                                _createVNode$1(_component_v_btn, {
+                                  icon: "mdi-content-copy",
+                                  size: "x-small",
+                                  onClick: _withModifiers(($event) => copyPath(item.path), ["stop"]),
+                                  style: { "margin-left": "8px" }
+                                }, null, 8, ["onClick"])
+                              ], 16)
+                            ]),
+                            default: _withCtx$1(() => [
+                              _createElementVNode$1("span", null, _toDisplayString$1(item.path), 1)
+                            ]),
+                            _: 2
+                          }, 1024)
+                        ]),
                         item.type == "torrent" ? (_openBlock$1(), _createElementBlock$1(_Fragment, { key: 0 }, [
-                          _createElementVNode$1("td", _hoisted_1$1, [
-                            _createVNode$1(_component_v_chip, {
-                              color: item.client == "transmission" ? "primary" : "error",
-                              size: "small",
-                              "text-color": "white"
-                            }, {
-                              default: _withCtx$1(() => [
-                                _createTextVNode$1(_toDisplayString$1((item.client || "").slice(0, 2)), 1)
-                              ]),
-                              _: 2
-                            }, 1032, ["color"]),
-                            _createTextVNode$1(" " + _toDisplayString$1(item.name), 1)
-                          ]),
                           _createElementVNode$1("td", null, [
                             _createVNode$1(_component_v_chip, {
                               color: deleteOptionText(item).color,
@@ -777,9 +854,9 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
                               _: 2
                             }, 1032, ["color"])
                           ]),
-                          _createElementVNode$1("td", _hoisted_2, _toDisplayString$1(_unref(formatBytes)(item.size)), 1)
+                          _createElementVNode$1("td", _hoisted_3, _toDisplayString$1(_unref(formatBytes)(item.size)), 1)
                         ], 64)) : _createCommentVNode("", true),
-                        _createElementVNode$1("td", _hoisted_3, [
+                        _createElementVNode$1("td", _hoisted_4, [
                           _createVNode$1(_component_v_btn, {
                             icon: "",
                             size: "small",
@@ -837,7 +914,7 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
   }
 });
 
-const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-f50019e7"]]);
+const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-d238067e"]]);
 
 const {defineComponent:_defineComponent} = await importShared('vue');
 

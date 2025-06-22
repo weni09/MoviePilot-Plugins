@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 
 QBITTORRENT = "qbittorrent"
 TRANSMISSION = "transmission"
@@ -15,3 +16,4 @@ VIDEO_SUFFIX_LIST = ['.mp4', '.mkv', '.avi', '.mov', '.wmv', '.flv', '.webm',
                      '.mpeg', '.mpg', '.3gp', '.ts', '.m4v', '.rmvb', '.rm', '.vob', '.asf', '.ogv']
 
 TORRENT_INFO_FILE_NAME = "torrent_info.json"
+
