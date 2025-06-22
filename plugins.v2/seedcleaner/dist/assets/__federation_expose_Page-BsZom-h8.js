@@ -396,11 +396,33 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       state.snackbar.show = true;
     };
     const copyPath = async (path) => {
-      try {
-        await navigator.clipboard.writeText(path);
-        showNotification("路径已复制到剪贴板");
-      } catch (err) {
-        showNotification("复制路径失败", "error");
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(path);
+          showNotification("路径已复制到剪贴板");
+        } catch (err) {
+          console.error("复制路径失败", err);
+          showNotification("复制路径失败", "error");
+        }
+      } else {
+        try {
+          const textarea = document.createElement("textarea");
+          textarea.value = path;
+          textarea.style.position = "fixed";
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          const successful = document.execCommand("copy");
+          document.body.removeChild(textarea);
+          if (successful) {
+            showNotification("路径已复制到剪贴板");
+          } else {
+            showNotification("复制路径失败", "error");
+          }
+        } catch (err) {
+          console.error("兼容方案:复制路径失败", err);
+          showNotification("复制路径失败", "error");
+        }
       }
     };
     __expose({
@@ -631,7 +653,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-103ef57b"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-119bda9d"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -717,11 +739,33 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
       state.snackbar.show = true;
     };
     const copyPath = async (path) => {
-      try {
-        await navigator.clipboard.writeText(path);
-        showNotification("路径已复制到剪贴板");
-      } catch (err) {
-        showNotification("复制路径失败", "error");
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(path);
+          showNotification("路径已复制到剪贴板");
+        } catch (err) {
+          console.error("复制路径失败", err);
+          showNotification("复制路径失败", "error");
+        }
+      } else {
+        try {
+          const textarea = document.createElement("textarea");
+          textarea.value = path;
+          textarea.style.position = "fixed";
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          const successful = document.execCommand("copy");
+          document.body.removeChild(textarea);
+          if (successful) {
+            showNotification("路径已复制到剪贴板");
+          } else {
+            showNotification("复制路径失败", "error");
+          }
+        } catch (err) {
+          console.error("兼容方案:复制路径失败", err);
+          showNotification("复制路径失败", "error");
+        }
       }
     };
     const getCleanupList = () => {
@@ -913,7 +957,7 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
   }
 });
 
-const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-4c153d43"]]);
+const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-18954e78"]]);
 
 const {defineComponent:_defineComponent} = await importShared('vue');
 
