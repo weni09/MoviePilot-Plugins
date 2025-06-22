@@ -1,0 +1,59 @@
+/* 覆盖vuetify样式 */
+.label-text[data-v-8f891bfa] {
+  font-size: 0.9rem !important;
+  line-height: 1.667;
+  letter-spacing: 0.0333333333em !important;
+  font-family: "Roboto", sans-serif;
+  text-transform: none !important;
+}
+.div-radio-group[data-v-8f891bfa] {
+  display: flex;
+}
+.bg-primary-lighten-5[data-v-8f891bfa] {
+  background-color: rgba(var(--v-theme-primary), 0.07);
+}
+.border[data-v-8f891bfa] {
+  border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+.text-subtitle-2[data-v-8f891bfa] {
+  font-size: 0.9rem !important;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.size-column[data-v-119bda9d] {
+  width: 7.5rem !important;
+  max-width: 7.5rem !important;
+}
+.name-column[data-v-119bda9d] {
+  width: 40rem !important;
+  max-width: 40rem !important;
+}
+/* 覆盖vuetify样式 */
+.size-column[data-v-18954e78] {
+  width: 7.5rem !important;
+  max-width: 7.5rem !important;
+}
+.name-column[data-v-18954e78] {
+  width: 40rem !important;
+  max-width: 40rem !important;
+}/* 覆盖vuetify样式 */
+.plugin-page[data-v-28138550] {
+  margin: 0 auto;
+  padding: 0.5rem;
+}
+.bg-primary-lighten-5[data-v-28138550] {
+  background-color: rgba(var(--v-theme-primary), 0.07);
+}
+.border[data-v-28138550] {
+  border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+.text-subtitle[data-v-28138550] {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.text-subtitle-1[data-v-28138550] {
+  font-size: 1.1rem !important;
+}
+.text-subtitle-2[data-v-28138550] {
+  font-size: 1rem !important;
+}

@@ -1,66 +1,10 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
-import { bp as createForm, a as useRender, H as forwardRefs, bq as makeFormProps, c as makeComponentProps, aO as VCard, aT as VCardTitle, z as VIcon, aS as VCardText, b5 as VRow, aV as VCol, af as VSelect, L as VTextField, aP as VCardActions, q as VBtn, N as VList, O as VListItem, b1 as VListItemTitle, T as VChip, b0 as VListItemSubtitle, ai as VDivider, am as VSpacer, r as VSnackbar, P as PLUGIN_ID } from './VSnackbar-BBT0ycYQ.js';
-import { g as genericComponent, p as propsFactory } from './layout-I2YKawZF.js';
+import { P as PLUGIN_ID } from './definedFunctions-Bb1e_4Bq.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
-
-const {normalizeClass:_normalizeClass,normalizeStyle:_normalizeStyle,createElementVNode:_createElementVNode$1} = await importShared('vue');
-const {ref: ref$1} = await importShared('vue');
-const makeVFormProps = propsFactory({
-  ...makeComponentProps(),
-  ...makeFormProps()
-}, 'VForm');
-const VForm = genericComponent()({
-  name: 'VForm',
-  props: makeVFormProps(),
-  emits: {
-    'update:modelValue': val => true,
-    submit: e => true
-  },
-  setup(props, _ref) {
-    let {
-      slots,
-      emit
-    } = _ref;
-    const form = createForm(props);
-    const formRef = ref$1();
-    function onReset(e) {
-      e.preventDefault();
-      form.reset();
-    }
-    function onSubmit(_e) {
-      const e = _e;
-      const ready = form.validate();
-      e.then = ready.then.bind(ready);
-      e.catch = ready.catch.bind(ready);
-      e.finally = ready.finally.bind(ready);
-      emit('submit', e);
-      if (!e.defaultPrevented) {
-        ready.then(_ref2 => {
-          let {
-            valid
-          } = _ref2;
-          if (valid) {
-            formRef.value?.submit();
-          }
-        });
-      }
-      e.preventDefault();
-    }
-    useRender(() => _createElementVNode$1("form", {
-      "ref": formRef,
-      "class": _normalizeClass(['v-form', props.class]),
-      "style": _normalizeStyle(props.style),
-      "novalidate": true,
-      "onReset": onReset,
-      "onSubmit": onSubmit
-    }, [slots.default?.(form)]));
-    return forwardRefs(form, formRef);
-  }
-});
 
 const {defineComponent:_defineComponent} = await importShared('vue');
 
-const {createVNode:_createVNode,createElementVNode:_createElementVNode,withCtx:_withCtx,createTextVNode:_createTextVNode,renderList:_renderList,Fragment:_Fragment,openBlock:_openBlock,createElementBlock:_createElementBlock,toDisplayString:_toDisplayString,createBlock:_createBlock,createCommentVNode:_createCommentVNode,withModifiers:_withModifiers} = await importShared('vue');
+const {resolveComponent:_resolveComponent,createVNode:_createVNode,createElementVNode:_createElementVNode,withCtx:_withCtx,createTextVNode:_createTextVNode,renderList:_renderList,Fragment:_Fragment,openBlock:_openBlock,createElementBlock:_createElementBlock,toDisplayString:_toDisplayString,createBlock:_createBlock,createCommentVNode:_createCommentVNode,withModifiers:_withModifiers} = await importShared('vue');
 
 const _hoisted_1 = { class: "plugin-common plugin-config" };
 const {ref,reactive,onMounted,computed,watch} = await importShared('vue');
@@ -231,34 +175,34 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       getSystemDownloaders();
     });
     return (_ctx, _cache) => {
-                                                            
-                                                                        
-                                                                
-                                                                      
-                                                            
-                                                                        
-                                                          
-                                                                            
-                                                          
-                                                            
-                                                                                  
-                                                                                        
-                                                                      
-                                                            
-                                                          
-                                                            
-                                                                  
-                                                                
-                                                                    
+      const _component_v_icon = _resolveComponent("v-icon");
+      const _component_v_card_title = _resolveComponent("v-card-title");
+      const _component_v_select = _resolveComponent("v-select");
+      const _component_v_card_text = _resolveComponent("v-card-text");
+      const _component_v_card = _resolveComponent("v-card");
+      const _component_v_text_field = _resolveComponent("v-text-field");
+      const _component_v_btn = _resolveComponent("v-btn");
+      const _component_v_card_actions = _resolveComponent("v-card-actions");
+      const _component_v_col = _resolveComponent("v-col");
+      const _component_v_chip = _resolveComponent("v-chip");
+      const _component_v_list_item_title = _resolveComponent("v-list-item-title");
+      const _component_v_list_item_subtitle = _resolveComponent("v-list-item-subtitle");
+      const _component_v_list_item = _resolveComponent("v-list-item");
+      const _component_v_list = _resolveComponent("v-list");
+      const _component_v_row = _resolveComponent("v-row");
+      const _component_v_form = _resolveComponent("v-form");
+      const _component_v_divider = _resolveComponent("v-divider");
+      const _component_v_spacer = _resolveComponent("v-spacer");
+      const _component_v_snackbar = _resolveComponent("v-snackbar");
       return _openBlock(), _createElementBlock("div", _hoisted_1, [
-        _createVNode(VCard, {
+        _createVNode(_component_v_card, {
           flat: "",
           class: "rounded border"
         }, {
           default: _withCtx(() => [
-            _createVNode(VCardTitle, { class: "text-subtitle-1 d-flex align-center px-3 py-2 bg-primary-lighten-5" }, {
+            _createVNode(_component_v_card_title, { class: "text-subtitle-1 d-flex align-center px-3 py-2 bg-primary-lighten-5" }, {
               default: _withCtx(() => [
-                _createVNode(VIcon, {
+                _createVNode(_component_v_icon, {
                   icon: "mdi-cog",
                   class: "mr-2",
                   color: "primary",
@@ -269,29 +213,29 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
               _: 1,
               __: [13]
             }),
-            _createVNode(VCardText, { class: "px-3 py-2" }, {
+            _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
               default: _withCtx(() => [
-                _createVNode(VForm, {
+                _createVNode(_component_v_form, {
                   ref_key: "formRef",
                   ref: formRef,
                   onSubmit: _withModifiers(saveFullConfig, ["prevent"])
                 }, {
                   default: _withCtx(() => [
-                    _createVNode(VRow, { "no-gutters": "" }, {
+                    _createVNode(_component_v_row, { "no-gutters": "" }, {
                       default: _withCtx(() => [
-                        _createVNode(VCol, {
+                        _createVNode(_component_v_col, {
                           cols: "6",
                           class: "pr-4"
                         }, {
                           default: _withCtx(() => [
-                            _createVNode(VCard, {
+                            _createVNode(_component_v_card, {
                               flat: "",
                               class: "rounded border config-card mb-4"
                             }, {
                               default: _withCtx(() => [
-                                _createVNode(VCardText, { class: "px-3 py-2" }, {
+                                _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
                                   default: _withCtx(() => [
-                                    _createVNode(VSelect, {
+                                    _createVNode(_component_v_select, {
                                       modelValue: state.selectedSystemDownloaderNames,
                                       "onUpdate:modelValue": [
                                         _cache[0] || (_cache[0] = ($event) => state.selectedSystemDownloaderNames = $event),
@@ -313,21 +257,21 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                               ]),
                               _: 1
                             }),
-                            _createVNode(VCard, {
+                            _createVNode(_component_v_card, {
                               flat: "",
                               class: "mt-4 rounded border config-card"
                             }, {
                               default: _withCtx(() => [
-                                _createVNode(VCardTitle, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
+                                _createVNode(_component_v_card_title, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
                                   default: _withCtx(() => _cache[14] || (_cache[14] = [
                                     _createTextVNode(" 自定义下载器 ")
                                   ])),
                                   _: 1,
                                   __: [14]
                                 }),
-                                _createVNode(VCardText, { class: "px-3 py-2" }, {
+                                _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
                                   default: _withCtx(() => [
-                                    _createVNode(VTextField, {
+                                    _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.name,
                                       "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => state.customDownloader.name = $event),
                                       label: "名称",
@@ -338,7 +282,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       required: "",
                                       class: "mb-2 text-caption"
                                     }, null, 8, ["modelValue", "rules"]),
-                                    _createVNode(VSelect, {
+                                    _createVNode(_component_v_select, {
                                       modelValue: state.customDownloader.type,
                                       "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.customDownloader.type = $event),
                                       items: ["qbittorrent", "transmission"],
@@ -347,7 +291,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       density: "compact",
                                       class: "mb-2 text-caption"
                                     }, null, 8, ["modelValue"]),
-                                    _createVNode(VTextField, {
+                                    _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.host,
                                       "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => state.customDownloader.host = $event),
                                       label: "下载器地址 (带http://或https://)",
@@ -355,7 +299,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       density: "compact",
                                       class: "mb-2 text-caption"
                                     }, null, 8, ["modelValue"]),
-                                    _createVNode(VTextField, {
+                                    _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.port,
                                       "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => state.customDownloader.port = $event),
                                       modelModifiers: { number: true },
@@ -365,7 +309,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       density: "compact",
                                       class: "mb-2 text-caption"
                                     }, null, 8, ["modelValue"]),
-                                    _createVNode(VTextField, {
+                                    _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.username,
                                       "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => state.customDownloader.username = $event),
                                       label: "用户名",
@@ -373,7 +317,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       density: "compact",
                                       class: "mb-2 text-caption"
                                     }, null, 8, ["modelValue"]),
-                                    _createVNode(VTextField, {
+                                    _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.password,
                                       "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => state.customDownloader.password = $event),
                                       label: "密码",
@@ -385,9 +329,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                   ]),
                                   _: 1
                                 }),
-                                _createVNode(VCardActions, { class: "px-3 pb-2 d-flex justify-end" }, {
+                                _createVNode(_component_v_card_actions, { class: "px-3 pb-2 d-flex justify-end" }, {
                                   default: _withCtx(() => [
-                                    _createVNode(VBtn, {
+                                    _createVNode(_component_v_btn, {
                                       color: "primary",
                                       "prepend-icon": "mdi-plus-circle",
                                       onClick: addCustomDownloader,
@@ -408,38 +352,38 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                           ]),
                           _: 1
                         }),
-                        _createVNode(VCol, { cols: "6" }, {
+                        _createVNode(_component_v_col, { cols: "6" }, {
                           default: _withCtx(() => [
-                            _createVNode(VCard, {
+                            _createVNode(_component_v_card, {
                               flat: "",
                               class: "rounded border config-card downloader-list"
                             }, {
                               default: _withCtx(() => [
-                                _createVNode(VCardTitle, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
+                                _createVNode(_component_v_card_title, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
                                   default: _withCtx(() => _cache[16] || (_cache[16] = [
                                     _createTextVNode(" 下载器列表 ")
                                   ])),
                                   _: 1,
                                   __: [16]
                                 }),
-                                _createVNode(VCardText, { class: "px-3 py-2" }, {
+                                _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
                                   default: _withCtx(() => [
-                                    _createVNode(VList, {
+                                    _createVNode(_component_v_list, {
                                       dense: "",
                                       lines: "one"
                                     }, {
                                       default: _withCtx(() => [
                                         (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(allDownloaders.value, (item, index) => {
-                                          return _openBlock(), _createBlock(VListItem, { key: index }, {
+                                          return _openBlock(), _createBlock(_component_v_list_item, { key: index }, {
                                             append: _withCtx(() => [
-                                              item._type === "custom" ? (_openBlock(), _createBlock(VBtn, {
+                                              item._type === "custom" ? (_openBlock(), _createBlock(_component_v_btn, {
                                                 key: 0,
                                                 color: "info",
                                                 icon: "mdi-pencil",
                                                 size: "x-small",
                                                 onClick: ($event) => editCustom(item)
                                               }, null, 8, ["onClick"])) : _createCommentVNode("", true),
-                                              _createVNode(VBtn, {
+                                              _createVNode(_component_v_btn, {
                                                 class: "ml-2",
                                                 icon: "mdi-delete",
                                                 size: "x-small",
@@ -447,9 +391,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                               }, null, 8, ["onClick"])
                                             ]),
                                             default: _withCtx(() => [
-                                              _createVNode(VListItemTitle, null, {
+                                              _createVNode(_component_v_list_item_title, null, {
                                                 default: _withCtx(() => [
-                                                  _createVNode(VChip, {
+                                                  _createVNode(_component_v_chip, {
                                                     color: item._type == "system" ? "primary" : "info",
                                                     size: "small",
                                                     "text-color": "white"
@@ -463,7 +407,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                                 ]),
                                                 _: 2
                                               }, 1024),
-                                              _createVNode(VListItemSubtitle, null, {
+                                              _createVNode(_component_v_list_item_subtitle, null, {
                                                 default: _withCtx(() => [
                                                   _createTextVNode(_toDisplayString(item.host) + ":" + _toDisplayString(item.port), 1)
                                                 ]),
@@ -482,21 +426,21 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                               ]),
                               _: 1
                             }),
-                            _createVNode(VCard, {
+                            _createVNode(_component_v_card, {
                               flat: "",
                               class: "rounded border config-card mt-2"
                             }, {
                               default: _withCtx(() => [
-                                _createVNode(VCardTitle, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
+                                _createVNode(_component_v_card_title, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
                                   default: _withCtx(() => _cache[17] || (_cache[17] = [
                                     _createTextVNode(" 路径设置 ")
                                   ])),
                                   _: 1,
                                   __: [17]
                                 }),
-                                _createVNode(VCardText, { class: "px-3 py-2" }, {
+                                _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
                                   default: _withCtx(() => [
-                                    _createVNode(VTextField, {
+                                    _createVNode(_component_v_text_field, {
                                       modelValue: editableConfig.exclude_paths,
                                       "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => editableConfig.exclude_paths = $event),
                                       label: "排除的目录",
@@ -507,7 +451,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       density: "compact",
                                       class: "mb-3 text-caption"
                                     }, null, 8, ["modelValue"]),
-                                    _createVNode(VTextField, {
+                                    _createVNode(_component_v_text_field, {
                                       modelValue: editableConfig.extra_dir_paths,
                                       "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => editableConfig.extra_dir_paths = $event),
                                       label: "额外的目录",
@@ -521,9 +465,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                   ]),
                                   _: 1
                                 }),
-                                _createVNode(VCardText, { class: "d-flex align-center px-3 py-1" }, {
+                                _createVNode(_component_v_card_text, { class: "d-flex align-center px-3 py-1" }, {
                                   default: _withCtx(() => [
-                                    _createVNode(VIcon, {
+                                    _createVNode(_component_v_icon, {
                                       icon: "mdi-information",
                                       color: "error",
                                       class: "mr-2",
@@ -549,11 +493,11 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
               ]),
               _: 1
             }),
-            _createVNode(VDivider),
-            _createVNode(VCardActions, { class: "px-2 py-1 pr-10" }, {
+            _createVNode(_component_v_divider),
+            _createVNode(_component_v_card_actions, { class: "px-2 py-1 pr-10" }, {
               default: _withCtx(() => [
-                _createVNode(VSpacer),
-                _createVNode(VBtn, {
+                _createVNode(_component_v_spacer),
+                _createVNode(_component_v_btn, {
                   color: "info",
                   onClick: _cache[10] || (_cache[10] = ($event) => emit("switch", "page")),
                   "prepend-icon": "mdi-view-dashboard",
@@ -566,8 +510,8 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   _: 1,
                   __: [19]
                 }, 8, ["disabled"]),
-                _createVNode(VDivider, { vertical: "" }),
-                _createVNode(VBtn, {
+                _createVNode(_component_v_divider, { vertical: "" }),
+                _createVNode(_component_v_btn, {
                   color: "primary",
                   disabled: state.saving,
                   onClick: saveFullConfig,
@@ -582,8 +526,8 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   _: 1,
                   __: [20]
                 }, 8, ["disabled", "loading"]),
-                _createVNode(VDivider, { vertical: "" }),
-                _createVNode(VBtn, {
+                _createVNode(_component_v_divider, { vertical: "" }),
+                _createVNode(_component_v_btn, {
                   color: "grey",
                   onClick: _cache[11] || (_cache[11] = ($event) => emit("close")),
                   "prepend-icon": "mdi-close",
@@ -603,7 +547,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
           ]),
           _: 1
         }),
-        _createVNode(VSnackbar, {
+        _createVNode(_component_v_snackbar, {
           modelValue: state.snackbar.show,
           "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => state.snackbar.show = $event),
           timeout: 3e3,
@@ -622,4 +566,4 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
 
 const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-066d88c2"]]);
 
-export { VForm as V, ConfigComponent as default };
+export { ConfigComponent as default };
