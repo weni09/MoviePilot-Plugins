@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
-import { f as formatBytes, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-BVR0Cihv.js';
+import { m as mapTrackers, f as formatBytes, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-YHIDKS4y.js';
 
 const {resolveComponent:_resolveComponent$3,createVNode:_createVNode$3,createElementVNode:_createElementVNode$3,withCtx:_withCtx$3,openBlock:_openBlock$3,createBlock:_createBlock$2} = await importShared('vue');
 
@@ -293,8 +293,10 @@ const {createElementVNode:_createElementVNode$2,createTextVNode:_createTextVNode
 
 const _hoisted_1$2 = { class: "text-left" };
 const _hoisted_2$1 = { class: "name-column" };
-const _hoisted_3$1 = { style: { "margin-left": "8px" } };
-const _hoisted_4$1 = { class: "size-column" };
+const _hoisted_3$1 = { class: "name-text" };
+const _hoisted_4$1 = { key: 0 };
+const _hoisted_5 = { key: 1 };
+const _hoisted_6 = { class: "size-column" };
 const {computed: computed$1,reactive: reactive$2} = await importShared('vue');
 const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   __name: "ScanResults",
@@ -403,6 +405,17 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         showNotification("复制路径失败", "error");
       }
     };
+    const availableColors = ["primary", "secondary", "success", "info", "warning", "error", "accent"];
+    const getColorByString = (strs) => {
+      let strsArray = strs.sort();
+      let _strs = strsArray.join("");
+      let hash = 0;
+      for (let i = 0; i < _strs.length; i++) {
+        hash = _strs.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const index = Math.abs(hash % availableColors.length);
+      return availableColors[index];
+    };
     __expose({
       clearSelectedScans
     });
@@ -509,7 +522,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
             default: _withCtx$2(() => [
               _createVNode$2(_component_v_table, {
                 "fixed-header": "",
-                height: "320px",
+                height: "420px",
                 density: "compact",
                 hover: ""
               }, {
@@ -573,7 +586,33 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                           }, 1024)
                         ]),
                         item.type === "torrent" ? (_openBlock$2(), _createElementBlock$2(_Fragment$1, { key: 0 }, [
-                          _createElementVNode$2("td", null, _toDisplayString$2(item.trackers.length > 0 ? item.trackers.join(", ") : "无 Tracker"), 1),
+                          _createElementVNode$2("td", null, [
+                            item.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_4$1, [
+                              _createVNode$2(_component_v_chip, {
+                                color: getColorByString(item.trackers),
+                                "text-color": "white",
+                                size: "small",
+                                class: "mr-1 mb-1"
+                              }, {
+                                default: _withCtx$2(() => [
+                                  _createTextVNode$2(_toDisplayString$2(_unref$1(mapTrackers)(item.trackers)[0]), 1)
+                                ]),
+                                _: 2
+                              }, 1032, ["color"])
+                            ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_5, [
+                              _createVNode$2(_component_v_chip, {
+                                color: "info",
+                                "text-color": "white",
+                                size: "small"
+                              }, {
+                                default: _withCtx$2(() => _cache[12] || (_cache[12] = [
+                                  _createTextVNode$2(" 无 Tracker ")
+                                ])),
+                                _: 1,
+                                __: [12]
+                              })
+                            ]))
+                          ]),
                           _createElementVNode$2("td", null, [
                             _createVNode$2(_component_v_chip, {
                               color: item.data_missing ? "error" : "success",
@@ -587,22 +626,34 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                             }, 1032, ["color"])
                           ])
                         ], 64)) : item.type === "file" ? (_openBlock$2(), _createElementBlock$2(_Fragment$1, { key: 1 }, [
-                          _cache[13] || (_cache[13] = _createElementVNode$2("td", null, "无 Tracker", -1)),
+                          _createElementVNode$2("td", null, [
+                            _createVNode$2(_component_v_chip, {
+                              color: "info",
+                              "text-color": "white",
+                              size: "small"
+                            }, {
+                              default: _withCtx$2(() => _cache[13] || (_cache[13] = [
+                                _createTextVNode$2(" 无 Tracker ")
+                              ])),
+                              _: 1,
+                              __: [13]
+                            })
+                          ]),
                           _createElementVNode$2("td", null, [
                             _createVNode$2(_component_v_chip, {
                               color: "warning",
                               size: "small",
                               "text-color": "white"
                             }, {
-                              default: _withCtx$2(() => _cache[12] || (_cache[12] = [
+                              default: _withCtx$2(() => _cache[14] || (_cache[14] = [
                                 _createTextVNode$2("缺失种子")
                               ])),
                               _: 1,
-                              __: [12]
+                              __: [14]
                             })
                           ])
                         ], 64)) : _createCommentVNode$1("", true),
-                        _createElementVNode$2("td", _hoisted_4$1, _toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
+                        _createElementVNode$2("td", _hoisted_6, _toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
                       ]);
                     }), 128))
                   ])
@@ -631,7 +682,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-8f11e8cf"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-bcb2b756"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -913,7 +964,7 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
   }
 });
 
-const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-6be8fe86"]]);
+const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-03decced"]]);
 
 const {defineComponent:_defineComponent} = await importShared('vue');
 
