@@ -841,7 +841,6 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
                           ]),
                           _createElementVNode$1("td", null, _toDisplayString$1(itemSizeText(item)), 1)
                         ], 64)) : item.type == "file" ? (_openBlock$1(), _createElementBlock$1(_Fragment, { key: 1 }, [
-                          _createElementVNode$1("td", null, _toDisplayString$1(item.name), 1),
                           _createElementVNode$1("td", null, [
                             _createVNode$1(_component_v_chip, {
                               color: deleteOptionText(item).color,
@@ -914,7 +913,7 @@ const _sfc_main$1 = /* @__PURE__ */ _defineComponent$1({
   }
 });
 
-const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-d238067e"]]);
+const CleanupList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-4c153d43"]]);
 
 const {defineComponent:_defineComponent} = await importShared('vue');
 
