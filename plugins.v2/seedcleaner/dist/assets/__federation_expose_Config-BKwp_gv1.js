@@ -4,7 +4,7 @@ import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
 
 const {defineComponent:_defineComponent} = await importShared('vue');
 
-const {resolveComponent:_resolveComponent,createVNode:_createVNode,createElementVNode:_createElementVNode,withCtx:_withCtx,createTextVNode:_createTextVNode,renderList:_renderList,Fragment:_Fragment,openBlock:_openBlock,createElementBlock:_createElementBlock,toDisplayString:_toDisplayString,createBlock:_createBlock,createCommentVNode:_createCommentVNode,withModifiers:_withModifiers} = await importShared('vue');
+const {resolveComponent:_resolveComponent,createVNode:_createVNode,createElementVNode:_createElementVNode,createTextVNode:_createTextVNode,withCtx:_withCtx,renderList:_renderList,Fragment:_Fragment,openBlock:_openBlock,createElementBlock:_createElementBlock,toDisplayString:_toDisplayString,createBlock:_createBlock,createCommentVNode:_createCommentVNode,withModifiers:_withModifiers} = await importShared('vue');
 
 const _hoisted_1 = { class: "plugin-common plugin-config" };
 const {ref,reactive,onMounted,computed,watch} = await importShared('vue');
@@ -176,12 +176,15 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
     });
     return (_ctx, _cache) => {
       const _component_v_icon = _resolveComponent("v-icon");
+      const _component_v_card_subtitle = _resolveComponent("v-card-subtitle");
+      const _component_v_spacer = _resolveComponent("v-spacer");
+      const _component_v_tooltip = _resolveComponent("v-tooltip");
+      const _component_v_btn = _resolveComponent("v-btn");
       const _component_v_card_title = _resolveComponent("v-card-title");
       const _component_v_select = _resolveComponent("v-select");
       const _component_v_card_text = _resolveComponent("v-card-text");
       const _component_v_card = _resolveComponent("v-card");
       const _component_v_text_field = _resolveComponent("v-text-field");
-      const _component_v_btn = _resolveComponent("v-btn");
       const _component_v_card_actions = _resolveComponent("v-card-actions");
       const _component_v_col = _resolveComponent("v-col");
       const _component_v_chip = _resolveComponent("v-chip");
@@ -191,8 +194,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       const _component_v_list = _resolveComponent("v-list");
       const _component_v_row = _resolveComponent("v-row");
       const _component_v_form = _resolveComponent("v-form");
-      const _component_v_divider = _resolveComponent("v-divider");
-      const _component_v_spacer = _resolveComponent("v-spacer");
       const _component_v_snackbar = _resolveComponent("v-snackbar");
       return _openBlock(), _createElementBlock("div", _hoisted_1, [
         _createVNode(_component_v_card, {
@@ -208,10 +209,100 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   color: "primary",
                   size: "small"
                 }),
-                _cache[13] || (_cache[13] = _createElementVNode("span", null, "种子清理工-配置", -1))
+                _cache[17] || (_cache[17] = _createElementVNode("span", null, "种子清理工", -1)),
+                _createVNode(_component_v_card_subtitle, { class: "ml-2" }, {
+                  default: _withCtx(() => _cache[13] || (_cache[13] = [
+                    _createTextVNode("配置页")
+                  ])),
+                  _: 1,
+                  __: [13]
+                }),
+                _createVNode(_component_v_spacer),
+                _createVNode(_component_v_btn, {
+                  color: "info",
+                  onClick: _cache[0] || (_cache[0] = ($event) => emit("switch", "page")),
+                  icon: "mdi-view-dashboard",
+                  disabled: state.saving,
+                  variant: "tonal",
+                  size: "small",
+                  class: "mr-4"
+                }, {
+                  default: _withCtx(() => [
+                    _createVNode(_component_v_icon, {
+                      icon: "mdi-view-dashboard",
+                      size: "small"
+                    }),
+                    _createVNode(_component_v_tooltip, {
+                      activator: "parent",
+                      location: "top"
+                    }, {
+                      default: _withCtx(() => _cache[14] || (_cache[14] = [
+                        _createTextVNode("详情页")
+                      ])),
+                      _: 1,
+                      __: [14]
+                    })
+                  ]),
+                  _: 1
+                }, 8, ["disabled"]),
+                _createVNode(_component_v_btn, {
+                  color: "success",
+                  disabled: state.saving,
+                  onClick: saveFullConfig,
+                  loading: state.saving,
+                  icon: "mdi-content-save",
+                  variant: "tonal",
+                  size: "small",
+                  class: "mr-4"
+                }, {
+                  default: _withCtx(() => [
+                    _createVNode(_component_v_icon, {
+                      icon: "mdi-content-save",
+                      size: "small"
+                    }),
+                    _createVNode(_component_v_tooltip, {
+                      activator: "parent",
+                      location: "top"
+                    }, {
+                      default: _withCtx(() => _cache[15] || (_cache[15] = [
+                        _createTextVNode("保存配置")
+                      ])),
+                      _: 1,
+                      __: [15]
+                    })
+                  ]),
+                  _: 1
+                }, 8, ["disabled", "loading"]),
+                _createVNode(_component_v_btn, {
+                  color: "primary",
+                  onClick: _cache[1] || (_cache[1] = ($event) => emit("close")),
+                  icon: "mdi-close",
+                  disabled: state.saving,
+                  variant: "tonal",
+                  size: "small",
+                  class: "mr-4"
+                }, {
+                  default: _withCtx(() => [
+                    _createVNode(_component_v_icon, {
+                      icon: "mdi-close",
+                      size: "small"
+                    }),
+                    _createVNode(_component_v_tooltip, {
+                      activator: "parent",
+                      location: "top"
+                    }, {
+                      default: _withCtx(() => _cache[16] || (_cache[16] = [
+                        _createTextVNode("关闭")
+                      ])),
+                      _: 1,
+                      __: [16]
+                    })
+                  ]),
+                  _: 1
+                }, 8, ["disabled"])
               ]),
               _: 1,
-              __: [13]
+              __: [17]
             }),
             _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
               default: _withCtx(() => [
@@ -238,7 +329,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                     _createVNode(_component_v_select, {
                                       modelValue: state.selectedSystemDownloaderNames,
                                       "onUpdate:modelValue": [
-                                        _cache[0] || (_cache[0] = ($event) => state.selectedSystemDownloaderNames = $event),
+                                        _cache[2] || (_cache[2] = ($event) => state.selectedSystemDownloaderNames = $event),
                                         handleSystemDownloadersChange
                                       ],
                                       items: state.systemDownloader.map((d) => d.name),
@@ -263,28 +354,28 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                             }, {
                               default: _withCtx(() => [
                                 _createVNode(_component_v_card_title, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
-                                  default: _withCtx(() => _cache[14] || (_cache[14] = [
+                                  default: _withCtx(() => _cache[18] || (_cache[18] = [
                                     _createTextVNode(" 自定义下载器 ")
                                   ])),
                                   _: 1,
-                                  __: [14]
+                                  __: [18]
                                 }),
                                 _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
                                   default: _withCtx(() => [
                                     _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.name,
-                                      "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => state.customDownloader.name = $event),
+                                      "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.customDownloader.name = $event),
                                       label: "名称",
                                       variant: "outlined",
                                       density: "compact",
-                                      onBlur: _cache[2] || (_cache[2] = ($event) => validateName(state.customDownloader.name)),
+                                      onBlur: _cache[4] || (_cache[4] = ($event) => validateName(state.customDownloader.name)),
                                       rules: [validateName],
                                       required: "",
                                       class: "mb-2 text-caption"
                                     }, null, 8, ["modelValue", "rules"]),
                                     _createVNode(_component_v_select, {
                                       modelValue: state.customDownloader.type,
-                                      "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.customDownloader.type = $event),
+                                      "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => state.customDownloader.type = $event),
                                       items: ["qbittorrent", "transmission"],
                                       label: "类型",
                                       variant: "outlined",
@@ -293,7 +384,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                     }, null, 8, ["modelValue"]),
                                     _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.host,
-                                      "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => state.customDownloader.host = $event),
+                                      "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => state.customDownloader.host = $event),
                                       label: "下载器地址 (带http://或https://)",
                                       variant: "outlined",
                                       density: "compact",
@@ -301,7 +392,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                     }, null, 8, ["modelValue"]),
                                     _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.port,
-                                      "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => state.customDownloader.port = $event),
+                                      "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => state.customDownloader.port = $event),
                                       modelModifiers: { number: true },
                                       label: "端口",
                                       type: "number",
@@ -311,7 +402,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                     }, null, 8, ["modelValue"]),
                                     _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.username,
-                                      "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => state.customDownloader.username = $event),
+                                      "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => state.customDownloader.username = $event),
                                       label: "用户名",
                                       variant: "outlined",
                                       density: "compact",
@@ -319,7 +410,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                     }, null, 8, ["modelValue"]),
                                     _createVNode(_component_v_text_field, {
                                       modelValue: state.customDownloader.password,
-                                      "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => state.customDownloader.password = $event),
+                                      "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => state.customDownloader.password = $event),
                                       label: "密码",
                                       variant: "outlined",
                                       density: "compact",
@@ -337,11 +428,11 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       onClick: addCustomDownloader,
                                       variant: "plain"
                                     }, {
-                                      default: _withCtx(() => _cache[15] || (_cache[15] = [
+                                      default: _withCtx(() => _cache[19] || (_cache[19] = [
                                         _createTextVNode("添加到下载器列表")
                                       ])),
                                       _: 1,
-                                      __: [15]
+                                      __: [19]
                                     })
                                   ]),
                                   _: 1
@@ -360,11 +451,11 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                             }, {
                               default: _withCtx(() => [
                                 _createVNode(_component_v_card_title, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
-                                  default: _withCtx(() => _cache[16] || (_cache[16] = [
+                                  default: _withCtx(() => _cache[20] || (_cache[20] = [
                                     _createTextVNode(" 下载器列表 ")
                                   ])),
                                   _: 1,
-                                  __: [16]
+                                  __: [20]
                                 }),
                                 _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
                                   default: _withCtx(() => [
@@ -432,17 +523,17 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                             }, {
                               default: _withCtx(() => [
                                 _createVNode(_component_v_card_title, { class: "text-caption px-3 py-2 bg-primary-lighten-5" }, {
-                                  default: _withCtx(() => _cache[17] || (_cache[17] = [
+                                  default: _withCtx(() => _cache[21] || (_cache[21] = [
                                     _createTextVNode(" 路径设置 ")
                                   ])),
                                   _: 1,
-                                  __: [17]
+                                  __: [21]
                                 }),
                                 _createVNode(_component_v_card_text, { class: "px-3 py-2" }, {
                                   default: _withCtx(() => [
                                     _createVNode(_component_v_text_field, {
                                       modelValue: editableConfig.exclude_paths,
-                                      "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => editableConfig.exclude_paths = $event),
+                                      "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => editableConfig.exclude_paths = $event),
                                       label: "排除的目录",
                                       hint: "用于查找缺失种子的源文件,多个用';'隔开,一般为软/硬链接目标路径",
                                       "persistent-hint": "",
@@ -453,7 +544,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                     }, null, 8, ["modelValue"]),
                                     _createVNode(_component_v_text_field, {
                                       modelValue: editableConfig.extra_dir_paths,
-                                      "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => editableConfig.extra_dir_paths = $event),
+                                      "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => editableConfig.extra_dir_paths = $event),
                                       label: "额外的目录",
                                       hint: "用于查找缺失种子的源文件,多个用';'隔开,其不是现有下载器的保存目录",
                                       "persistent-hint": "",
@@ -473,10 +564,10 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                                       class: "mr-2",
                                       size: "small"
                                     }),
-                                    _cache[18] || (_cache[18] = _createElementVNode("span", { class: "text-caption" }, " 如果在docker容器中，请确保下载器中的保存(下载/源文件)路径存在于MoviePilot容器中！ ", -1))
+                                    _cache[22] || (_cache[22] = _createElementVNode("span", { class: "text-caption" }, " 如果在docker容器中，请确保下载器中的保存(下载/源文件)路径存在于MoviePilot容器中！ ", -1))
                                   ]),
                                   _: 1,
-                                  __: [18]
+                                  __: [22]
                                 })
                               ]),
                               _: 1
@@ -490,57 +581,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   ]),
                   _: 1
                 }, 512)
-              ]),
-              _: 1
-            }),
-            _createVNode(_component_v_divider),
-            _createVNode(_component_v_card_actions, { class: "px-2 py-1 pr-10" }, {
-              default: _withCtx(() => [
-                _createVNode(_component_v_spacer),
-                _createVNode(_component_v_btn, {
-                  color: "info",
-                  onClick: _cache[10] || (_cache[10] = ($event) => emit("switch", "page")),
-                  "prepend-icon": "mdi-view-dashboard",
-                  disabled: state.saving,
-                  variant: "text"
-                }, {
-                  default: _withCtx(() => _cache[19] || (_cache[19] = [
-                    _createTextVNode(" 详情页 ")
-                  ])),
-                  _: 1,
-                  __: [19]
-                }, 8, ["disabled"]),
-                _createVNode(_component_v_divider, { vertical: "" }),
-                _createVNode(_component_v_btn, {
-                  color: "primary",
-                  disabled: state.saving,
-                  onClick: saveFullConfig,
-                  loading: state.saving,
-                  "prepend-icon": "mdi-content-save",
-                  variant: "text",
-                  size: "small"
-                }, {
-                  default: _withCtx(() => _cache[20] || (_cache[20] = [
-                    _createTextVNode(" 保存配置 ")
-                  ])),
-                  _: 1,
-                  __: [20]
-                }, 8, ["disabled", "loading"]),
-                _createVNode(_component_v_divider, { vertical: "" }),
-                _createVNode(_component_v_btn, {
-                  color: "grey",
-                  onClick: _cache[11] || (_cache[11] = ($event) => emit("close")),
-                  "prepend-icon": "mdi-close",
-                  disabled: state.saving,
-                  variant: "text",
-                  size: "small"
-                }, {
-                  default: _withCtx(() => _cache[21] || (_cache[21] = [
-                    _createTextVNode("关闭")
-                  ])),
-                  _: 1,
-                  __: [21]
-                }, 8, ["disabled"])
               ]),
               _: 1
             })
@@ -564,6 +604,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-066d88c2"]]);
+const ConfigComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-756b5004"]]);
 
 export { ConfigComponent as default };

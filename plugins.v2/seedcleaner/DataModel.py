@@ -36,6 +36,7 @@ class SearchModel(BaseModel):
     removeOption: str = "all"
     trackerInput: str = ""
     existingSeedData: bool = False
+    name: str = ""
 
 
 class ClearModel(BaseModel):

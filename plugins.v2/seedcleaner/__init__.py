@@ -1,5 +1,6 @@
 import hashlib
 import os
+import re
 import shutil
 import subprocess
 import time
@@ -25,7 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.2.9"
+    plugin_version = "1.3.0"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -406,6 +407,18 @@ class SeedCleaner(_PluginBase):
                 unique_torrents[info_hash] = record
         return unique_torrents
 
+    def _is_name_match(self, name: str, keyword: str) -> bool:
+        """
+        使用正则表达式判断 name 是否匹配 keyword
+        :param name: 种子名称
+        :param keyword: 正则表达式字符串
+        :return: 是否匹配成功
+        """
+        try:
+            return re.search(keyword, name) is not None
+        except re.error:
+            return False
+
     def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 50,
                    pageChange: bool = False, pageSizeChange: bool = False) -> ResponseModel:
         logger.info(f"开始扫描,扫描参数:{search_info.dict()},page:{page},limit:{limit},pageChange:{pageChange}")
@@ -428,21 +441,34 @@ class SeedCleaner(_PluginBase):
         if search_info.auxOption != ALL_SELECTED:  # 辅种选项不等于全部
             unique_torrents = self.get_unique_index_torrents()
         for key, torrent_info in torrent_all_info.items():
+
+            # 缺失文件过滤
             if search_info.missingOptions.file:
                 if torrent_info.data_missing:
                     res_dict[key] = torrent_info
             elif not search_info.missingOptions.seed and not search_info.missingOptions.file:
                 res_dict[key] = torrent_info
+
+            # 新增：名称正则匹配过滤
+            if search_info.name:
+                name_match = self._is_name_match(torrent_info.name, search_info.name)
+                if not name_match and key in res_dict:
+                    res_dict.pop(key, None)
+
+            # 辅种选项过滤：无辅
             if search_info.auxOption == NO_AUX:  # 无辅，删除不唯一的种子
                 if key not in unique_torrents.keys() and key in res_dict.keys():
-                    res_dict.pop(key)
+                    res_dict.pop(key, None)
+            # 辅种选项过滤：有辅
             if search_info.auxOption == HAS_AUX:  # 有辅，删除唯一种子
                 if key in unique_torrents.keys() and key in res_dict.keys():
-                    res_dict.pop(key)
+                    res_dict.pop(key, None)
+            # Tracker 匹配过滤
             if search_info.trackerInput:
                 tracker_list = search_info.trackerInput.split(";")
                 if not self._is_tracer_match(torrent_info, tracker_list) and key in res_dict.keys():
-                    res_dict.pop(key)
+                    res_dict.pop(key, None)
+            # 构建响应列表
             if len(res_dict) > 0 and key in res_dict.keys():
                 value = res_dict[key]
                 try:
@@ -459,7 +485,7 @@ class SeedCleaner(_PluginBase):
                         "removeOption": search_info.removeOption  # 种子信息添加删除选项
                     })
                 except AttributeError as e:
-                    logger.error(f"处理种子信息出错: {key}")
+                    logger.error(f"处理种子信息出错: {e}")
                     continue
         # 结构统一化
         combined = res_list + missingFiles

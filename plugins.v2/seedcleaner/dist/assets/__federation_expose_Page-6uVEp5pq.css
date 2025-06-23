@@ -1,69 +1,68 @@
 /* 覆盖vuetify样式 */
-.label-text[data-v-8f891bfa] {
+.label-text[data-v-f83dc821] {
   font-size: 0.9rem !important;
   line-height: 1.667;
   letter-spacing: 0.0333333333em !important;
   font-family: "Roboto", sans-serif;
   text-transform: none !important;
 }
-.div-radio-group[data-v-8f891bfa] {
-  display: flex;
-}
-.bg-primary-lighten-5[data-v-8f891bfa] {
+.bg-primary-lighten-5[data-v-f83dc821] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-8f891bfa] {
+.border[data-v-f83dc821] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle-2[data-v-8f891bfa] {
+.text-subtitle-2[data-v-f83dc821] {
   font-size: 0.9rem !important;
   font-weight: 500;
   margin-bottom: 2px;
 }
-.size-column[data-v-bcb2b756] {
+.size-column[data-v-2962cbae] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
 .name-column {
-&[data-v-bcb2b756] {
+&[data-v-2962cbae] {
   width: 40rem !important;
   max-width: 40rem !important;
   }
-& .name-text[data-v-bcb2b756]{
+& .name-text[data-v-2962cbae]{
     margin-left: 8px;
     max-width: 35rem;
 }
 }
 /* 覆盖vuetify样式 */
-.size-column[data-v-03decced] {
+.size-column[data-v-4ef956ae] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
-.name-column[data-v-03decced] {
+.name-column[data-v-4ef956ae] {
   width: 40rem !important;
   max-width: 40rem !important;
 }
-.name-column .name-text[data-v-03decced] {
+.name-column .name-text[data-v-4ef956ae] {
   margin-left: 8px;
   max-width: 35rem;
 }/* 覆盖vuetify样式 */
-.plugin-page[data-v-28138550] {
+.plugin-page[data-v-190fb993] {
   margin: 0 auto;
   padding: 0.5rem;
 }
-.bg-primary-lighten-5[data-v-28138550] {
+.bg-primary-lighten-5[data-v-190fb993] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-28138550] {
+.border[data-v-190fb993] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle[data-v-28138550] {
+.text-subtitle[data-v-190fb993] {
   font-weight: 500;
   margin-bottom: 2px;
 }
-.text-subtitle-1[data-v-28138550] {
+.text-subtitle-1[data-v-190fb993] {
   font-size: 1.1rem !important;
 }
-.text-subtitle-2[data-v-28138550] {
-  font-size: 1rem !important;
+.text-subtitle-2[data-v-190fb993] {
+  font-size: 0.9rem !important;
+  font-weight: 500;
+  margin-bottom: 2px;
 }
