@@ -26,7 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.3.0"
+    plugin_version = "1.3.1"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -487,6 +487,9 @@ class SeedCleaner(_PluginBase):
                 except AttributeError as e:
                     logger.error(f"处理种子信息出错: {e}")
                     continue
+        # 过滤missingFiles,防止填了种子目录的额外路径
+        if missingFiles:
+            missingFiles = [x for x in missingFiles if x.name.split(".")[0] not in list(self.torrent_info_dict.keys())]
         # 结构统一化
         combined = res_list + missingFiles
         total = len(combined)
@@ -575,6 +578,9 @@ class SeedCleaner(_PluginBase):
                     downloader.disconnect()  # 断开连接
                     return ResponseFailedModel(message="清理失败")
             downloader.disconnect()  # 断开连接
+        if will_delete_file_list:  # 确定文件不是种子
+            will_delete_file_list = [x for x in will_delete_file_list if
+                                     x.stem not in list(self.torrent_info_dict.keys())]
         for file_path in will_delete_file_list:  # 删除文件，仅对缺少种子的源文件进行删除
             if self.delete_file_by_path(file_path):
                 continue
