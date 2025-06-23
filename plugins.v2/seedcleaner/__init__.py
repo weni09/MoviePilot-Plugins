@@ -419,29 +419,13 @@ class SeedCleaner(_PluginBase):
         except re.error:
             return False
 
-    def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 50,
-                   pageChange: bool = False, pageSizeChange: bool = False) -> ResponseModel:
-        logger.info(f"开始扫描,扫描参数:{search_info.dict()},page:{page},limit:{limit},pageChange:{pageChange}")
-        try:
-            if pageChange or pageSizeChange:
-                torrent_all_info = self.torrent_info_dict
-            else:
-                torrent_all_info = self.get_all_torrent_info(search_info)
-            logger.info(f"获取到所有种子信息: {torrent_all_info.values().__len__()}")
-        except Exception as e:
-            logger.error(f"{e}")
-            return ResponseFailedModel(message="获取种子信息失败")
-        if search_info.missingOptions.seed:
-            missingFiles = self.find_extra_data_list()
-        else:
-            missingFiles = []
+    def filter_torrents(self, torrent_all_info: dict[str, TorrentModel], search_info: SearchModel) -> List[dict]:
         res_dict = {}
         res_list = []
         unique_torrents = {}
         if search_info.auxOption != ALL_SELECTED:  # 辅种选项不等于全部
             unique_torrents = self.get_unique_index_torrents()
         for key, torrent_info in torrent_all_info.items():
-
             # 缺失文件过滤
             if search_info.missingOptions.file:
                 if torrent_info.data_missing:
@@ -471,25 +455,45 @@ class SeedCleaner(_PluginBase):
             # 构建响应列表
             if len(res_dict) > 0 and key in res_dict.keys():
                 value = res_dict[key]
-                try:
-                    res_list.append({
-                        "type": "torrent",
-                        "client": value.client,
-                        "client_name": value.client_name,
-                        "data_missing": value.data_missing,
-                        "trackers": value.trackers,
-                        "hash": value.hash,
-                        "size": int(value.total_size) or 0,
-                        "name": value.name,
-                        "path": str(Path(value.save_path) / value.name),
-                        "removeOption": search_info.removeOption  # 种子信息添加删除选项
-                    })
-                except AttributeError as e:
-                    logger.error(f"处理种子信息出错: {e}")
-                    continue
+                res_list.append({
+                    "type": "torrent",
+                    "client": value.client,
+                    "client_name": value.client_name,
+                    "data_missing": value.data_missing,
+                    "trackers": value.trackers,
+                    "hash": value.hash,
+                    "size": int(value.total_size) or 0,
+                    "name": value.name,
+                    "path": str(Path(value.save_path) / value.name),
+                    "removeOption": search_info.removeOption  # 种子信息添加删除选项
+                })
+            return res_list
+
+    def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 50,
+                   pageChange: bool = False, pageSizeChange: bool = False) -> ResponseModel:
+        logger.info(f"开始扫描,扫描参数:{search_info.dict()},page:{page},limit:{limit},pageChange:{pageChange}")
+        try:
+            if pageChange or pageSizeChange:
+                torrent_all_info = self.torrent_info_dict
+            else:
+                torrent_all_info = self.get_all_torrent_info(search_info)
+            logger.info(f"获取到所有种子信息: {torrent_all_info.values().__len__()}")
+        except Exception as e:
+            logger.error(f"{e}")
+            return ResponseFailedModel(message="获取种子信息失败")
+        if search_info.missingOptions.seed:
+            missingFiles = self.find_extra_data_list()
+        else:
+            missingFiles = []
+        try:
+            res_list = self.filter_torrents(torrent_all_info, search_info)
+        except Exception as e:
+            logger.error(f"过滤种子信息错误:{e}")
+            return ResponseFailedModel(message="种子信息处理失败")
         # 过滤missingFiles,防止填了种子目录的额外路径
         if missingFiles:
-            missingFiles = [x for x in missingFiles if x.name.split(".")[0] not in list(self.torrent_info_dict.keys())]
+            missingFiles = [x for x in missingFiles if
+                            x["name"].split(".")[0] not in list(self.torrent_info_dict.keys())]
         # 结构统一化
         combined = res_list + missingFiles
         total = len(combined)
