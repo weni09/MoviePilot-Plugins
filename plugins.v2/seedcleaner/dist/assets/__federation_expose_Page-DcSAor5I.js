@@ -37,7 +37,8 @@ const initParams = ()=>{
   state.removeOption = 'all';
   state.trackerInput = '';
   state.existingSeedData = false;
-  console.log("state after initParams", state.value); 
+  state.name = '';
+  // console.log("state after initParams", state.value); 
 };
 __expose({
   state,
@@ -418,7 +419,7 @@ return (_ctx, _cache) => {
 }
 
 };
-const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-f83dc821"]]);
+const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-348959c9"]]);
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 

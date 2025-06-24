@@ -1,18 +1,18 @@
 /* 覆盖vuetify样式 */
-.label-text[data-v-f83dc821] {
+.label-text[data-v-348959c9] {
   font-size: 0.9rem !important;
   line-height: 1.667;
   letter-spacing: 0.0333333333em !important;
   font-family: "Roboto", sans-serif;
   text-transform: none !important;
 }
-.bg-primary-lighten-5[data-v-f83dc821] {
+.bg-primary-lighten-5[data-v-348959c9] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-f83dc821] {
+.border[data-v-348959c9] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle-2[data-v-f83dc821] {
+.text-subtitle-2[data-v-348959c9] {
   font-size: 0.9rem !important;
   font-weight: 500;
   margin-bottom: 2px;
