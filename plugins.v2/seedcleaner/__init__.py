@@ -435,7 +435,7 @@ class SeedCleaner(_PluginBase):
 
             # 新增：名称正则匹配过滤
             if search_info.name:
-                logger.info(f"使用正则表达式匹配种子名称: {search_info.name}")
+                # logger.info(f"使用正则表达式匹配种子名称: {search_info.name}")
                 name_match = self._is_name_match(torrent_info.name, search_info.name)
                 if not name_match and key in res_dict:
                     res_dict.pop(key, None)
