@@ -37,6 +37,9 @@ class SearchModel(BaseModel):
     trackerInput: str = ""
     existingSeedData: bool = False
     name: str = ""
+    page: int = 1
+    limit: int = 50
+    sortBy: Tuple[str, str] = ("name", "asc")
 
 
 class ClearModel(BaseModel):

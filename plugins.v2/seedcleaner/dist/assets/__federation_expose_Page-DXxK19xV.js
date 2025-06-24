@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
-import { m as mapTrackers, f as formatBytes, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-yMRWY0u5.js';
+import { f as formatBytes, m as mapTrackers, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-yMRWY0u5.js';
 
 const {resolveComponent:_resolveComponent$3,createVNode:_createVNode$3,createElementVNode:_createElementVNode$3,withCtx:_withCtx$3,openBlock:_openBlock$3,createBlock:_createBlock$2} = await importShared('vue');
 
@@ -422,15 +422,15 @@ const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-f83d
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
-const {toDisplayString:_toDisplayString$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,createVNode:_createVNode$2,createElementVNode:_createElementVNode$2,renderList:_renderList$1,Fragment:_Fragment$1,createElementBlock:_createElementBlock$2,withModifiers:_withModifiers$1,mergeProps:_mergeProps$1,unref:_unref$1} = await importShared('vue');
+const {toDisplayString:_toDisplayString$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,createVNode:_createVNode$2,createElementVNode:_createElementVNode$2,withModifiers:_withModifiers$1,mergeProps:_mergeProps$1,unref:_unref$1,createElementBlock:_createElementBlock$2} = await importShared('vue');
 
 const _hoisted_1$2 = { class: "d-flex align-center mr-4" };
-const _hoisted_2$2 = { class: "text-left" };
-const _hoisted_3$1 = { class: "name-column" };
-const _hoisted_4$1 = { class: "name-text" };
-const _hoisted_5 = { key: 0 };
-const _hoisted_6 = { key: 1 };
-const _hoisted_7 = { class: "size-column" };
+const _hoisted_2$2 = { class: "name-text" };
+const _hoisted_3$1 = { key: 0 };
+const _hoisted_4$1 = { key: 1 };
+const _hoisted_5 = { colspan: "100%" };
+const _hoisted_6 = { class: "text-left" };
+const _hoisted_7 = { class: "text-left" };
 const {computed: computed$1,reactive: reactive$2} = await importShared('vue');
 const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   __name: "ScanResults",
@@ -446,13 +446,19 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         pageSize: 50
       })
     },
+    // 将sortBy改为字符串类型，避免直接传递SortItem数组
     scanParams: {
       type: Object,
       required: true,
       default: () => ({
         page: 1,
-        pageSize: 50
+        pageSize: 50,
+        sortBy: []
       })
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ["deleteAllRecord", "addToCleanup", "update:scanParams"],
@@ -466,7 +472,15 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         show: false,
         message: "",
         color: "success"
-      }
+      },
+      headers: [
+        { value: "expand", title: "", key: "data-table-expand" },
+        { value: "name", title: "名称", align: "center", sortable: true, maxWidth: "40rem" },
+        { value: "tracker", title: "Tracker", align: "center" },
+        { value: "status", title: "状态", align: "center" },
+        { value: "size", title: "大小", sortable: true, align: "center" },
+        { value: "select", title: "", key: "data-table-select" }
+      ]
     });
     const totalComputed = computed$1(() => {
       let res = [];
@@ -488,7 +502,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       const Keys = props.scanRes.combinedList.map((item) => item.hash);
       return [...Keys];
     });
-    const selectAllScans = computed$1({
+    computed$1({
       get: () => allScanKeys.value.length > 0 && state.selectedScans.length === allScanKeys.value.length,
       set: (value) => {
         if (value) {
@@ -517,6 +531,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       emit("update:scanParams", {
         pageSize: props.scanParams.pageSize,
         page: newPage,
+        sort: props.scanParams.sortBy,
         changed: "page"
       });
     };
@@ -525,7 +540,18 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         pageSize: newPageSize,
         page: 1,
         // 切换每页数量后跳转到第一页
+        sort: props.scanParams.sortBy,
         changed: "pageSize"
+      });
+    };
+    const handleSortChange = (items) => {
+      console.log("handleSortChange", items);
+      emit("update:scanParams", {
+        pageSize: props.scanParams.pageSize,
+        page: props.scanParams.page,
+        // 切换每页数量后跳转到第一页
+        sort: items,
+        changed: "sort"
       });
     };
     const clearSelectedScans = () => {
@@ -562,8 +588,10 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       const _component_v_tooltip = _resolveComponent$2("v-tooltip");
       const _component_v_btn = _resolveComponent$2("v-btn");
       const _component_v_card_title = _resolveComponent$2("v-card-title");
-      const _component_v_checkbox = _resolveComponent$2("v-checkbox");
+      const _component_v_skeleton_loader = _resolveComponent$2("v-skeleton-loader");
       const _component_v_table = _resolveComponent$2("v-table");
+      const _component_v_checkbox = _resolveComponent$2("v-checkbox");
+      const _component_v_data_table_server = _resolveComponent$2("v-data-table-server");
       const _component_v_card_text = _resolveComponent$2("v-card-text");
       const _component_v_snackbar = _resolveComponent$2("v-snackbar");
       const _component_v_card = _resolveComponent$2("v-card");
@@ -680,146 +708,153 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
           }),
           _createVNode$2(_component_v_card_text, { class: "pa-0" }, {
             default: _withCtx$2(() => [
-              _createVNode$2(_component_v_table, {
+              _createVNode$2(_component_v_data_table_server, {
+                headers: state.headers,
+                "hide-default-header": false,
+                items: props.scanRes.combinedList,
+                "items-per-page": __props.scanParams.pageSize,
+                page: __props.scanParams.page,
+                "item-count": props.scanRes.total,
+                "items-length": props.scanRes.total,
+                "sort-by": props.scanParams.sortBy,
+                "item-value": (item) => item.hash,
+                loading: props.loading,
+                modelValue: state.selectedScans,
+                "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.selectedScans = $event),
+                "must-sort": "",
                 "fixed-header": "",
                 height: "420px",
-                density: "compact",
-                hover: ""
+                density: "default",
+                hover: "",
+                "hide-default-footer": "",
+                "show-expand": "",
+                "show-select": "",
+                "expand-on-click": "",
+                "onUpdate:sortBy": handleSortChange,
+                "onUpdate:page": handlePageChange,
+                "onUpdate:itemsPerPage": handlePageSizeChange
               }, {
-                default: _withCtx$2(() => [
-                  _createElementVNode$2("thead", null, [
-                    _createElementVNode$2("tr", null, [
-                      _cache[7] || (_cache[7] = _createElementVNode$2("th", { class: "text-left name-column" }, "名称", -1)),
-                      _cache[8] || (_cache[8] = _createElementVNode$2("th", { class: "text-left" }, "Tracker", -1)),
-                      _cache[9] || (_cache[9] = _createElementVNode$2("th", { class: "text-left" }, "状态", -1)),
-                      _cache[10] || (_cache[10] = _createElementVNode$2("th", { class: "text-left size-column" }, "大小", -1)),
-                      _createElementVNode$2("th", _hoisted_2$2, [
-                        _createVNode$2(_component_v_checkbox, {
-                          modelValue: selectAllScans.value,
-                          "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => selectAllScans.value = $event),
-                          "hide-details": ""
-                        }, null, 8, ["modelValue"])
-                      ])
-                    ])
-                  ]),
-                  _createElementVNode$2("tbody", null, [
-                    (_openBlock$2(true), _createElementBlock$2(_Fragment$1, null, _renderList$1(props.scanRes.combinedList, (item) => {
-                      return _openBlock$2(), _createElementBlock$2("tr", {
-                        key: item.hash
-                      }, [
-                        _createElementVNode$2("td", _hoisted_3$1, [
-                          _createVNode$2(_component_v_tooltip, { location: "bottom" }, {
-                            activator: _withCtx$2(({ props: props2 }) => [
-                              _createElementVNode$2("div", _mergeProps$1({ ref_for: true }, props2, { style: { "display": "flex", "align-items": "center" } }), [
-                                item.hasOwnProperty("client") && item.client ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
-                                  key: 0,
-                                  color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
-                                  size: "small",
-                                  "text-color": "white"
-                                }, {
-                                  default: _withCtx$2(() => [
-                                    _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
-                                  ]),
-                                  _: 2
-                                }, 1032, ["color"])) : _createCommentVNode$1("", true),
-                                _createElementVNode$2("span", _hoisted_4$1, _toDisplayString$2(item.name), 1),
-                                _createVNode$2(_component_v_btn, {
-                                  icon: "mdi-content-copy",
-                                  size: "x-small",
-                                  onClick: _withModifiers$1(($event) => _copyPath(item.path), ["stop"]),
-                                  style: { "margin-left": "8px" }
-                                }, null, 8, ["onClick"])
-                              ], 16)
-                            ]),
-                            default: _withCtx$2(() => [
-                              _createElementVNode$2("span", null, _toDisplayString$2(item.path), 1)
-                            ]),
-                            _: 2
-                          }, 1024)
+                loading: _withCtx$2(() => [
+                  _createVNode$2(_component_v_skeleton_loader, { type: "table-row@10" })
+                ]),
+                "item.name": _withCtx$2(({ item }) => [
+                  _createVNode$2(_component_v_tooltip, { location: "bottom" }, {
+                    activator: _withCtx$2(({ props: props2 }) => [
+                      _createElementVNode$2("div", _mergeProps$1(props2, { style: { "display": "flex", "align-items": "center" } }), [
+                        item.hasOwnProperty("client") && item.client ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                          key: 0,
+                          color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
+                          size: "small",
+                          "text-color": "white"
+                        }, {
+                          default: _withCtx$2(() => [
+                            _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
+                          ]),
+                          _: 2
+                        }, 1032, ["color"])) : _createCommentVNode$1("", true),
+                        _createElementVNode$2("span", _hoisted_2$2, _toDisplayString$2(item.name), 1),
+                        _createVNode$2(_component_v_btn, {
+                          icon: "mdi-content-copy",
+                          size: "x-small",
+                          onClick: _withModifiers$1(($event) => _copyPath(item.path), ["stop"]),
+                          style: { "margin-left": "8px" }
+                        }, null, 8, ["onClick"])
+                      ], 16)
+                    ]),
+                    default: _withCtx$2(() => [
+                      _createElementVNode$2("span", null, _toDisplayString$2(item.path), 1)
+                    ]),
+                    _: 2
+                  }, 1024)
+                ]),
+                "item.tracker": _withCtx$2(({ item }) => [
+                  item.type === "torrent" && item?.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_3$1, [
+                    _createVNode$2(_component_v_chip, {
+                      color: getColorByString(item.trackers),
+                      "text-color": "white",
+                      size: "small",
+                      class: "mr-1 mb-1"
+                    }, {
+                      default: _withCtx$2(() => [
+                        _createTextVNode$2(_toDisplayString$2(_unref$1(mapTrackers)(item.trackers)[0]), 1)
+                      ]),
+                      _: 2
+                    }, 1032, ["color"])
+                  ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_4$1, [
+                    _createVNode$2(_component_v_chip, {
+                      color: "info",
+                      "text-color": "white",
+                      size: "small"
+                    }, {
+                      default: _withCtx$2(() => _cache[7] || (_cache[7] = [
+                        _createTextVNode$2(" 无 Tracker ")
+                      ])),
+                      _: 1,
+                      __: [7]
+                    })
+                  ]))
+                ]),
+                "item.status": _withCtx$2(({ item }) => [
+                  item.type === "torrent" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                    key: 0,
+                    color: item.data_missing ? "error" : "success",
+                    size: "small",
+                    "text-color": "white"
+                  }, {
+                    default: _withCtx$2(() => [
+                      _createTextVNode$2(_toDisplayString$2(item.data_missing ? "缺失源文件" : "包含源文件"), 1)
+                    ]),
+                    _: 2
+                  }, 1032, ["color"])) : item.type === "file" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                    key: 1,
+                    color: "warning",
+                    size: "small",
+                    "text-color": "white"
+                  }, {
+                    default: _withCtx$2(() => _cache[8] || (_cache[8] = [
+                      _createTextVNode$2(" 缺失种子 ")
+                    ])),
+                    _: 1,
+                    __: [8]
+                  })) : _createCommentVNode$1("", true)
+                ]),
+                "item.size": _withCtx$2(({ item }) => [
+                  _createTextVNode$2(_toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
+                ]),
+                "expanded-row": _withCtx$2(({ item }) => [
+                  _createElementVNode$2("tr", null, [
+                    _createElementVNode$2("td", _hoisted_5, [
+                      _createVNode$2(_component_v_table, { density: "compact" }, {
+                        default: _withCtx$2(() => [
+                          _cache[9] || (_cache[9] = _createElementVNode$2("thead", null, [
+                            _createElementVNode$2("tr", null, [
+                              _createElementVNode$2("th", { class: "text-left" }, " Hash "),
+                              _createElementVNode$2("th", { class: "text-left" }, " 客户端名称 ")
+                            ])
+                          ], -1)),
+                          _createElementVNode$2("tbody", null, [
+                            _createElementVNode$2("tr", null, [
+                              _createElementVNode$2("td", _hoisted_6, _toDisplayString$2(item.hash), 1),
+                              _createElementVNode$2("td", _hoisted_7, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
+                            ])
+                          ])
                         ]),
-                        item.type === "torrent" ? (_openBlock$2(), _createElementBlock$2(_Fragment$1, { key: 0 }, [
-                          _createElementVNode$2("td", null, [
-                            item.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_5, [
-                              _createVNode$2(_component_v_chip, {
-                                color: getColorByString(item.trackers),
-                                "text-color": "white",
-                                size: "small",
-                                class: "mr-1 mb-1"
-                              }, {
-                                default: _withCtx$2(() => [
-                                  _createTextVNode$2(_toDisplayString$2(_unref$1(mapTrackers)(item.trackers)[0]), 1)
-                                ]),
-                                _: 2
-                              }, 1032, ["color"])
-                            ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_6, [
-                              _createVNode$2(_component_v_chip, {
-                                color: "info",
-                                "text-color": "white",
-                                size: "small"
-                              }, {
-                                default: _withCtx$2(() => _cache[11] || (_cache[11] = [
-                                  _createTextVNode$2(" 无 Tracker ")
-                                ])),
-                                _: 1,
-                                __: [11]
-                              })
-                            ]))
-                          ]),
-                          _createElementVNode$2("td", null, [
-                            _createVNode$2(_component_v_chip, {
-                              color: item.data_missing ? "error" : "success",
-                              size: "small",
-                              "text-color": "white"
-                            }, {
-                              default: _withCtx$2(() => [
-                                _createTextVNode$2(_toDisplayString$2(item.data_missing ? "缺失源文件" : "包含源文件"), 1)
-                              ]),
-                              _: 2
-                            }, 1032, ["color"])
-                          ])
-                        ], 64)) : item.type === "file" ? (_openBlock$2(), _createElementBlock$2(_Fragment$1, { key: 1 }, [
-                          _createElementVNode$2("td", null, [
-                            _createVNode$2(_component_v_chip, {
-                              color: "info",
-                              "text-color": "white",
-                              size: "small"
-                            }, {
-                              default: _withCtx$2(() => _cache[12] || (_cache[12] = [
-                                _createTextVNode$2(" 无 Tracker ")
-                              ])),
-                              _: 1,
-                              __: [12]
-                            })
-                          ]),
-                          _createElementVNode$2("td", null, [
-                            _createVNode$2(_component_v_chip, {
-                              color: "warning",
-                              size: "small",
-                              "text-color": "white"
-                            }, {
-                              default: _withCtx$2(() => _cache[13] || (_cache[13] = [
-                                _createTextVNode$2("缺失种子")
-                              ])),
-                              _: 1,
-                              __: [13]
-                            })
-                          ])
-                        ], 64)) : _createCommentVNode$1("", true),
-                        _createElementVNode$2("td", _hoisted_7, _toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1),
-                        _createElementVNode$2("td", null, [
-                          _createVNode$2(_component_v_checkbox, {
-                            modelValue: state.selectedScans,
-                            "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.selectedScans = $event),
-                            value: item.hash,
-                            "hide-details": ""
-                          }, null, 8, ["modelValue", "value"])
-                        ])
-                      ]);
-                    }), 128))
+                        _: 2,
+                        __: [9]
+                      }, 1024)
+                    ])
                   ])
                 ]),
+                "item.select": _withCtx$2(({ item }) => [
+                  _createVNode$2(_component_v_checkbox, {
+                    modelValue: state.selectedScans,
+                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => state.selectedScans = $event),
+                    value: item.hash,
+                    "hide-details": ""
+                  }, null, 8, ["modelValue", "value"])
+                ]),
                 _: 1
-              })
+              }, 8, ["headers", "items", "items-per-page", "page", "item-count", "items-length", "sort-by", "item-value", "loading", "modelValue"])
             ]),
             _: 1
           }),
@@ -842,7 +877,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-2962cbae"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-3e7ccb39"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -1179,7 +1214,8 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       },
       scanParams: {
         page: 1,
-        pageSize: 50
+        pageSize: 50,
+        sortBy: [{ key: "name", order: "asc" }]
       },
       snackbar: {
         location: "top",
@@ -1203,15 +1239,19 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       state.scanRes.mTotal = 0;
       scanResultsRef.value.clearSelectedScans();
     };
-    const startScan = (isPageChange = false, isPageSizeChange = false) => {
+    const startScan = (isPageChange = false, isPageSizeChange = false, isSortChanged = false) => {
       console.log("开始扫描", `扫描参数: ${toolbarRef.value.state},isPageChange: ${isPageChange}`);
       state.scaning = true;
       initData();
       if (!isPageChange) {
         state.scanParams.page = 1;
       }
-      let url = `plugin/${PLUGIN_ID}/scan?page=${state.scanParams.page}&limit=${state.scanParams.pageSize}&pageChange=${isPageChange}&pageSizeChange=${isPageSizeChange}`;
-      props.api.post(url, toolbarRef.value.state).then((res) => {
+      let url = `plugin/${PLUGIN_ID}/scan?pageChange=${isPageChange}&pageSizeChange=${isPageSizeChange}&sortChange=${isSortChanged}`;
+      const params = { ...toolbarRef.value.state };
+      params["page"] = state.scanParams.page;
+      params["limit"] = state.scanParams.pageSize;
+      params["sortBy"] = [state.scanParams.sortBy[0].key, state.scanParams.sortBy[0].order];
+      props.api.post(url, params).then((res) => {
         state.scanRes.combinedList = res.data.combined_list || [];
         state.scanRes.total = res.data.total || 0;
         state.scanRes.tTotal = res.data.t_total || 0;
@@ -1279,14 +1319,27 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
     const handleScanParamsUpdate = (newScanParams) => {
       let isPageChanged = false;
       let isPageSizeChanged = false;
+      let isSortChanged = false;
       if (newScanParams.changed === "page") {
         isPageChanged = true;
       } else if (newScanParams.changed === "pageSize") {
         isPageSizeChanged = true;
+      } else if (newScanParams.changed === "sort") {
+        isSortChanged = true;
       }
-      state.scanParams.page = Number(newScanParams.page);
-      state.scanParams.pageSize = Number(newScanParams.pageSize);
-      startScan(isPageChanged, isPageSizeChanged);
+      if (isPageChanged) {
+        state.scanParams.page = Number(newScanParams.page);
+      } else if (isPageSizeChanged) {
+        state.scanParams.pageSize = Number(newScanParams.pageSize);
+      }
+      if (isSortChanged) {
+        const sortItem = {
+          key: newScanParams.sort[0].key,
+          order: newScanParams.sort[0].order
+        };
+        state.scanParams.sortBy = [sortItem];
+      }
+      startScan(isPageChanged, isPageSizeChanged, isSortChanged);
     };
     return (_ctx, _cache) => {
       const _component_v_icon = _resolveComponent("v-icon");
@@ -1525,10 +1578,11 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   onDeleteAllRecord: deleteAllRecord,
                   onAddToCleanup: addToCleanup,
                   "scan-params": state.scanParams,
+                  loading: state.scaning,
                   "onUpdate:scanParams": handleScanParamsUpdate,
                   ref_key: "scanResultsRef",
                   ref: scanResultsRef
-                }, null, 8, ["scan-res", "scan-params"]), [
+                }, null, 8, ["scan-res", "scan-params", "loading"]), [
                   [_vShow, state.listTab == "scan"]
                 ]),
                 _withDirectives(_createVNode(CleanupList, {
@@ -1560,6 +1614,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-190fb993"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-1d6e0eb7"]]);
 
 export { PageComponent as default };

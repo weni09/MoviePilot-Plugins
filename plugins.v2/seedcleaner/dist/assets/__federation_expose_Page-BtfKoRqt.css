@@ -17,16 +17,16 @@
   font-weight: 500;
   margin-bottom: 2px;
 }
-.size-column[data-v-2962cbae] {
+.size-column[data-v-3e7ccb39] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
 .name-column {
-&[data-v-2962cbae] {
+&[data-v-3e7ccb39] {
   width: 40rem !important;
   max-width: 40rem !important;
   }
-& .name-text[data-v-2962cbae]{
+& .name-text[data-v-3e7ccb39]{
     margin-left: 8px;
     max-width: 35rem;
 }
@@ -44,24 +44,24 @@
   margin-left: 8px;
   max-width: 35rem;
 }/* 覆盖vuetify样式 */
-.plugin-page[data-v-190fb993] {
+.plugin-page[data-v-1d6e0eb7] {
   margin: 0 auto;
   padding: 0.5rem;
 }
-.bg-primary-lighten-5[data-v-190fb993] {
+.bg-primary-lighten-5[data-v-1d6e0eb7] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-190fb993] {
+.border[data-v-1d6e0eb7] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle[data-v-190fb993] {
+.text-subtitle[data-v-1d6e0eb7] {
   font-weight: 500;
   margin-bottom: 2px;
 }
-.text-subtitle-1[data-v-190fb993] {
+.text-subtitle-1[data-v-1d6e0eb7] {
   font-size: 1.1rem !important;
 }
-.text-subtitle-2[data-v-190fb993] {
+.text-subtitle-2[data-v-1d6e0eb7] {
   font-size: 0.9rem !important;
   font-weight: 500;
   margin-bottom: 2px;

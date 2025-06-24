@@ -26,7 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.3.3"
+    plugin_version = "1.3.4"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -470,11 +470,12 @@ class SeedCleaner(_PluginBase):
                 })
         return res_list
 
-    def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 50,
-                   pageChange: bool = False, pageSizeChange: bool = False) -> ResponseModel:
-        logger.info(f"开始扫描,扫描参数:{search_info.dict()},page:{page},limit:{limit},pageChange:{pageChange}")
+    def start_scan(self, search_info: SearchModel, pageChange: bool = False, pageSizeChange: bool = False,
+                   sortChange: bool = False) -> ResponseModel:
+        logger.info(f"开始扫描,扫描参数:{search_info.dict()},"
+                    f"pageChange:{pageChange},pageSizeChange:{pageSizeChange},sortChange:{sortChange}")
         try:
-            if pageChange or pageSizeChange:
+            if pageChange or pageSizeChange or sortChange:
                 torrent_all_info = self.torrent_info_dict
             else:
                 torrent_all_info = self.get_all_torrent_info(search_info)
@@ -494,16 +495,18 @@ class SeedCleaner(_PluginBase):
         # 结构统一化
         combined = res_list + missingFiles
         total = len(combined)
-        combined.sort(key=lambda x: x.get("hash", "").lower())
-        paginated_combined = combined[(page - 1) * limit: page * limit]
-        logger.info(f"扫描结果数量: {len(combined)}, 返回第 {page} 页")
+        sort_name = search_info.sortBy[0]
+        sort_order = search_info.sortBy[1]
+        combined.sort(key=lambda x: x[sort_name.lower()], reverse=sort_order == "desc")
+        paginated_combined = combined[(search_info.page - 1) * search_info.limit: search_info.page * search_info.limit]
+        logger.info(f"扫描结果数量: {len(combined)}, 返回第 {search_info.page} 页")
         res = {
             "combined_list": paginated_combined,
             "total": total,
             "t_total": len(res_list),
             "m_total": len(missingFiles),
-            "page": page,
-            "page_size": limit
+            "page": search_info.page,
+            "page_size": search_info.limit
         }
         return ResponseSuccessModel(message="扫描成功", data=res)
 
