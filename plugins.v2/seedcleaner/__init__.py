@@ -435,6 +435,7 @@ class SeedCleaner(_PluginBase):
 
             # 新增：名称正则匹配过滤
             if search_info.name:
+                logger.info(f"使用正则表达式匹配种子名称: {search_info.name}")
                 name_match = self._is_name_match(torrent_info.name, search_info.name)
                 if not name_match and key in res_dict:
                     res_dict.pop(key, None)
@@ -467,7 +468,7 @@ class SeedCleaner(_PluginBase):
                     "path": str(Path(value.save_path) / value.name),
                     "removeOption": search_info.removeOption  # 种子信息添加删除选项
                 })
-            return res_list
+        return res_list
 
     def start_scan(self, search_info: SearchModel, page: int = 1, limit: int = 50,
                    pageChange: bool = False, pageSizeChange: bool = False) -> ResponseModel:
@@ -490,10 +491,6 @@ class SeedCleaner(_PluginBase):
         except Exception as e:
             logger.error(f"过滤种子信息错误:{e}")
             return ResponseFailedModel(message="种子信息处理失败")
-        # 过滤missingFiles,防止填了种子目录的额外路径
-        if missingFiles:
-            missingFiles = [x for x in missingFiles if
-                            x["name"].split(".")[0] not in list(self.torrent_info_dict.keys())]
         # 结构统一化
         combined = res_list + missingFiles
         total = len(combined)
@@ -582,9 +579,6 @@ class SeedCleaner(_PluginBase):
                     downloader.disconnect()  # 断开连接
                     return ResponseFailedModel(message="清理失败")
             downloader.disconnect()  # 断开连接
-        if will_delete_file_list:  # 确定文件不是种子
-            will_delete_file_list = [x for x in will_delete_file_list if
-                                     x.stem not in list(self.torrent_info_dict.keys())]
         for file_path in will_delete_file_list:  # 删除文件，仅对缺少种子的源文件进行删除
             if self.delete_file_by_path(file_path):
                 continue

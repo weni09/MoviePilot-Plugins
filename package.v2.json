@@ -3,11 +3,12 @@
         "name": "种子清理工",
         "description": "清理transmission/qbittorrent种子和源文件。",
         "labels": "插件工具",
-        "version": "1.3.2",
+        "version": "1.3.3",
         "icon": "delete.png",
         "author": "weni09",
         "level": 1,
         "history": {
+            "v1.3.3": "紧急修复一个循环中断BUG",
             "v1.3.2": "修复qbittorrent和transmission不完整文件名后缀匹配问题",
             "v1.3.1": "增加：扫描和清理逻辑，过滤掉源文件名是种子名称的文件",
             "v1.3.0": "调整优化部分布局，布局更紧凑，节省空间；新增:名称正则匹配功能",
