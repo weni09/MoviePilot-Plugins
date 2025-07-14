@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
-import { f as formatBytes, m as mapTrackers, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-yMRWY0u5.js';
+import { f as formatBytes, m as mapTrackers, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-iUFyr5Ln.js';
 
 const {resolveComponent:_resolveComponent$3,createVNode:_createVNode$3,createElementVNode:_createElementVNode$3,withCtx:_withCtx$3,openBlock:_openBlock$3,createBlock:_createBlock$2} = await importShared('vue');
 
@@ -423,16 +423,17 @@ const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-3489
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
-const {toDisplayString:_toDisplayString$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,createVNode:_createVNode$2,createElementVNode:_createElementVNode$2,withModifiers:_withModifiers$1,mergeProps:_mergeProps$1,unref:_unref$1,createElementBlock:_createElementBlock$2} = await importShared('vue');
+const {toDisplayString:_toDisplayString$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,createVNode:_createVNode$2,createElementVNode:_createElementVNode$2,withKeys:_withKeys,withModifiers:_withModifiers$1,unref:_unref$1,createElementBlock:_createElementBlock$2} = await importShared('vue');
 
 const _hoisted_1$2 = { class: "d-flex align-center mr-4" };
-const _hoisted_2$2 = { class: "name-text" };
-const _hoisted_3$1 = { key: 0 };
-const _hoisted_4$1 = { key: 1 };
-const _hoisted_5 = { colspan: "100%" };
-const _hoisted_6 = { class: "text-left" };
+const _hoisted_2$2 = { class: "filter-chips d-flex" };
+const _hoisted_3$1 = { class: "name-text" };
+const _hoisted_4$1 = { key: 0 };
+const _hoisted_5 = { key: 1 };
+const _hoisted_6 = { colspan: "100%" };
 const _hoisted_7 = { class: "text-left" };
-const {computed: computed$1,reactive: reactive$2} = await importShared('vue');
+const _hoisted_8 = { class: "text-left" };
+const {ref: ref$1,computed: computed$1,reactive: reactive$2} = await importShared('vue');
 const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   __name: "ScanResults",
   props: {
@@ -441,8 +442,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       default: () => ({
         combinedList: [],
         total: 0,
-        t_total: 0,
-        m_total: 0,
+        totalSize: 0,
+        tTotal: 0,
+        tTotalSize: 0,
+        mTotal: 0,
+        mTotalSize: 0,
         page: 1,
         pageSize: 50
       })
@@ -462,10 +466,14 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       default: false
     }
   },
-  emits: ["deleteAllRecord", "addToCleanup", "update:scanParams"],
+  emits: ["deleteAllRecord", "addToCleanup", "update:scanParams", "applyFilter"],
   setup(__props, { expose: __expose, emit: __emit }) {
     const props = __props;
     const emit = __emit;
+    const filterItems = [{
+      title: "路径",
+      value: "path"
+    }];
     const state = reactive$2({
       selectedScans: [],
       snackbar: {
@@ -476,42 +484,39 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       },
       headers: [
         { value: "expand", title: "", key: "data-table-expand" },
-        { value: "name", title: "名称", align: "center", sortable: true, maxWidth: "40rem" },
+        { value: "name", title: "名称", align: "left", sortable: true, maxWidth: "20rem" },
+        { value: "path", title: "路径", align: "left", sortable: true, maxWidth: "12rem" },
         { value: "tracker", title: "Tracker", align: "center" },
         { value: "status", title: "状态", align: "center" },
         { value: "size", title: "大小", sortable: true, align: "center" },
         { value: "select", title: "", key: "data-table-select" }
-      ]
+      ],
+      filterName: "path",
+      filter: {}
     });
+    const getfilterTitleByKey = (key) => {
+      for (let i of filterItems) {
+        if (i.value === key) {
+          return i.title;
+        }
+      }
+      return key;
+    };
     const totalComputed = computed$1(() => {
       let res = [];
       if (props.scanRes.tTotal > 0) {
-        let torrentFIleText = `种子：${props.scanRes.tTotal}`;
+        let torrentFIleText = `种子：${props.scanRes.tTotal}/${formatBytes(props.scanRes.tTotalSize)}`;
         res.push(torrentFIleText);
       }
       if (props.scanRes.mTotal > 0) {
-        let missingFileText = `缺失种子的文件：${props.scanRes.mTotal}`;
+        let missingFileText = `缺种的文件：${props.scanRes.mTotal}/${formatBytes(props.scanRes.mTotalSize)}`;
         res.push(missingFileText);
       }
       if (props.scanRes.tTotal > 0 && props.scanRes.mTotal > 0) {
-        let totalText = `总计：${props.scanRes.total}`;
+        let totalText = `总计：${props.scanRes.total}/${formatBytes(props.scanRes.totalSize)}`;
         res.push(totalText);
       }
       return res.join(" | ");
-    });
-    const allScanKeys = computed$1(() => {
-      const Keys = props.scanRes.combinedList.map((item) => item.hash);
-      return [...Keys];
-    });
-    computed$1({
-      get: () => allScanKeys.value.length > 0 && state.selectedScans.length === allScanKeys.value.length,
-      set: (value) => {
-        if (value) {
-          state.selectedScans = [...allScanKeys.value];
-        } else {
-          state.selectedScans = [];
-        }
-      }
     });
     const showNotification = (text, color = "success") => {
       state.snackbar.message = text;
@@ -559,9 +564,9 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       state.selectedScans = [];
     };
     const _copyPath = async (path) => {
-      showNotification("路径已复制到剪贴板");
+      showNotification("完整路径已复制到剪贴板");
       if (await copyPath(path)) {
-        showNotification("路径已复制到剪贴板");
+        showNotification("完整路径已复制到剪贴板");
       } else {
         showNotification("复制路径失败", "error");
       }
@@ -577,6 +582,33 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       const index = Math.abs(hash % availableColors.length);
       return availableColors[index];
     };
+    const selectedScansSize = computed$1(() => {
+      return formatBytes(state.selectedScans.reduce((sum, scan) => {
+        if ("data_missing" in scan && scan.data_missing) {
+          sum = sum + 0;
+        } else {
+          sum = sum + scan.size;
+        }
+        return sum;
+      }, 0));
+    });
+    const filterDialog = ref$1(false);
+    const toggleFilter = () => {
+      filterDialog.value = true;
+    };
+    const applyFilter = () => {
+      console.log("应用筛选，路径包含：", state.filterName, state.filter[state.filterName]);
+      filterDialog.value = false;
+      if (!state.filter[state.filterName]) {
+        return;
+      }
+      emit("applyFilter", state.filter);
+    };
+    const deleteFilter = (name) => {
+      state.filter[name] = "";
+      filterDialog.value = false;
+      emit("applyFilter", state.filter);
+    };
     __expose({
       clearSelectedScans
     });
@@ -589,13 +621,18 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       const _component_v_tooltip = _resolveComponent$2("v-tooltip");
       const _component_v_btn = _resolveComponent$2("v-btn");
       const _component_v_card_title = _resolveComponent$2("v-card-title");
+      const _component_v_col = _resolveComponent$2("v-col");
+      const _component_v_text_field = _resolveComponent$2("v-text-field");
+      const _component_v_row = _resolveComponent$2("v-row");
+      const _component_v_card_text = _resolveComponent$2("v-card-text");
+      const _component_v_card_actions = _resolveComponent$2("v-card-actions");
+      const _component_v_card = _resolveComponent$2("v-card");
+      const _component_v_dialog = _resolveComponent$2("v-dialog");
       const _component_v_skeleton_loader = _resolveComponent$2("v-skeleton-loader");
       const _component_v_table = _resolveComponent$2("v-table");
       const _component_v_checkbox = _resolveComponent$2("v-checkbox");
       const _component_v_data_table_server = _resolveComponent$2("v-data-table-server");
-      const _component_v_card_text = _resolveComponent$2("v-card-text");
       const _component_v_snackbar = _resolveComponent$2("v-snackbar");
-      const _component_v_card = _resolveComponent$2("v-card");
       return _openBlock$2(), _createBlock$1(_component_v_card, {
         flat: "",
         class: "mb-4"
@@ -623,7 +660,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   variant: "flat"
                 }, {
                   default: _withCtx$2(() => [
-                    _createTextVNode$2(_toDisplayString$2(`已选择 ${state.selectedScans.length}项`), 1)
+                    _createTextVNode$2(_toDisplayString$2(`已选择 ${state.selectedScans.length}项: ${selectedScansSize.value}`), 1)
                   ]),
                   _: 1
                 })
@@ -670,11 +707,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     activator: "parent",
                     location: "top"
                   }, {
-                    default: _withCtx$2(() => _cache[5] || (_cache[5] = [
+                    default: _withCtx$2(() => _cache[10] || (_cache[10] = [
                       _createTextVNode$2("清空记录")
                     ])),
                     _: 1,
-                    __: [5]
+                    __: [10]
                   })
                 ]),
                 _: 1
@@ -695,20 +732,144 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     activator: "parent",
                     location: "top"
                   }, {
-                    default: _withCtx$2(() => _cache[6] || (_cache[6] = [
+                    default: _withCtx$2(() => _cache[11] || (_cache[11] = [
                       _createTextVNode$2("添加到待清理")
                     ])),
                     _: 1,
-                    __: [6]
+                    __: [11]
                   })
                 ]),
                 _: 1
-              })
+              }),
+              _createVNode$2(_component_v_btn, {
+                color: "warning",
+                icon: "",
+                size: "small",
+                class: "mr-4",
+                onClick: toggleFilter
+              }, {
+                default: _withCtx$2(() => [
+                  _createVNode$2(_component_v_icon, {
+                    icon: "mdi-filter-variant",
+                    size: "small"
+                  }),
+                  _createVNode$2(_component_v_tooltip, {
+                    activator: "parent",
+                    location: "top"
+                  }, {
+                    default: _withCtx$2(() => _cache[12] || (_cache[12] = [
+                      _createTextVNode$2("筛选条件")
+                    ])),
+                    _: 1,
+                    __: [12]
+                  })
+                ]),
+                _: 1
+              }),
+              _createVNode$2(_component_v_dialog, {
+                modelValue: filterDialog.value,
+                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => filterDialog.value = $event),
+                "max-width": "400px"
+              }, {
+                default: _withCtx$2(() => [
+                  _createVNode$2(_component_v_card, null, {
+                    default: _withCtx$2(() => [
+                      _createVNode$2(_component_v_card_title, null, {
+                        default: _withCtx$2(() => _cache[13] || (_cache[13] = [
+                          _createTextVNode$2("条件筛选")
+                        ])),
+                        _: 1,
+                        __: [13]
+                      }),
+                      _createVNode$2(_component_v_card_text, null, {
+                        default: _withCtx$2(() => [
+                          _createVNode$2(_component_v_row, {
+                            align: "center",
+                            gutters: 1,
+                            class: "d-flex align-center align-content-center"
+                          }, {
+                            default: _withCtx$2(() => [
+                              _createVNode$2(_component_v_col, { cols: "4" }, {
+                                default: _withCtx$2(() => [
+                                  _createVNode$2(_component_v_select, {
+                                    modelValue: state.filterName,
+                                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => state.filterName = $event),
+                                    items: filterItems,
+                                    variant: "outlined",
+                                    density: "compact",
+                                    class: "mb-3 text-caption",
+                                    hint: "筛选字段名称"
+                                  }, null, 8, ["modelValue"])
+                                ]),
+                                _: 1
+                              }),
+                              _createVNode$2(_component_v_col, { cols: "8" }, {
+                                default: _withCtx$2(() => [
+                                  _createVNode$2(_component_v_text_field, {
+                                    modelValue: state.filter[state.filterName],
+                                    "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.filter[state.filterName] = $event),
+                                    label: `输入筛选${getfilterTitleByKey(state.filterName)}`,
+                                    onKeyup: _withKeys(applyFilter, ["enter"]),
+                                    autofocus: ""
+                                  }, null, 8, ["modelValue", "label"])
+                                ]),
+                                _: 1
+                              })
+                            ]),
+                            _: 1
+                          })
+                        ]),
+                        _: 1
+                      }),
+                      _createVNode$2(_component_v_card_actions, null, {
+                        default: _withCtx$2(() => [
+                          _createVNode$2(_component_v_btn, {
+                            onClick: _cache[4] || (_cache[4] = ($event) => deleteFilter(state.filterName))
+                          }, {
+                            default: _withCtx$2(() => _cache[14] || (_cache[14] = [
+                              _createTextVNode$2("取消")
+                            ])),
+                            _: 1,
+                            __: [14]
+                          }),
+                          _createVNode$2(_component_v_btn, {
+                            color: "primary",
+                            onClick: applyFilter
+                          }, {
+                            default: _withCtx$2(() => _cache[15] || (_cache[15] = [
+                              _createTextVNode$2("确定")
+                            ])),
+                            _: 1,
+                            __: [15]
+                          })
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  })
+                ]),
+                _: 1
+              }, 8, ["modelValue"])
             ]),
             _: 1
           }),
           _createVNode$2(_component_v_card_text, { class: "pa-0" }, {
             default: _withCtx$2(() => [
+              _createElementVNode$2("div", _hoisted_2$2, [
+                state.filter[state.filterName] ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                  key: 0,
+                  closable: "",
+                  "prepend-icon": "mdi-folder-arrow-left",
+                  variant: "outlined",
+                  "onClick:close": _cache[6] || (_cache[6] = ($event) => deleteFilter(state.filterName))
+                }, {
+                  default: _withCtx$2(() => [
+                    _createTextVNode$2(_toDisplayString$2(state.filter[state.filterName]), 1)
+                  ]),
+                  _: 1
+                })) : _createCommentVNode$1("", true)
+              ]),
               _createVNode$2(_component_v_data_table_server, {
                 headers: state.headers,
                 "hide-default-header": false,
@@ -718,13 +879,13 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 "item-count": props.scanRes.total,
                 "items-length": props.scanRes.total,
                 "sort-by": props.scanParams.sortBy,
-                "item-value": (item) => item.hash,
+                "item-value": (item) => item,
                 loading: props.loading,
                 modelValue: state.selectedScans,
-                "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.selectedScans = $event),
+                "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => state.selectedScans = $event),
                 "must-sort": "",
                 "fixed-header": "",
-                height: "420px",
+                height: "400px",
                 density: "default",
                 hover: "",
                 "hide-default-footer": "",
@@ -739,37 +900,30 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   _createVNode$2(_component_v_skeleton_loader, { type: "table-row@10" })
                 ]),
                 "item.name": _withCtx$2(({ item }) => [
-                  _createVNode$2(_component_v_tooltip, { location: "bottom" }, {
-                    activator: _withCtx$2(({ props: props2 }) => [
-                      _createElementVNode$2("div", _mergeProps$1(props2, { style: { "display": "flex", "align-items": "center" } }), [
-                        item.hasOwnProperty("client") && item.client ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
-                          key: 0,
-                          color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
-                          size: "small",
-                          "text-color": "white"
-                        }, {
-                          default: _withCtx$2(() => [
-                            _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
-                          ]),
-                          _: 2
-                        }, 1032, ["color"])) : _createCommentVNode$1("", true),
-                        _createElementVNode$2("span", _hoisted_2$2, _toDisplayString$2(item.name), 1),
-                        _createVNode$2(_component_v_btn, {
-                          icon: "mdi-content-copy",
-                          size: "x-small",
-                          onClick: _withModifiers$1(($event) => _copyPath(item.path), ["stop"]),
-                          style: { "margin-left": "8px" }
-                        }, null, 8, ["onClick"])
-                      ], 16)
-                    ]),
+                  item.hasOwnProperty("client") && item.client ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                    key: 0,
+                    color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
+                    size: "small",
+                    "text-color": "white"
+                  }, {
                     default: _withCtx$2(() => [
-                      _createElementVNode$2("span", null, _toDisplayString$2(item.path), 1)
+                      _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
                     ]),
                     _: 2
-                  }, 1024)
+                  }, 1032, ["color"])) : _createCommentVNode$1("", true),
+                  _createElementVNode$2("span", _hoisted_3$1, _toDisplayString$2(item.name), 1)
+                ]),
+                "item.path": _withCtx$2(({ item }) => [
+                  _createElementVNode$2("span", null, _toDisplayString$2(item.path.replace(item.name, "")), 1),
+                  _createVNode$2(_component_v_btn, {
+                    icon: "mdi-content-copy",
+                    size: "x-small",
+                    onClick: _withModifiers$1(($event) => _copyPath(item.path), ["stop"]),
+                    style: { "margin-left": "8px" }
+                  }, null, 8, ["onClick"])
                 ]),
                 "item.tracker": _withCtx$2(({ item }) => [
-                  item.type === "torrent" && item?.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_3$1, [
+                  item.type === "torrent" && item?.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_4$1, [
                     _createVNode$2(_component_v_chip, {
                       color: getColorByString(item.trackers),
                       "text-color": "white",
@@ -781,17 +935,17 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                       ]),
                       _: 2
                     }, 1032, ["color"])
-                  ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_4$1, [
+                  ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_5, [
                     _createVNode$2(_component_v_chip, {
                       color: "info",
                       "text-color": "white",
                       size: "small"
                     }, {
-                      default: _withCtx$2(() => _cache[7] || (_cache[7] = [
+                      default: _withCtx$2(() => _cache[16] || (_cache[16] = [
                         _createTextVNode$2(" 无 Tracker ")
                       ])),
                       _: 1,
-                      __: [7]
+                      __: [16]
                     })
                   ]))
                 ]),
@@ -812,11 +966,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     size: "small",
                     "text-color": "white"
                   }, {
-                    default: _withCtx$2(() => _cache[8] || (_cache[8] = [
+                    default: _withCtx$2(() => _cache[17] || (_cache[17] = [
                       _createTextVNode$2(" 缺失种子 ")
                     ])),
                     _: 1,
-                    __: [8]
+                    __: [17]
                   })) : _createCommentVNode$1("", true)
                 ]),
                 "item.size": _withCtx$2(({ item }) => [
@@ -824,10 +978,10 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 ]),
                 "expanded-row": _withCtx$2(({ item }) => [
                   _createElementVNode$2("tr", null, [
-                    _createElementVNode$2("td", _hoisted_5, [
+                    _createElementVNode$2("td", _hoisted_6, [
                       _createVNode$2(_component_v_table, { density: "compact" }, {
                         default: _withCtx$2(() => [
-                          _cache[9] || (_cache[9] = _createElementVNode$2("thead", null, [
+                          _cache[18] || (_cache[18] = _createElementVNode$2("thead", null, [
                             _createElementVNode$2("tr", null, [
                               _createElementVNode$2("th", { class: "text-left" }, " Hash "),
                               _createElementVNode$2("th", { class: "text-left" }, " 客户端名称 ")
@@ -835,13 +989,13 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                           ], -1)),
                           _createElementVNode$2("tbody", null, [
                             _createElementVNode$2("tr", null, [
-                              _createElementVNode$2("td", _hoisted_6, _toDisplayString$2(item.hash), 1),
-                              _createElementVNode$2("td", _hoisted_7, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
+                              _createElementVNode$2("td", _hoisted_7, _toDisplayString$2(item.hash), 1),
+                              _createElementVNode$2("td", _hoisted_8, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
                             ])
                           ])
                         ]),
                         _: 2,
-                        __: [9]
+                        __: [18]
                       }, 1024)
                     ])
                   ])
@@ -849,8 +1003,8 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 "item.select": _withCtx$2(({ item }) => [
                   _createVNode$2(_component_v_checkbox, {
                     modelValue: state.selectedScans,
-                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => state.selectedScans = $event),
-                    value: item.hash,
+                    "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => state.selectedScans = $event),
+                    value: item,
                     "hide-details": ""
                   }, null, 8, ["modelValue", "value"])
                 ]),
@@ -861,7 +1015,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
           }),
           _createVNode$2(_component_v_snackbar, {
             modelValue: state.snackbar.show,
-            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => state.snackbar.show = $event),
+            "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => state.snackbar.show = $event),
             timeout: 3e3,
             color: state.snackbar.color,
             location: state.snackbar.location
@@ -878,7 +1032,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-3e7ccb39"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-25ad1928"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -1208,15 +1362,21 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       scanRes: {
         combinedList: [],
         total: 0,
+        totalSize: 0,
         tTotal: 0,
+        tTotalSize: 0,
         mTotal: 0,
+        mTotalSize: 0,
         page: 1,
         pageSize: 50
       },
       scanParams: {
         page: 1,
         pageSize: 50,
-        sortBy: [{ key: "name", order: "asc" }]
+        sortBy: [{ key: "name", order: "asc" }],
+        filter: {
+          path: ""
+        }
       },
       snackbar: {
         location: "top",
@@ -1240,26 +1400,29 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       state.scanRes.mTotal = 0;
       scanResultsRef.value.clearSelectedScans();
     };
-    const startScan = (isPageChange = false, isPageSizeChange = false, isSortChanged = false) => {
+    const startScan = (isPageChange = false, isPageSizeChange = false, isSortChanged = false, filterChanged = false) => {
       console.log("开始扫描", `扫描参数: ${toolbarRef.value.state},isPageChange: ${isPageChange}`);
       state.scaning = true;
       initData();
       if (!isPageChange) {
         state.scanParams.page = 1;
       }
-      let url = `plugin/${PLUGIN_ID}/scan?pageChange=${isPageChange}&pageSizeChange=${isPageSizeChange}&sortChange=${isSortChanged}`;
+      let url = `plugin/${PLUGIN_ID}/scan?pageChange=${isPageChange}&pageSizeChange=${isPageSizeChange}&sortChange=${isSortChanged}&filterChange=${filterChanged}`;
       const params = { ...toolbarRef.value.state };
       params["page"] = state.scanParams.page;
       params["limit"] = state.scanParams.pageSize;
       params["sortBy"] = [state.scanParams.sortBy[0].key, state.scanParams.sortBy[0].order];
+      params["filter"] = state.scanParams.filter;
       props.api.post(url, params).then((res) => {
         state.scanRes.combinedList = res.data.combined_list || [];
         state.scanRes.total = res.data.total || 0;
         state.scanRes.tTotal = res.data.t_total || 0;
         state.scanRes.mTotal = res.data.m_total || 0;
+        state.scanRes.totalSize = res.data.total_size || 0;
+        state.scanRes.tTotalSize = res.data.t_total_size || 0;
+        state.scanRes.mTotalSize = res.data.m_total_size || 0;
         state.scanRes.page = res.data.page || 1;
         state.scanRes.pageSize = res.data.page_size || 50;
-        console.log("扫描结果:", state.scanRes);
         setTab("scan");
       }).catch((error) => {
         console.error("扫描失败:", error);
@@ -1287,12 +1450,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
         state.snackbar.show = true;
         return;
       }
-      let willCleanupList = [];
-      for (let item of state.scanRes.combinedList) {
-        if (cleanupList.includes(item.hash)) {
-          willCleanupList.push(item);
-        }
-      }
+      let willCleanupList = cleanupList;
       cleanupRef.value.setCleanupList(willCleanupList);
     };
     const startCleanup = () => {
@@ -1341,6 +1499,10 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
         state.scanParams.sortBy = [sortItem];
       }
       startScan(isPageChanged, isPageSizeChanged, isSortChanged);
+    };
+    const applyFilter = (filter) => {
+      state.scanParams.filter.path = filter.path;
+      startScan(false, false, false, true);
     };
     return (_ctx, _cache) => {
       const _component_v_icon = _resolveComponent("v-icon");
@@ -1582,7 +1744,8 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   loading: state.scaning,
                   "onUpdate:scanParams": handleScanParamsUpdate,
                   ref_key: "scanResultsRef",
-                  ref: scanResultsRef
+                  ref: scanResultsRef,
+                  onApplyFilter: applyFilter
                 }, null, 8, ["scan-res", "scan-params", "loading"]), [
                   [_vShow, state.listTab == "scan"]
                 ]),
@@ -1615,6 +1778,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-1d6e0eb7"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3ed8f622"]]);
 
 export { PageComponent as default };

@@ -1,4 +1,5 @@
 const trackerMapping = {
+  "si-qi": "思齐",
   "agsvpt": "末日",
   "ptvicomo": "象站",
   "hdkylin": "麒麟",
