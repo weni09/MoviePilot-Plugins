@@ -3,11 +3,12 @@
         "name": "种子清理工",
         "description": "清理transmission/qbittorrent种子和源文件。",
         "labels": "插件工具",
-        "version": "1.4.0",
+        "version": "1.4.1",
         "icon": "delete.png",
         "author": "weni09",
         "level": 1,
         "history": {
+            "v1.4.1": "优化:布局和样式",
             "v1.4.0": "新增：路径字段，路径排序/筛选;显示所有/已选择种子大小统计",
             "v1.3.4": "更换表格组件，加入表格加载状态显示；新增行扩展项展示，新增按名称和大小排序；",
             "v1.3.3": "紧急修复一个循环中断BUG",

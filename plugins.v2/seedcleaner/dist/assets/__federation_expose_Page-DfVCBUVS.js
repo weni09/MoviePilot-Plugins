@@ -2,20 +2,22 @@ import { importShared } from './__federation_fn_import-JrT3xvdd.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
 import { f as formatBytes, m as mapTrackers, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-DqnAxrdM.js';
 
-const {resolveComponent:_resolveComponent$3,createVNode:_createVNode$3,createElementVNode:_createElementVNode$3,withCtx:_withCtx$3,openBlock:_openBlock$3,createBlock:_createBlock$2} = await importShared('vue');
+const {resolveComponent:_resolveComponent$3,createVNode:_createVNode$3,createElementVNode:_createElementVNode$3,withModifiers:_withModifiers$2,normalizeClass:_normalizeClass,withCtx:_withCtx$3,vShow:_vShow$1,withDirectives:_withDirectives$1,openBlock:_openBlock$3,createBlock:_createBlock$2} = await importShared('vue');
 
 
 const _hoisted_1$3 = { class: "d-flex justify-space-between" };
 const _hoisted_2$3 = { class: "d-flex justify-space-between" };
 const _hoisted_3$2 = { class: "d-flex justify-space-between" };
 
-const {reactive: reactive$3} = await importShared('vue');
+const {reactive: reactive$3,ref: ref$2} = await importShared('vue');
 
 
 
 const _sfc_main$3 = {
   __name: 'ToolBar',
   setup(__props, { expose: __expose }) {
+
+const isCollapsed = ref$2(false);
 
 const state = reactive$3({
    missingOptions:{
@@ -29,7 +31,7 @@ const state = reactive$3({
     name:""
 });
 
-const initParams = ()=>{
+const initParams = () =>{
   // console.log("initParams called",state);
   state.missingOptions.seed = false;
   state.missingOptions.file = false;
@@ -40,13 +42,21 @@ const initParams = ()=>{
   state.name = '';
   // console.log("state after initParams", state.value); 
 };
+
+const toggleCollapse = () => {
+  isCollapsed.value = !isCollapsed.value;
+};
+
 __expose({
   state,
   initParams,
+  isCollapsed,  // 暴露折叠状态给父组件
+  toggleCollapse  // 暴露切换方法给父组件
 });
 
 return (_ctx, _cache) => {
   const _component_v_icon = _resolveComponent$3("v-icon");
+  const _component_v_btn = _resolveComponent$3("v-btn");
   const _component_v_card_title = _resolveComponent$3("v-card-title");
   const _component_v_col = _resolveComponent$3("v-col");
   const _component_v_checkbox = _resolveComponent$3("v-checkbox");
@@ -56,14 +66,18 @@ return (_ctx, _cache) => {
   const _component_v_tooltip = _resolveComponent$3("v-tooltip");
   const _component_v_text_field = _resolveComponent$3("v-text-field");
   const _component_v_card_text = _resolveComponent$3("v-card-text");
+  const _component_v_expand_transition = _resolveComponent$3("v-expand-transition");
   const _component_v_card = _resolveComponent$3("v-card");
 
   return (_openBlock$3(), _createBlock$2(_component_v_card, {
     flat: "",
-    class: "tool-bar px-2 py-1"
+    class: "tool-bar"
   }, {
     default: _withCtx$3(() => [
-      _createVNode$3(_component_v_card_title, { class: "text-subtitle-2 d-flex align-center px-3 py-2 bg-primary-lighten-5" }, {
+      _createVNode$3(_component_v_card_title, {
+        class: "text-subtitle-2 d-flex align-center px-2 py-1 bg-primary-lighten-5 cursor-pointer",
+        onClick: toggleCollapse
+      }, {
         default: _withCtx$3(() => [
           _createVNode$3(_component_v_icon, {
             icon: "mdi-magnify",
@@ -71,344 +85,360 @@ return (_ctx, _cache) => {
             color: "primary",
             size: "small"
           }),
-          _cache[7] || (_cache[7] = _createElementVNode$3("span", null, "扫描选项", -1))
+          _cache[7] || (_cache[7] = _createElementVNode$3("span", null, "扫描选项", -1)),
+          _createVNode$3(_component_v_btn, {
+            icon: "mdi-chevron-left",
+            onClick: _withModifiers$2(toggleCollapse, ["stop","prevent"]),
+            size: "small",
+            variant: "tonal",
+            class: _normalizeClass(["ml-auto mr-4 transition-button", { 'rotate-180': isCollapsed.value }])
+          }, null, 8, ["class"])
         ]),
         _: 1,
         __: [7]
       }),
-      _createVNode$3(_component_v_card_text, null, {
+      _createVNode$3(_component_v_expand_transition, null, {
         default: _withCtx$3(() => [
-          _createVNode$3(_component_v_row, {
-            align: "center",
-            "no-gutters": "",
-            class: "d-flex"
-          }, {
-            default: _withCtx$3(() => [
-              _createVNode$3(_component_v_col, {
-                cols: "6",
-                class: "d-flex align-center justify-start"
-              }, {
-                default: _withCtx$3(() => [
-                  _createVNode$3(_component_v_row, {
-                    align: "center",
-                    "no-gutters": "",
-                    class: "d-flex justify-start"
-                  }, {
-                    default: _withCtx$3(() => [
-                      _createVNode$3(_component_v_col, {
-                        cols: "4",
-                        class: "d-flex justify-start"
-                      }, {
-                        default: _withCtx$3(() => _cache[8] || (_cache[8] = [
-                          _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "缺失选项：", -1)
-                        ])),
-                        _: 1,
-                        __: [8]
-                      }),
-                      _createVNode$3(_component_v_col, { cols: "4" }, {
-                        default: _withCtx$3(() => [
-                          _createVNode$3(_component_v_checkbox, {
-                            modelValue: state.missingOptions.file,
-                            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ((state.missingOptions.file) = $event)),
-                            label: "缺文件的种子",
-                            "hide-details": ""
-                          }, null, 8, ["modelValue"])
-                        ]),
-                        _: 1
-                      }),
-                      _createVNode$3(_component_v_col, { cols: "4" }, {
-                        default: _withCtx$3(() => [
-                          _createVNode$3(_component_v_checkbox, {
-                            modelValue: state.missingOptions.seed,
-                            "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ((state.missingOptions.seed) = $event)),
-                            label: "缺种的源文件",
-                            "hide-details": ""
-                          }, null, 8, ["modelValue"])
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              }),
-              _createVNode$3(_component_v_col, {
-                cols: "6",
-                class: "d-flex align-center justify-start"
-              }, {
-                default: _withCtx$3(() => [
-                  _createVNode$3(_component_v_row, {
-                    align: "center",
-                    "no-gutters": "",
-                    class: "d-flex justify-start"
-                  }, {
-                    default: _withCtx$3(() => [
-                      _createVNode$3(_component_v_col, {
-                        cols: "4",
-                        class: "d-flex justify-start"
-                      }, {
-                        default: _withCtx$3(() => _cache[9] || (_cache[9] = [
-                          _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "有无辅种：", -1)
-                        ])),
-                        _: 1,
-                        __: [9]
-                      }),
-                      _createVNode$3(_component_v_col, {
-                        cols: "8",
-                        class: "d-flex justify-start"
-                      }, {
-                        default: _withCtx$3(() => [
-                          _createVNode$3(_component_v_radio_group, {
-                            modelValue: state.auxOption,
-                            "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => ((state.auxOption) = $event)),
-                            inline: "",
-                            "hide-details": ""
-                          }, {
-                            default: _withCtx$3(() => [
-                              _createElementVNode$3("div", _hoisted_1$3, [
-                                _createVNode$3(_component_v_radio, {
-                                  label: "全部",
-                                  value: "all"
-                                }),
-                                _createVNode$3(_component_v_radio, {
-                                  label: "无辅种",
-                                  value: "no_aux"
-                                }),
-                                _createVNode$3(_component_v_radio, {
-                                  label: "有辅种",
-                                  value: "has_aux"
+          _withDirectives$1(_createElementVNode$3("div", null, [
+            _createVNode$3(_component_v_card_text, null, {
+              default: _withCtx$3(() => [
+                _createVNode$3(_component_v_row, {
+                  align: "center",
+                  "no-gutters": "",
+                  class: "d-flex"
+                }, {
+                  default: _withCtx$3(() => [
+                    _createVNode$3(_component_v_col, {
+                      cols: "6",
+                      class: "d-flex align-center justify-start"
+                    }, {
+                      default: _withCtx$3(() => [
+                        _createVNode$3(_component_v_row, {
+                          align: "center",
+                          "no-gutters": "",
+                          class: "d-flex justify-start"
+                        }, {
+                          default: _withCtx$3(() => [
+                            _createVNode$3(_component_v_col, {
+                              cols: "4",
+                              class: "d-flex justify-start"
+                            }, {
+                              default: _withCtx$3(() => _cache[8] || (_cache[8] = [
+                                _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "缺失选项：", -1)
+                              ])),
+                              _: 1,
+                              __: [8]
+                            }),
+                            _createVNode$3(_component_v_col, { cols: "4" }, {
+                              default: _withCtx$3(() => [
+                                _createVNode$3(_component_v_checkbox, {
+                                  modelValue: state.missingOptions.file,
+                                  "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ((state.missingOptions.file) = $event)),
+                                  label: "缺文件的种子",
+                                  "hide-details": ""
+                                }, null, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            }),
+                            _createVNode$3(_component_v_col, { cols: "4" }, {
+                              default: _withCtx$3(() => [
+                                _createVNode$3(_component_v_checkbox, {
+                                  modelValue: state.missingOptions.seed,
+                                  "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ((state.missingOptions.seed) = $event)),
+                                  label: "缺种的源文件",
+                                  "hide-details": ""
+                                }, null, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    }),
+                    _createVNode$3(_component_v_col, {
+                      cols: "6",
+                      class: "d-flex align-center justify-start"
+                    }, {
+                      default: _withCtx$3(() => [
+                        _createVNode$3(_component_v_row, {
+                          align: "center",
+                          "no-gutters": "",
+                          class: "d-flex justify-start"
+                        }, {
+                          default: _withCtx$3(() => [
+                            _createVNode$3(_component_v_col, {
+                              cols: "4",
+                              class: "d-flex justify-start"
+                            }, {
+                              default: _withCtx$3(() => _cache[9] || (_cache[9] = [
+                                _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "有无辅种：", -1)
+                              ])),
+                              _: 1,
+                              __: [9]
+                            }),
+                            _createVNode$3(_component_v_col, {
+                              cols: "8",
+                              class: "d-flex justify-start"
+                            }, {
+                              default: _withCtx$3(() => [
+                                _createVNode$3(_component_v_radio_group, {
+                                  modelValue: state.auxOption,
+                                  "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => ((state.auxOption) = $event)),
+                                  inline: "",
+                                  "hide-details": ""
+                                }, {
+                                  default: _withCtx$3(() => [
+                                    _createElementVNode$3("div", _hoisted_1$3, [
+                                      _createVNode$3(_component_v_radio, {
+                                        label: "全部",
+                                        value: "all"
+                                      }),
+                                      _createVNode$3(_component_v_radio, {
+                                        label: "无辅种",
+                                        value: "no_aux"
+                                      }),
+                                      _createVNode$3(_component_v_radio, {
+                                        label: "有辅种",
+                                        value: "has_aux"
+                                      })
+                                    ])
+                                  ]),
+                                  _: 1
+                                }, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    })
+                  ]),
+                  _: 1
+                }),
+                _createVNode$3(_component_v_row, {
+                  align: "center",
+                  "no-gutters": "",
+                  class: "d-flex"
+                }, {
+                  default: _withCtx$3(() => [
+                    _createVNode$3(_component_v_col, {
+                      cols: "6",
+                      class: "d-flex align-center justify-start"
+                    }, {
+                      default: _withCtx$3(() => [
+                        _createVNode$3(_component_v_row, {
+                          align: "center",
+                          "no-gutters": "",
+                          class: "d-flex justify-start"
+                        }, {
+                          default: _withCtx$3(() => [
+                            _createVNode$3(_component_v_col, {
+                              cols: "4",
+                              class: "d-flex justify-start"
+                            }, {
+                              default: _withCtx$3(() => _cache[10] || (_cache[10] = [
+                                _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "删除选项：", -1)
+                              ])),
+                              _: 1,
+                              __: [10]
+                            }),
+                            _createVNode$3(_component_v_col, {
+                              cols: "8",
+                              class: "d-flex justify-start"
+                            }, {
+                              default: _withCtx$3(() => [
+                                _createVNode$3(_component_v_radio_group, {
+                                  modelValue: state.removeOption,
+                                  "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => ((state.removeOption) = $event)),
+                                  inline: "",
+                                  "hide-details": ""
+                                }, {
+                                  default: _withCtx$3(() => [
+                                    _createElementVNode$3("div", _hoisted_2$3, [
+                                      _createVNode$3(_component_v_radio, {
+                                        label: "全部",
+                                        value: "all"
+                                      }),
+                                      _createVNode$3(_component_v_radio, {
+                                        label: "仅删除种子",
+                                        value: "only_torrent"
+                                      })
+                                    ])
+                                  ]),
+                                  _: 1
+                                }, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    }),
+                    _createVNode$3(_component_v_col, {
+                      cols: "6",
+                      class: "d-flex align-center justify-start"
+                    }, {
+                      default: _withCtx$3(() => [
+                        _createVNode$3(_component_v_row, {
+                          align: "center",
+                          "no-gutters": "",
+                          class: "d-flex justify-start"
+                        }, {
+                          default: _withCtx$3(() => [
+                            _createVNode$3(_component_v_col, {
+                              cols: "4",
+                              class: "d-flex justify-start"
+                            }, {
+                              default: _withCtx$3(() => [
+                                _cache[12] || (_cache[12] = _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "存量数据：", -1)),
+                                _createVNode$3(_component_v_tooltip, {
+                                  activator: "parent",
+                                  location: "top"
+                                }, {
+                                  default: _withCtx$3(() => _cache[11] || (_cache[11] = [
+                                    _createElementVNode$3("span", null, "使用缓存在MoviePilot插件的数据文件进行扫描", -1)
+                                  ])),
+                                  _: 1,
+                                  __: [11]
                                 })
-                              ])
-                            ]),
-                            _: 1
-                          }, 8, ["modelValue"])
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              })
-            ]),
-            _: 1
-          }),
-          _createVNode$3(_component_v_row, {
-            align: "center",
-            "no-gutters": "",
-            class: "d-flex"
-          }, {
-            default: _withCtx$3(() => [
-              _createVNode$3(_component_v_col, {
-                cols: "6",
-                class: "d-flex align-center justify-start"
-              }, {
-                default: _withCtx$3(() => [
-                  _createVNode$3(_component_v_row, {
-                    align: "center",
-                    "no-gutters": "",
-                    class: "d-flex justify-start"
-                  }, {
-                    default: _withCtx$3(() => [
-                      _createVNode$3(_component_v_col, {
-                        cols: "4",
-                        class: "d-flex justify-start"
-                      }, {
-                        default: _withCtx$3(() => _cache[10] || (_cache[10] = [
-                          _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "删除选项：", -1)
-                        ])),
-                        _: 1,
-                        __: [10]
-                      }),
-                      _createVNode$3(_component_v_col, {
-                        cols: "8",
-                        class: "d-flex justify-start"
-                      }, {
-                        default: _withCtx$3(() => [
-                          _createVNode$3(_component_v_radio_group, {
-                            modelValue: state.removeOption,
-                            "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => ((state.removeOption) = $event)),
-                            inline: "",
-                            "hide-details": ""
-                          }, {
-                            default: _withCtx$3(() => [
-                              _createElementVNode$3("div", _hoisted_2$3, [
-                                _createVNode$3(_component_v_radio, {
-                                  label: "全部",
-                                  value: "all"
-                                }),
-                                _createVNode$3(_component_v_radio, {
-                                  label: "仅删除种子",
-                                  value: "only_torrent"
-                                })
-                              ])
-                            ]),
-                            _: 1
-                          }, 8, ["modelValue"])
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              }),
-              _createVNode$3(_component_v_col, {
-                cols: "6",
-                class: "d-flex align-center justify-start"
-              }, {
-                default: _withCtx$3(() => [
-                  _createVNode$3(_component_v_row, {
-                    align: "center",
-                    "no-gutters": "",
-                    class: "d-flex justify-start"
-                  }, {
-                    default: _withCtx$3(() => [
-                      _createVNode$3(_component_v_col, {
-                        cols: "4",
-                        class: "d-flex justify-start"
-                      }, {
-                        default: _withCtx$3(() => [
-                          _cache[12] || (_cache[12] = _createElementVNode$3("span", { class: "label-text font-weight-bold align-content-center" }, "存量数据：", -1)),
-                          _createVNode$3(_component_v_tooltip, {
-                            activator: "parent",
-                            location: "top"
-                          }, {
-                            default: _withCtx$3(() => _cache[11] || (_cache[11] = [
-                              _createElementVNode$3("span", null, "使用缓存在MoviePilot插件的数据文件进行扫描", -1)
-                            ])),
-                            _: 1,
-                            __: [11]
-                          })
-                        ]),
-                        _: 1,
-                        __: [12]
-                      }),
-                      _createVNode$3(_component_v_col, {
-                        cols: "8",
-                        class: "d-flex justify-start"
-                      }, {
-                        default: _withCtx$3(() => [
-                          _createVNode$3(_component_v_radio_group, {
-                            modelValue: state.existingSeedData,
-                            "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => ((state.existingSeedData) = $event)),
-                            inline: "",
-                            "hide-details": ""
-                          }, {
-                            default: _withCtx$3(() => [
-                              _createElementVNode$3("div", _hoisted_3$2, [
-                                _createVNode$3(_component_v_radio, {
-                                  label: "否",
-                                  value: false
-                                }),
-                                _createVNode$3(_component_v_radio, {
-                                  label: "是",
-                                  value: true
-                                })
-                              ])
-                            ]),
-                            _: 1
-                          }, 8, ["modelValue"])
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              })
-            ]),
-            _: 1
-          }),
-          _createVNode$3(_component_v_row, {
-            class: "d-flex",
-            align: "center",
-            "no-gutters": ""
-          }, {
-            default: _withCtx$3(() => [
-              _createVNode$3(_component_v_col, {
-                cols: "6",
-                class: "d-flex align-center justify-start"
-              }, {
-                default: _withCtx$3(() => [
-                  _createVNode$3(_component_v_row, {
-                    align: "center",
-                    "no-gutters": "",
-                    class: "d-flex justify-center"
-                  }, {
-                    default: _withCtx$3(() => [
-                      _createVNode$3(_component_v_col, { cols: "4" }, {
-                        default: _withCtx$3(() => _cache[13] || (_cache[13] = [
-                          _createElementVNode$3("span", { class: "label-text font-weight-bold" }, "Tracker：", -1)
-                        ])),
-                        _: 1,
-                        __: [13]
-                      }),
-                      _createVNode$3(_component_v_col, {
-                        cols: "8",
-                        class: "pr-2"
-                      }, {
-                        default: _withCtx$3(() => [
-                          _createVNode$3(_component_v_text_field, {
-                            modelValue: state.trackerInput,
-                            "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => ((state.trackerInput) = $event)),
-                            label: "Tracker (多个用分号分隔)",
-                            placeholder: "tracker1.com;tracker2.com",
-                            variant: "outlined",
-                            density: "compact",
-                            size: "small"
-                          }, null, 8, ["modelValue"])
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              }),
-              _createVNode$3(_component_v_col, { cols: "6" }, {
-                default: _withCtx$3(() => [
-                  _createVNode$3(_component_v_row, {
-                    align: "center",
-                    "no-gutters": "",
-                    class: "d-flex justify-center"
-                  }, {
-                    default: _withCtx$3(() => [
-                      _createVNode$3(_component_v_col, { cols: "4" }, {
-                        default: _withCtx$3(() => _cache[14] || (_cache[14] = [
-                          _createElementVNode$3("span", { class: "label-text font-weight-bold" }, "名称查询:", -1)
-                        ])),
-                        _: 1,
-                        __: [14]
-                      }),
-                      _createVNode$3(_component_v_col, { cols: "8" }, {
-                        default: _withCtx$3(() => [
-                          _createVNode$3(_component_v_text_field, {
-                            modelValue: state.name,
-                            "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => ((state.name) = $event)),
-                            label: "名称，支持正则表达式(Python)",
-                            placeholder: "多啦A梦",
-                            variant: "outlined",
-                            density: "compact",
-                            size: "small"
-                          }, null, 8, ["modelValue"])
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })
-                ]),
-                _: 1
-              })
-            ]),
-            _: 1
-          })
+                              ]),
+                              _: 1,
+                              __: [12]
+                            }),
+                            _createVNode$3(_component_v_col, {
+                              cols: "8",
+                              class: "d-flex justify-start"
+                            }, {
+                              default: _withCtx$3(() => [
+                                _createVNode$3(_component_v_radio_group, {
+                                  modelValue: state.existingSeedData,
+                                  "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => ((state.existingSeedData) = $event)),
+                                  inline: "",
+                                  "hide-details": ""
+                                }, {
+                                  default: _withCtx$3(() => [
+                                    _createElementVNode$3("div", _hoisted_3$2, [
+                                      _createVNode$3(_component_v_radio, {
+                                        label: "否",
+                                        value: false
+                                      }),
+                                      _createVNode$3(_component_v_radio, {
+                                        label: "是",
+                                        value: true
+                                      })
+                                    ])
+                                  ]),
+                                  _: 1
+                                }, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    })
+                  ]),
+                  _: 1
+                }),
+                _createVNode$3(_component_v_row, {
+                  class: "d-flex",
+                  align: "center",
+                  "no-gutters": ""
+                }, {
+                  default: _withCtx$3(() => [
+                    _createVNode$3(_component_v_col, {
+                      cols: "6",
+                      class: "d-flex align-center justify-start"
+                    }, {
+                      default: _withCtx$3(() => [
+                        _createVNode$3(_component_v_row, {
+                          align: "center",
+                          "no-gutters": "",
+                          class: "d-flex justify-center"
+                        }, {
+                          default: _withCtx$3(() => [
+                            _createVNode$3(_component_v_col, { cols: "4" }, {
+                              default: _withCtx$3(() => _cache[13] || (_cache[13] = [
+                                _createElementVNode$3("span", { class: "label-text font-weight-bold" }, "Tracker：", -1)
+                              ])),
+                              _: 1,
+                              __: [13]
+                            }),
+                            _createVNode$3(_component_v_col, {
+                              cols: "8",
+                              class: "pr-2"
+                            }, {
+                              default: _withCtx$3(() => [
+                                _createVNode$3(_component_v_text_field, {
+                                  modelValue: state.trackerInput,
+                                  "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => ((state.trackerInput) = $event)),
+                                  label: "Tracker (多个用分号分隔)",
+                                  placeholder: "tracker1.com;tracker2.com",
+                                  variant: "outlined",
+                                  density: "compact",
+                                  size: "small"
+                                }, null, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    }),
+                    _createVNode$3(_component_v_col, { cols: "6" }, {
+                      default: _withCtx$3(() => [
+                        _createVNode$3(_component_v_row, {
+                          align: "center",
+                          "no-gutters": "",
+                          class: "d-flex justify-center"
+                        }, {
+                          default: _withCtx$3(() => [
+                            _createVNode$3(_component_v_col, { cols: "4" }, {
+                              default: _withCtx$3(() => _cache[14] || (_cache[14] = [
+                                _createElementVNode$3("span", { class: "label-text font-weight-bold" }, "名称查询:", -1)
+                              ])),
+                              _: 1,
+                              __: [14]
+                            }),
+                            _createVNode$3(_component_v_col, { cols: "8" }, {
+                              default: _withCtx$3(() => [
+                                _createVNode$3(_component_v_text_field, {
+                                  modelValue: state.name,
+                                  "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => ((state.name) = $event)),
+                                  label: "名称，支持正则表达式(Python)",
+                                  placeholder: "多啦A梦",
+                                  variant: "outlined",
+                                  density: "compact",
+                                  size: "small"
+                                }, null, 8, ["modelValue"])
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    })
+                  ]),
+                  _: 1
+                })
+              ]),
+              _: 1
+            })
+          ], 512), [
+            [_vShow$1, !isCollapsed.value]
+          ])
         ]),
         _: 1
       })
@@ -419,20 +449,21 @@ return (_ctx, _cache) => {
 }
 
 };
-const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-348959c9"]]);
+const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-98e92630"]]);
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
 const {toDisplayString:_toDisplayString$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,createVNode:_createVNode$2,createElementVNode:_createElementVNode$2,withKeys:_withKeys,withModifiers:_withModifiers$1,unref:_unref$1,createElementBlock:_createElementBlock$2} = await importShared('vue');
 
 const _hoisted_1$2 = { class: "d-flex align-center mr-4" };
-const _hoisted_2$2 = { class: "filter-chips d-flex" };
-const _hoisted_3$1 = { class: "name-text" };
-const _hoisted_4$1 = { key: 0 };
-const _hoisted_5 = { key: 1 };
-const _hoisted_6 = { colspan: "100%" };
-const _hoisted_7 = { class: "text-left" };
+const _hoisted_2$2 = { class: "filter-chips d-flex justify-start px-4" };
+const _hoisted_3$1 = { style: { "min-height": "260px", "max-height": "420px", "overflow-y": "auto" } };
+const _hoisted_4$1 = { class: "name-text" };
+const _hoisted_5 = { key: 0 };
+const _hoisted_6 = { key: 1 };
+const _hoisted_7 = { colspan: "100%" };
 const _hoisted_8 = { class: "text-left" };
+const _hoisted_9 = { class: "text-left" };
 const {ref: ref$1,computed: computed$1,reactive: reactive$2} = await importShared('vue');
 const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   __name: "ScanResults",
@@ -485,7 +516,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       headers: [
         { value: "expand", title: "", key: "data-table-expand" },
         { value: "name", title: "名称", align: "left", sortable: true, maxWidth: "20rem" },
-        { value: "path", title: "路径", align: "left", sortable: true, maxWidth: "12rem" },
+        { value: "path", title: "路径", align: "left", sortable: true, maxWidth: "14rem" },
         { value: "tracker", title: "Tracker", align: "center" },
         { value: "status", title: "状态", align: "center" },
         { value: "size", title: "大小", sortable: true, align: "center" },
@@ -599,9 +630,6 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     const applyFilter = () => {
       console.log("应用筛选，路径包含：", state.filterName, state.filter[state.filterName]);
       filterDialog.value = false;
-      if (!state.filter[state.filterName]) {
-        return;
-      }
       emit("applyFilter", state.filter);
     };
     const deleteFilter = (name) => {
@@ -638,7 +666,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         class: "mb-4"
       }, {
         default: _withCtx$2(() => [
-          _createVNode$2(_component_v_card_title, { class: "text-subtitle-1 d-flex align-center px-3 py-2 bg-primary-lighten-5" }, {
+          _createVNode$2(_component_v_card_title, { class: "text-subtitle-1 d-flex align-center px-2 py-1 bg-primary-lighten-5" }, {
             default: _withCtx$2(() => [
               _createElementVNode$2("div", _hoisted_1$2, [
                 totalComputed.value != "" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
@@ -785,11 +813,13 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                         default: _withCtx$2(() => [
                           _createVNode$2(_component_v_row, {
                             align: "center",
-                            gutters: 1,
-                            class: "d-flex align-center align-content-center"
+                            class: "d-flex align-content-center"
                           }, {
                             default: _withCtx$2(() => [
-                              _createVNode$2(_component_v_col, { cols: "4" }, {
+                              _createVNode$2(_component_v_col, {
+                                cols: "4",
+                                class: "px-1"
+                              }, {
                                 default: _withCtx$2(() => [
                                   _createVNode$2(_component_v_select, {
                                     modelValue: state.filterName,
@@ -797,13 +827,15 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                                     items: filterItems,
                                     variant: "outlined",
                                     density: "compact",
-                                    class: "mb-3 text-caption",
-                                    hint: "筛选字段名称"
+                                    class: "text-caption"
                                   }, null, 8, ["modelValue"])
                                 ]),
                                 _: 1
                               }),
-                              _createVNode$2(_component_v_col, { cols: "8" }, {
+                              _createVNode$2(_component_v_col, {
+                                cols: "8",
+                                class: "px-1"
+                              }, {
                                 default: _withCtx$2(() => [
                                   _createVNode$2(_component_v_text_field, {
                                     modelValue: state.filter[state.filterName],
@@ -811,6 +843,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                                     label: `输入筛选${getfilterTitleByKey(state.filterName)}`,
                                     onKeyup: _withKeys(applyFilter, ["enter"]),
                                     density: "compact",
+                                    variant: "outlined",
                                     autofocus: ""
                                   }, null, 8, ["modelValue", "label"])
                                 ]),
@@ -825,7 +858,9 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                       _createVNode$2(_component_v_card_actions, null, {
                         default: _withCtx$2(() => [
                           _createVNode$2(_component_v_btn, {
-                            onClick: _cache[4] || (_cache[4] = ($event) => deleteFilter(state.filterName))
+                            onClick: _cache[4] || (_cache[4] = ($event) => {
+                              filterDialog.value = false;
+                            })
                           }, {
                             default: _withCtx$2(() => _cache[14] || (_cache[14] = [
                               _createTextVNode$2("取消")
@@ -871,146 +906,147 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   _: 1
                 })) : _createCommentVNode$1("", true)
               ]),
-              _createVNode$2(_component_v_data_table_server, {
-                headers: state.headers,
-                "hide-default-header": false,
-                items: props.scanRes.combinedList,
-                "items-per-page": __props.scanParams.pageSize,
-                page: __props.scanParams.page,
-                "item-count": props.scanRes.total,
-                "items-length": props.scanRes.total,
-                "sort-by": props.scanParams.sortBy,
-                "item-value": (item) => item,
-                loading: props.loading,
-                modelValue: state.selectedScans,
-                "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => state.selectedScans = $event),
-                "must-sort": "",
-                "fixed-header": "",
-                height: "420px",
-                density: "default",
-                hover: "",
-                "hide-default-footer": "",
-                "show-expand": "",
-                "show-select": "",
-                "expand-on-click": "",
-                "onUpdate:sortBy": handleSortChange,
-                "onUpdate:page": handlePageChange,
-                "onUpdate:itemsPerPage": handlePageSizeChange
-              }, {
-                loading: _withCtx$2(() => [
-                  _createVNode$2(_component_v_skeleton_loader, { type: "table-row@10" })
-                ]),
-                "item.name": _withCtx$2(({ item }) => [
-                  item.hasOwnProperty("client") && item.client ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
-                    key: 0,
-                    color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
-                    size: "small",
-                    "text-color": "white"
-                  }, {
-                    default: _withCtx$2(() => [
-                      _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
-                    ]),
-                    _: 2
-                  }, 1032, ["color"])) : _createCommentVNode$1("", true),
-                  _createElementVNode$2("span", _hoisted_3$1, _toDisplayString$2(item.name), 1)
-                ]),
-                "item.path": _withCtx$2(({ item }) => [
-                  _createElementVNode$2("span", null, _toDisplayString$2(item.path.replace(item.name, "")), 1),
-                  _createVNode$2(_component_v_btn, {
-                    icon: "mdi-content-copy",
-                    size: "x-small",
-                    onClick: _withModifiers$1(($event) => _copyPath(item.path), ["stop"]),
-                    style: { "margin-left": "8px" }
-                  }, null, 8, ["onClick"])
-                ]),
-                "item.tracker": _withCtx$2(({ item }) => [
-                  item.type === "torrent" && item?.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_4$1, [
-                    _createVNode$2(_component_v_chip, {
-                      color: getColorByString(item.trackers),
-                      "text-color": "white",
+              _createElementVNode$2("div", _hoisted_3$1, [
+                _createVNode$2(_component_v_data_table_server, {
+                  headers: state.headers,
+                  "hide-default-header": false,
+                  items: props.scanRes.combinedList,
+                  "items-per-page": __props.scanParams.pageSize,
+                  page: __props.scanParams.page,
+                  "item-count": props.scanRes.total,
+                  "items-length": props.scanRes.total,
+                  "sort-by": props.scanParams.sortBy,
+                  "item-value": (item) => item,
+                  loading: props.loading,
+                  modelValue: state.selectedScans,
+                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => state.selectedScans = $event),
+                  "must-sort": "",
+                  "fixed-header": "",
+                  density: "default",
+                  hover: "",
+                  "hide-default-footer": "",
+                  "show-expand": "",
+                  "show-select": "",
+                  "expand-on-click": "",
+                  "onUpdate:sortBy": handleSortChange,
+                  "onUpdate:page": handlePageChange,
+                  "onUpdate:itemsPerPage": handlePageSizeChange
+                }, {
+                  loading: _withCtx$2(() => [
+                    _createVNode$2(_component_v_skeleton_loader, { type: "table-row@10" })
+                  ]),
+                  "item.name": _withCtx$2(({ item }) => [
+                    item.hasOwnProperty("client") && item.client ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                      key: 0,
+                      color: item.hasOwnProperty("client") && item.client === "transmission" ? "primary" : "error",
                       size: "small",
-                      class: "mr-1 mb-1"
+                      "text-color": "white"
                     }, {
                       default: _withCtx$2(() => [
-                        _createTextVNode$2(_toDisplayString$2(_unref$1(mapTrackers)(item.trackers)[0]), 1)
+                        _createTextVNode$2(_toDisplayString$2((item.client || "").slice(0, 2)), 1)
                       ]),
                       _: 2
-                    }, 1032, ["color"])
-                  ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_5, [
-                    _createVNode$2(_component_v_chip, {
-                      color: "info",
-                      "text-color": "white",
-                      size: "small"
+                    }, 1032, ["color"])) : _createCommentVNode$1("", true),
+                    _createElementVNode$2("span", _hoisted_4$1, _toDisplayString$2(item.name), 1)
+                  ]),
+                  "item.path": _withCtx$2(({ item }) => [
+                    _createElementVNode$2("span", null, _toDisplayString$2(item.path.replace(`/${item.name}`, "").replace(`\\${item.name}`, "")), 1),
+                    _createVNode$2(_component_v_btn, {
+                      icon: "mdi-content-copy",
+                      size: "x-small",
+                      onClick: _withModifiers$1(($event) => _copyPath(item.path), ["stop"]),
+                      style: { "margin-left": "8px" }
+                    }, null, 8, ["onClick"])
+                  ]),
+                  "item.tracker": _withCtx$2(({ item }) => [
+                    item.type === "torrent" && item?.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_5, [
+                      _createVNode$2(_component_v_chip, {
+                        color: getColorByString(item.trackers),
+                        "text-color": "white",
+                        size: "small",
+                        class: "mr-1 mb-1"
+                      }, {
+                        default: _withCtx$2(() => [
+                          _createTextVNode$2(_toDisplayString$2(_unref$1(mapTrackers)(item.trackers)[0]), 1)
+                        ]),
+                        _: 2
+                      }, 1032, ["color"])
+                    ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_6, [
+                      _createVNode$2(_component_v_chip, {
+                        color: "info",
+                        "text-color": "white",
+                        size: "small"
+                      }, {
+                        default: _withCtx$2(() => _cache[16] || (_cache[16] = [
+                          _createTextVNode$2(" 无 Tracker ")
+                        ])),
+                        _: 1,
+                        __: [16]
+                      })
+                    ]))
+                  ]),
+                  "item.status": _withCtx$2(({ item }) => [
+                    item.type === "torrent" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                      key: 0,
+                      color: item.data_missing ? "error" : "success",
+                      size: "small",
+                      "text-color": "white"
                     }, {
-                      default: _withCtx$2(() => _cache[16] || (_cache[16] = [
-                        _createTextVNode$2(" 无 Tracker ")
+                      default: _withCtx$2(() => [
+                        _createTextVNode$2(_toDisplayString$2(item.data_missing ? "缺失源文件" : "包含源文件"), 1)
+                      ]),
+                      _: 2
+                    }, 1032, ["color"])) : item.type === "file" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                      key: 1,
+                      color: "warning",
+                      size: "small",
+                      "text-color": "white"
+                    }, {
+                      default: _withCtx$2(() => _cache[17] || (_cache[17] = [
+                        _createTextVNode$2(" 缺失种子 ")
                       ])),
                       _: 1,
-                      __: [16]
-                    })
-                  ]))
-                ]),
-                "item.status": _withCtx$2(({ item }) => [
-                  item.type === "torrent" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
-                    key: 0,
-                    color: item.data_missing ? "error" : "success",
-                    size: "small",
-                    "text-color": "white"
-                  }, {
-                    default: _withCtx$2(() => [
-                      _createTextVNode$2(_toDisplayString$2(item.data_missing ? "缺失源文件" : "包含源文件"), 1)
-                    ]),
-                    _: 2
-                  }, 1032, ["color"])) : item.type === "file" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
-                    key: 1,
-                    color: "warning",
-                    size: "small",
-                    "text-color": "white"
-                  }, {
-                    default: _withCtx$2(() => _cache[17] || (_cache[17] = [
-                      _createTextVNode$2(" 缺失种子 ")
-                    ])),
-                    _: 1,
-                    __: [17]
-                  })) : _createCommentVNode$1("", true)
-                ]),
-                "item.size": _withCtx$2(({ item }) => [
-                  _createTextVNode$2(_toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
-                ]),
-                "expanded-row": _withCtx$2(({ item }) => [
-                  _createElementVNode$2("tr", null, [
-                    _createElementVNode$2("td", _hoisted_6, [
-                      _createVNode$2(_component_v_table, { density: "compact" }, {
-                        default: _withCtx$2(() => [
-                          _cache[18] || (_cache[18] = _createElementVNode$2("thead", null, [
-                            _createElementVNode$2("tr", null, [
-                              _createElementVNode$2("th", { class: "text-left" }, " Hash "),
-                              _createElementVNode$2("th", { class: "text-left" }, " 客户端名称 ")
+                      __: [17]
+                    })) : _createCommentVNode$1("", true)
+                  ]),
+                  "item.size": _withCtx$2(({ item }) => [
+                    _createTextVNode$2(_toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
+                  ]),
+                  "expanded-row": _withCtx$2(({ item }) => [
+                    _createElementVNode$2("tr", null, [
+                      _createElementVNode$2("td", _hoisted_7, [
+                        _createVNode$2(_component_v_table, { density: "compact" }, {
+                          default: _withCtx$2(() => [
+                            _cache[18] || (_cache[18] = _createElementVNode$2("thead", null, [
+                              _createElementVNode$2("tr", null, [
+                                _createElementVNode$2("th", { class: "text-left" }, " Hash "),
+                                _createElementVNode$2("th", { class: "text-left" }, " 客户端名称 ")
+                              ])
+                            ], -1)),
+                            _createElementVNode$2("tbody", null, [
+                              _createElementVNode$2("tr", null, [
+                                _createElementVNode$2("td", _hoisted_8, _toDisplayString$2(item.hash), 1),
+                                _createElementVNode$2("td", _hoisted_9, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
+                              ])
                             ])
-                          ], -1)),
-                          _createElementVNode$2("tbody", null, [
-                            _createElementVNode$2("tr", null, [
-                              _createElementVNode$2("td", _hoisted_7, _toDisplayString$2(item.hash), 1),
-                              _createElementVNode$2("td", _hoisted_8, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
-                            ])
-                          ])
-                        ]),
-                        _: 2,
-                        __: [18]
-                      }, 1024)
+                          ]),
+                          _: 2,
+                          __: [18]
+                        }, 1024)
+                      ])
                     ])
-                  ])
-                ]),
-                "item.select": _withCtx$2(({ item }) => [
-                  _createVNode$2(_component_v_checkbox, {
-                    modelValue: state.selectedScans,
-                    "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => state.selectedScans = $event),
-                    value: item,
-                    "hide-details": ""
-                  }, null, 8, ["modelValue", "value"])
-                ]),
-                _: 1
-              }, 8, ["headers", "items", "items-per-page", "page", "item-count", "items-length", "sort-by", "item-value", "loading", "modelValue"])
+                  ]),
+                  "item.select": _withCtx$2(({ item }) => [
+                    _createVNode$2(_component_v_checkbox, {
+                      modelValue: state.selectedScans,
+                      "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => state.selectedScans = $event),
+                      value: item,
+                      "hide-details": ""
+                    }, null, 8, ["modelValue", "value"])
+                  ]),
+                  _: 1
+                }, 8, ["headers", "items", "items-per-page", "page", "item-count", "items-length", "sort-by", "item-value", "loading", "modelValue"])
+              ])
             ]),
             _: 1
           }),
@@ -1033,7 +1069,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-c0d74c9a"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-c8d014e9"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -1603,12 +1639,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
               ref: toolbarRef
             }, null, 512),
             _createVNode(_component_v_divider),
-            _createVNode(_component_v_card, {
-              flat: "",
-              class: "px-2 py-1"
-            }, {
+            _createVNode(_component_v_card, { flat: "" }, {
               default: _withCtx(() => [
-                _createVNode(_component_v_card_title, { class: "text-subtitle-2 d-flex align-center px-3 py-2 bg-primary-lighten-5" }, {
+                _createVNode(_component_v_card_title, { class: "text-subtitle-2 d-flex align-center px-2 py-1 bg-primary-lighten-5" }, {
                   default: _withCtx(() => [
                     _createVNode(_component_v_icon, {
                       icon: "mdi-list-box",
@@ -1779,6 +1812,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3ed8f622"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-683472c7"]]);
 
 export { PageComponent as default };
