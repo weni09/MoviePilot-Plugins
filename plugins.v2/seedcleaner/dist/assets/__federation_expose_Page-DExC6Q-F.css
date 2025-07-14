@@ -17,16 +17,16 @@
   font-weight: 500;
   margin-bottom: 2px;
 }
-.size-column[data-v-25ad1928] {
+.size-column[data-v-c0d74c9a] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
 .name-column {
-&[data-v-25ad1928] {
+&[data-v-c0d74c9a] {
   width: 40rem !important;
   max-width: 40rem !important;
   }
-& .name-text[data-v-25ad1928]{
+& .name-text[data-v-c0d74c9a]{
     margin-left: 8px;
     max-width: 35rem;
 }

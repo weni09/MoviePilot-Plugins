@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
-import { f as formatBytes, m as mapTrackers, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-iUFyr5Ln.js';
+import { f as formatBytes, m as mapTrackers, c as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-DqnAxrdM.js';
 
 const {resolveComponent:_resolveComponent$3,createVNode:_createVNode$3,createElementVNode:_createElementVNode$3,withCtx:_withCtx$3,openBlock:_openBlock$3,createBlock:_createBlock$2} = await importShared('vue');
 
@@ -810,6 +810,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                                     "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.filter[state.filterName] = $event),
                                     label: `输入筛选${getfilterTitleByKey(state.filterName)}`,
                                     onKeyup: _withKeys(applyFilter, ["enter"]),
+                                    density: "compact",
                                     autofocus: ""
                                   }, null, 8, ["modelValue", "label"])
                                 ]),
@@ -885,7 +886,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => state.selectedScans = $event),
                 "must-sort": "",
                 "fixed-header": "",
-                height: "400px",
+                height: "420px",
                 density: "default",
                 hover: "",
                 "hide-default-footer": "",
@@ -1032,7 +1033,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-25ad1928"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-c0d74c9a"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
