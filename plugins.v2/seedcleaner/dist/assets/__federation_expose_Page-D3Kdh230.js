@@ -1479,7 +1479,7 @@ const {resolveComponent:_resolveComponent,createVNode:_createVNode,createElement
 
 const _hoisted_1 = { class: "plugin-common plugin-page" };
 const _hoisted_2 = { class: "d-flex" };
-const {reactive,ref} = await importShared('vue');
+const {onMounted,reactive,ref} = await importShared('vue');
 const _sfc_main = /* @__PURE__ */ _defineComponent({
   __name: "Page",
   props: {
@@ -1487,10 +1487,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       type: Object,
       default: () => ({}),
       required: true
-    },
-    initialConfig: {
-      type: Object,
-      default: () => ({})
     }
   },
   emits: ["close", "switch"],
@@ -1530,7 +1526,8 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
         show: false,
         message: "",
         color: "success"
-      }
+      },
+      initConfig: {}
     });
     const setTab = (name) => {
       state.listTab = name;
@@ -1654,6 +1651,15 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       state.scanParams.filter.client = filter.client || "";
       startScan(false, false, false, true);
     };
+    const getConfig = () => {
+      let url = `/plugin/${PLUGIN_ID}/config`;
+      props.api.get(url).then((res) => {
+        state.initConfig = res;
+      });
+    };
+    onMounted(() => {
+      getConfig();
+    });
     return (_ctx, _cache) => {
       const _component_v_icon = _resolveComponent("v-icon");
       const _component_v_card_subtitle = _resolveComponent("v-card-subtitle");
@@ -1889,7 +1895,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   onAddToCleanup: addToCleanup,
                   "scan-params": state.scanParams,
                   loading: state.scaning,
-                  initialConfig: props.initialConfig,
+                  initialConfig: state.initConfig,
                   "onUpdate:scanParams": handleScanParamsUpdate,
                   ref_key: "scanResultsRef",
                   ref: scanResultsRef,
@@ -1926,6 +1932,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-0a61e8be"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-d84f82d6"]]);
 
 export { PageComponent as default };
