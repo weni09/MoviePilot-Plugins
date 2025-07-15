@@ -26,7 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.4.1"
+    plugin_version = "1.4.2"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -454,8 +454,16 @@ class SeedCleaner(_PluginBase):
                 if not self._is_tracer_match(torrent_info, tracker_list) and key in res_dict.keys():
                     res_dict.pop(key, None)
             # 路径左匹配，过滤
-            if search_info.filter.path:
+            if search_info.filter.path and key in res_dict.keys():
                 if not str(Path(res_dict[key].save_path) / res_dict[key].name).startswith(search_info.filter.path):
+                    res_dict.pop(key, None)
+            # 下载器名称，过滤
+            if search_info.filter.client_name and key in res_dict.keys():
+                if res_dict[key].client_name != search_info.filter.client_name:
+                    res_dict.pop(key, None)
+            # 下载器类型，过滤
+            if search_info.filter.client and key in res_dict.keys():
+                if res_dict[key].client != search_info.filter.client:
                     res_dict.pop(key, None)
             # 构建响应列表
             if len(res_dict) > 0 and key in res_dict.keys():
@@ -475,7 +483,7 @@ class SeedCleaner(_PluginBase):
         return res_list
 
     def start_scan(self, search_info: SearchModel, pageChange: bool = False, pageSizeChange: bool = False,
-                       sortChange: bool = False, filterChange: bool = False) -> ResponseModel:
+                   sortChange: bool = False, filterChange: bool = False) -> ResponseModel:
         logger.info(f"开始扫描,扫描参数:{search_info.dict()},"
                     f"pageChange:{pageChange},pageSizeChange:{pageSizeChange},sortChange:{sortChange}")
         try:

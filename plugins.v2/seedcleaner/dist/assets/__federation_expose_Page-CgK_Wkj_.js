@@ -453,21 +453,26 @@ const ToolBar = /*#__PURE__*/_export_sfc(_sfc_main$3, [['__scopeId',"data-v-98e9
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
-const {toDisplayString:_toDisplayString$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,createVNode:_createVNode$2,createElementVNode:_createElementVNode$2,withKeys:_withKeys,withModifiers:_withModifiers$1,unref:_unref$1,createElementBlock:_createElementBlock$2} = await importShared('vue');
+const {toDisplayString:_toDisplayString$2,createTextVNode:_createTextVNode$2,resolveComponent:_resolveComponent$2,withCtx:_withCtx$2,openBlock:_openBlock$2,createBlock:_createBlock$1,createCommentVNode:_createCommentVNode$1,createVNode:_createVNode$2,createElementVNode:_createElementVNode$2,renderList:_renderList$1,Fragment:_Fragment$1,createElementBlock:_createElementBlock$2,withKeys:_withKeys,mergeProps:_mergeProps$1,withModifiers:_withModifiers$1,unref:_unref$1} = await importShared('vue');
 
 const _hoisted_1$2 = { class: "d-flex align-center mr-4" };
-const _hoisted_2$2 = { class: "filter-chips d-flex justify-start px-4" };
-const _hoisted_3$1 = { style: { "min-height": "260px", "max-height": "420px", "overflow-y": "auto" } };
-const _hoisted_4$1 = { class: "name-text" };
-const _hoisted_5 = { key: 0 };
-const _hoisted_6 = { key: 1 };
-const _hoisted_7 = { colspan: "100%" };
-const _hoisted_8 = { class: "text-left" };
+const _hoisted_2$2 = { class: "label-text font-weight-bold align-content-center" };
+const _hoisted_3$1 = { class: "filter-chips d-flex justify-start px-4" };
+const _hoisted_4$1 = { style: { "min-height": "260px", "max-height": "420px", "overflow-y": "auto" } };
+const _hoisted_5 = { class: "name-text" };
+const _hoisted_6 = { key: 0 };
+const _hoisted_7 = { key: 1 };
+const _hoisted_8 = { colspan: "100%" };
 const _hoisted_9 = { class: "text-left" };
+const _hoisted_10 = { class: "text-left" };
 const {ref: ref$1,computed: computed$1,reactive: reactive$2} = await importShared('vue');
 const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   __name: "ScanResults",
   props: {
+    initialConfig: {
+      type: Object,
+      default: () => ({})
+    },
     scanRes: {
       type: Object,
       default: () => ({
@@ -501,10 +506,20 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   setup(__props, { expose: __expose, emit: __emit }) {
     const props = __props;
     const emit = __emit;
-    const filterItems = [{
-      title: "路径",
-      value: "path"
-    }];
+    const filterItems = [
+      {
+        title: "路径",
+        value: "path"
+      },
+      {
+        title: "下载器名称",
+        value: "client_name"
+      },
+      {
+        title: "下载器类型",
+        value: "client"
+      }
+    ];
     const state = reactive$2({
       selectedScans: [],
       snackbar: {
@@ -522,8 +537,8 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         { value: "size", title: "大小", sortable: true, align: "center" },
         { value: "select", title: "", key: "data-table-select" }
       ],
-      filterName: "path",
-      filter: {}
+      filter: {},
+      currentFilterValues: ["path"]
     });
     const getfilterTitleByKey = (key) => {
       for (let i of filterItems) {
@@ -533,6 +548,20 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       }
       return key;
     };
+    const allDownloaders = computed$1(() => {
+      let downloaderNames = /* @__PURE__ */ new Set([
+        ...props.initialConfig.downloaders.system.map((d) => d.name),
+        ...props.initialConfig.downloaders.custom.map((d) => d.name)
+      ]);
+      let downloaderTypes = /* @__PURE__ */ new Set([
+        ...props.initialConfig.downloaders.system.map((d) => d.type),
+        ...props.initialConfig.downloaders.custom.map((d) => d.type)
+      ]);
+      return {
+        names: Array.from(downloaderNames),
+        types: Array.from(downloaderTypes)
+      };
+    });
     const totalComputed = computed$1(() => {
       let res = [];
       if (props.scanRes.tTotal > 0) {
@@ -628,7 +657,6 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       filterDialog.value = true;
     };
     const applyFilter = () => {
-      console.log("应用筛选，路径包含：", state.filterName, state.filter[state.filterName]);
       filterDialog.value = false;
       emit("applyFilter", state.filter);
     };
@@ -735,11 +763,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     activator: "parent",
                     location: "top"
                   }, {
-                    default: _withCtx$2(() => _cache[10] || (_cache[10] = [
+                    default: _withCtx$2(() => _cache[7] || (_cache[7] = [
                       _createTextVNode$2("清空记录")
                     ])),
                     _: 1,
-                    __: [10]
+                    __: [7]
                   })
                 ]),
                 _: 1
@@ -760,11 +788,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     activator: "parent",
                     location: "top"
                   }, {
-                    default: _withCtx$2(() => _cache[11] || (_cache[11] = [
+                    default: _withCtx$2(() => _cache[8] || (_cache[8] = [
                       _createTextVNode$2("添加到待清理")
                     ])),
                     _: 1,
-                    __: [11]
+                    __: [8]
                   })
                 ]),
                 _: 1
@@ -785,98 +813,135 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     activator: "parent",
                     location: "top"
                   }, {
-                    default: _withCtx$2(() => _cache[12] || (_cache[12] = [
+                    default: _withCtx$2(() => _cache[9] || (_cache[9] = [
                       _createTextVNode$2("筛选条件")
                     ])),
                     _: 1,
-                    __: [12]
+                    __: [9]
                   })
                 ]),
                 _: 1
               }),
               _createVNode$2(_component_v_dialog, {
                 modelValue: filterDialog.value,
-                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => filterDialog.value = $event),
+                "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => filterDialog.value = $event),
                 "max-width": "400px"
               }, {
                 default: _withCtx$2(() => [
                   _createVNode$2(_component_v_card, null, {
                     default: _withCtx$2(() => [
-                      _createVNode$2(_component_v_card_title, null, {
-                        default: _withCtx$2(() => _cache[13] || (_cache[13] = [
-                          _createTextVNode$2("条件筛选")
+                      _createVNode$2(_component_v_card_title, { class: "d-flex align-center" }, {
+                        default: _withCtx$2(() => _cache[10] || (_cache[10] = [
+                          _createElementVNode$2("span", null, "条件筛选(可选)", -1)
                         ])),
                         _: 1,
-                        __: [13]
+                        __: [10]
                       }),
                       _createVNode$2(_component_v_card_text, null, {
                         default: _withCtx$2(() => [
-                          _createVNode$2(_component_v_row, {
-                            align: "center",
-                            class: "d-flex align-content-center"
-                          }, {
-                            default: _withCtx$2(() => [
-                              _createVNode$2(_component_v_col, {
-                                cols: "4",
-                                class: "px-1"
-                              }, {
-                                default: _withCtx$2(() => [
-                                  _createVNode$2(_component_v_select, {
-                                    modelValue: state.filterName,
-                                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => state.filterName = $event),
-                                    items: filterItems,
-                                    variant: "outlined",
-                                    density: "compact",
-                                    class: "text-caption"
-                                  }, null, 8, ["modelValue"])
-                                ]),
-                                _: 1
-                              }),
-                              _createVNode$2(_component_v_col, {
-                                cols: "8",
-                                class: "px-1"
-                              }, {
-                                default: _withCtx$2(() => [
-                                  _createVNode$2(_component_v_text_field, {
-                                    modelValue: state.filter[state.filterName],
-                                    "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.filter[state.filterName] = $event),
-                                    label: `输入筛选${getfilterTitleByKey(state.filterName)}`,
-                                    onKeyup: _withKeys(applyFilter, ["enter"]),
-                                    density: "compact",
-                                    variant: "outlined",
-                                    autofocus: ""
-                                  }, null, 8, ["modelValue", "label"])
-                                ]),
-                                _: 1
-                              })
-                            ]),
-                            _: 1
-                          })
+                          (_openBlock$2(), _createElementBlock$2(_Fragment$1, null, _renderList$1(filterItems, (item, index) => {
+                            return _createVNode$2(_component_v_row, {
+                              align: "center",
+                              class: "d-flex align-content-center"
+                            }, {
+                              default: _withCtx$2(() => [
+                                _createVNode$2(_component_v_col, {
+                                  cols: "4",
+                                  class: "px-1"
+                                }, {
+                                  default: _withCtx$2(() => [
+                                    _createElementVNode$2("span", _hoisted_2$2, _toDisplayString$2(item.title) + "：", 1)
+                                  ]),
+                                  _: 2
+                                }, 1024),
+                                item.value === "path" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
+                                  key: 0,
+                                  cols: "8",
+                                  class: "px-1"
+                                }, {
+                                  default: _withCtx$2(() => [
+                                    _createVNode$2(_component_v_text_field, {
+                                      modelValue: state.filter[item.value],
+                                      "onUpdate:modelValue": ($event) => state.filter[item.value] = $event,
+                                      label: `输入筛选${getfilterTitleByKey(item.value)}`,
+                                      onKeyup: _withKeys(applyFilter, ["enter"]),
+                                      density: "compact",
+                                      variant: "outlined",
+                                      clearable: "",
+                                      autofocus: ""
+                                    }, null, 8, ["modelValue", "onUpdate:modelValue", "label"])
+                                  ]),
+                                  _: 2
+                                }, 1024)) : item.value === "client_name" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
+                                  key: 1,
+                                  cols: "8",
+                                  class: "px-1"
+                                }, {
+                                  default: _withCtx$2(() => [
+                                    _createVNode$2(_component_v_select, {
+                                      modelValue: state.filter[item.value],
+                                      "onUpdate:modelValue": ($event) => state.filter[item.value] = $event,
+                                      items: allDownloaders.value.names,
+                                      "item-title": (item2) => item2,
+                                      "item-value": (item2) => item2,
+                                      label: `选择筛选${getfilterTitleByKey(item.value)}`,
+                                      variant: "outlined",
+                                      density: "compact",
+                                      class: "text-caption",
+                                      clearable: ""
+                                    }, null, 8, ["modelValue", "onUpdate:modelValue", "items", "item-title", "item-value", "label"])
+                                  ]),
+                                  _: 2
+                                }, 1024)) : item.value === "client" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
+                                  key: 2,
+                                  cols: "8",
+                                  class: "px-1"
+                                }, {
+                                  default: _withCtx$2(() => [
+                                    _createVNode$2(_component_v_select, {
+                                      modelValue: state.filter[item.value],
+                                      "onUpdate:modelValue": ($event) => state.filter[item.value] = $event,
+                                      items: allDownloaders.value.types,
+                                      "item-title": (item2) => item2,
+                                      "item-value": (item2) => item2,
+                                      label: `选择筛选${getfilterTitleByKey(item.value)}`,
+                                      variant: "outlined",
+                                      density: "compact",
+                                      class: "text-caption",
+                                      clearable: ""
+                                    }, null, 8, ["modelValue", "onUpdate:modelValue", "items", "item-title", "item-value", "label"])
+                                  ]),
+                                  _: 2
+                                }, 1024)) : _createCommentVNode$1("", true)
+                              ]),
+                              _: 2
+                            }, 1024);
+                          }), 64))
                         ]),
                         _: 1
                       }),
                       _createVNode$2(_component_v_card_actions, null, {
                         default: _withCtx$2(() => [
                           _createVNode$2(_component_v_btn, {
-                            onClick: _cache[4] || (_cache[4] = ($event) => {
+                            onClick: _cache[2] || (_cache[2] = ($event) => {
                               filterDialog.value = false;
                             })
                           }, {
-                            default: _withCtx$2(() => _cache[14] || (_cache[14] = [
+                            default: _withCtx$2(() => _cache[11] || (_cache[11] = [
                               _createTextVNode$2("取消")
                             ])),
                             _: 1,
-                            __: [14]
+                            __: [11]
                           }),
                           _createVNode$2(_component_v_btn, {
                             color: "primary",
                             onClick: applyFilter
                           }, {
-                            default: _withCtx$2(() => _cache[15] || (_cache[15] = [
+                            default: _withCtx$2(() => _cache[12] || (_cache[12] = [
                               _createTextVNode$2("确定")
                             ])),
                             _: 1,
-                            __: [15]
+                            __: [12]
                           })
                         ]),
                         _: 1
@@ -892,21 +957,63 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
           }),
           _createVNode$2(_component_v_card_text, { class: "pa-0" }, {
             default: _withCtx$2(() => [
-              _createElementVNode$2("div", _hoisted_2$2, [
-                state.filter[state.filterName] ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
-                  key: 0,
-                  closable: "",
-                  "prepend-icon": "mdi-folder-arrow-left",
-                  variant: "outlined",
-                  "onClick:close": _cache[6] || (_cache[6] = ($event) => deleteFilter(state.filterName))
-                }, {
-                  default: _withCtx$2(() => [
-                    _createTextVNode$2(_toDisplayString$2(state.filter[state.filterName]), 1)
-                  ]),
-                  _: 1
-                })) : _createCommentVNode$1("", true)
-              ]),
               _createElementVNode$2("div", _hoisted_3$1, [
+                (_openBlock$2(true), _createElementBlock$2(_Fragment$1, null, _renderList$1(state.filter, (value, key) => {
+                  return _openBlock$2(), _createElementBlock$2(_Fragment$1, null, [
+                    value ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                      key: 0,
+                      class: "mx-2",
+                      closable: "",
+                      variant: "outlined",
+                      "onClick:close": ($event) => deleteFilter(key)
+                    }, {
+                      prepend: _withCtx$2(() => [
+                        _createVNode$2(_component_v_tooltip, { location: "bottom" }, {
+                          activator: _withCtx$2(({ props: props2 }) => [
+                            key == "path" ? (_openBlock$2(), _createBlock$1(_component_v_icon, _mergeProps$1({
+                              key: 0,
+                              ref_for: true
+                            }, props2), {
+                              default: _withCtx$2(() => _cache[13] || (_cache[13] = [
+                                _createTextVNode$2("mdi-folder-arrow-left")
+                              ])),
+                              _: 2,
+                              __: [13]
+                            }, 1040)) : key == "client_name" ? (_openBlock$2(), _createBlock$1(_component_v_icon, _mergeProps$1({
+                              key: 1,
+                              ref_for: true
+                            }, props2), {
+                              default: _withCtx$2(() => _cache[14] || (_cache[14] = [
+                                _createTextVNode$2("mdi-download")
+                              ])),
+                              _: 2,
+                              __: [14]
+                            }, 1040)) : key == "client" ? (_openBlock$2(), _createBlock$1(_component_v_icon, _mergeProps$1({
+                              key: 2,
+                              ref_for: true
+                            }, props2), {
+                              default: _withCtx$2(() => _cache[15] || (_cache[15] = [
+                                _createTextVNode$2("mdi-download-circle")
+                              ])),
+                              _: 2,
+                              __: [15]
+                            }, 1040)) : _createCommentVNode$1("", true)
+                          ]),
+                          default: _withCtx$2(() => [
+                            _createTextVNode$2(" " + _toDisplayString$2(getfilterTitleByKey(key)), 1)
+                          ]),
+                          _: 2
+                        }, 1024)
+                      ]),
+                      default: _withCtx$2(() => [
+                        _createTextVNode$2(" " + _toDisplayString$2(value), 1)
+                      ]),
+                      _: 2
+                    }, 1032, ["onClick:close"])) : _createCommentVNode$1("", true)
+                  ], 64);
+                }), 256))
+              ]),
+              _createElementVNode$2("div", _hoisted_4$1, [
                 _createVNode$2(_component_v_data_table_server, {
                   headers: state.headers,
                   "hide-default-header": false,
@@ -919,9 +1026,10 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   "item-value": (item) => item,
                   loading: props.loading,
                   modelValue: state.selectedScans,
-                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => state.selectedScans = $event),
+                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => state.selectedScans = $event),
                   "must-sort": "",
                   "fixed-header": "",
+                  height: "420px",
                   density: "default",
                   hover: "",
                   "hide-default-footer": "",
@@ -947,7 +1055,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                       ]),
                       _: 2
                     }, 1032, ["color"])) : _createCommentVNode$1("", true),
-                    _createElementVNode$2("span", _hoisted_4$1, _toDisplayString$2(item.name), 1)
+                    _createElementVNode$2("span", _hoisted_5, _toDisplayString$2(item.name), 1)
                   ]),
                   "item.path": _withCtx$2(({ item }) => [
                     _createElementVNode$2("span", null, _toDisplayString$2(item.path.replace(`/${item.name}`, "").replace(`\\${item.name}`, "")), 1),
@@ -959,7 +1067,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     }, null, 8, ["onClick"])
                   ]),
                   "item.tracker": _withCtx$2(({ item }) => [
-                    item.type === "torrent" && item?.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_5, [
+                    item.type === "torrent" && item?.trackers.length > 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_6, [
                       _createVNode$2(_component_v_chip, {
                         color: getColorByString(item.trackers),
                         "text-color": "white",
@@ -971,7 +1079,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                         ]),
                         _: 2
                       }, 1032, ["color"])
-                    ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_6, [
+                    ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_7, [
                       _createVNode$2(_component_v_chip, {
                         color: "info",
                         "text-color": "white",
@@ -1014,19 +1122,19 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   ]),
                   "expanded-row": _withCtx$2(({ item }) => [
                     _createElementVNode$2("tr", null, [
-                      _createElementVNode$2("td", _hoisted_7, [
+                      _createElementVNode$2("td", _hoisted_8, [
                         _createVNode$2(_component_v_table, { density: "compact" }, {
                           default: _withCtx$2(() => [
                             _cache[18] || (_cache[18] = _createElementVNode$2("thead", null, [
                               _createElementVNode$2("tr", null, [
                                 _createElementVNode$2("th", { class: "text-left" }, " Hash "),
-                                _createElementVNode$2("th", { class: "text-left" }, " 客户端名称 ")
+                                _createElementVNode$2("th", { class: "text-left" }, " 下载器名称 ")
                               ])
                             ], -1)),
                             _createElementVNode$2("tbody", null, [
                               _createElementVNode$2("tr", null, [
-                                _createElementVNode$2("td", _hoisted_8, _toDisplayString$2(item.hash), 1),
-                                _createElementVNode$2("td", _hoisted_9, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
+                                _createElementVNode$2("td", _hoisted_9, _toDisplayString$2(item.hash), 1),
+                                _createElementVNode$2("td", _hoisted_10, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
                               ])
                             ])
                           ]),
@@ -1039,7 +1147,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   "item.select": _withCtx$2(({ item }) => [
                     _createVNode$2(_component_v_checkbox, {
                       modelValue: state.selectedScans,
-                      "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => state.selectedScans = $event),
+                      "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => state.selectedScans = $event),
                       value: item,
                       "hide-details": ""
                     }, null, 8, ["modelValue", "value"])
@@ -1052,7 +1160,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
           }),
           _createVNode$2(_component_v_snackbar, {
             modelValue: state.snackbar.show,
-            "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => state.snackbar.show = $event),
+            "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => state.snackbar.show = $event),
             timeout: 3e3,
             color: state.snackbar.color,
             location: state.snackbar.location
@@ -1069,7 +1177,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-c8d014e9"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-7b3e9abc"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -1412,7 +1520,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
         pageSize: 50,
         sortBy: [{ key: "name", order: "asc" }],
         filter: {
-          path: ""
+          path: "",
+          client_name: "",
+          client: ""
         }
       },
       snackbar: {
@@ -1450,6 +1560,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       params["limit"] = state.scanParams.pageSize;
       params["sortBy"] = [state.scanParams.sortBy[0].key, state.scanParams.sortBy[0].order];
       params["filter"] = state.scanParams.filter;
+      console.log("startScan", params);
       props.api.post(url, params).then((res) => {
         state.scanRes.combinedList = res.data.combined_list || [];
         state.scanRes.total = res.data.total || 0;
@@ -1538,7 +1649,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       startScan(isPageChanged, isPageSizeChanged, isSortChanged);
     };
     const applyFilter = (filter) => {
-      state.scanParams.filter.path = filter.path;
+      state.scanParams.filter.path = filter.path || "";
+      state.scanParams.filter.client_name = filter.client_name || "";
+      state.scanParams.filter.client = filter.client || "";
       startScan(false, false, false, true);
     };
     return (_ctx, _cache) => {
@@ -1776,11 +1889,12 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                   onAddToCleanup: addToCleanup,
                   "scan-params": state.scanParams,
                   loading: state.scaning,
+                  initialConfig: props.initialConfig,
                   "onUpdate:scanParams": handleScanParamsUpdate,
                   ref_key: "scanResultsRef",
                   ref: scanResultsRef,
                   onApplyFilter: applyFilter
-                }, null, 8, ["scan-res", "scan-params", "loading"]), [
+                }, null, 8, ["scan-res", "scan-params", "loading", "initialConfig"]), [
                   [_vShow, state.listTab == "scan"]
                 ]),
                 _withDirectives(_createVNode(CleanupList, {
@@ -1812,6 +1926,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-683472c7"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-0a61e8be"]]);
 
 export { PageComponent as default };
