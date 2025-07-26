@@ -26,7 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.4.2"
+    plugin_version = "1.4.3"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -219,6 +219,7 @@ class SeedCleaner(_PluginBase):
 
     def scan_all_torrents_by_downloader(self):  # 扫描所有种子信息从下载器中
         downloader_list = self.get_download_list()
+        self.torrent_info_dict = {}
         for dl in downloader_list:
             try:
                 if dl.type == TRANSMISSION:
