@@ -465,6 +465,10 @@ const _hoisted_7 = { key: 1 };
 const _hoisted_8 = { colspan: "100%" };
 const _hoisted_9 = { class: "text-left" };
 const _hoisted_10 = { class: "text-left" };
+const _hoisted_11 = {
+  class: "text-left",
+  style: { "color": "red" }
+};
 const {ref: ref$1,computed: computed$1,reactive: reactive$2} = await importShared('vue');
 const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   __name: "ScanResults",
@@ -518,6 +522,14 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       {
         title: "下载器类型",
         value: "client"
+      },
+      {
+        title: "做种数",
+        value: "seeds_limit"
+      },
+      {
+        title: "大小(MB)",
+        value: "size_limit"
       }
     ];
     const state = reactive$2({
@@ -534,10 +546,17 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         { value: "path", title: "路径", align: "left", sortable: true, maxWidth: "14rem" },
         { value: "tracker", title: "Tracker", align: "center" },
         { value: "status", title: "状态", align: "center" },
+        { value: "seeds", title: "做种数", align: "center", sortable: true },
         { value: "size", title: "大小", sortable: true, align: "center" },
         { value: "select", title: "", key: "data-table-select" }
       ],
-      filter: {},
+      filter: {
+        path: "",
+        client_name: "",
+        client: "",
+        seeds_limit: [null, null],
+        size_limit: [null, null]
+      },
       currentFilterValues: ["path"]
     });
     const getfilterTitleByKey = (key) => {
@@ -593,6 +612,14 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     const totalPages = computed$1(() => {
       return Math.ceil(props.scanRes.total / props.scanParams.pageSize);
     });
+    const getStatusColor = (status) => {
+      let error_status = ["缺失源文件", "错误", "已停止", "未知"];
+      if (error_status.includes(status)) {
+        return "error";
+      } else {
+        return "success";
+      }
+    };
     const handlePageChange = (newPage) => {
       emit("update:scanParams", {
         pageSize: props.scanParams.pageSize,
@@ -661,9 +688,32 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       emit("applyFilter", state.filter);
     };
     const deleteFilter = (name) => {
-      state.filter[name] = "";
+      if (state.filter[name] instanceof Array) {
+        state.filter[name] = [null, null];
+      } else {
+        state.filter[name] = "";
+      }
       filterDialog.value = false;
       emit("applyFilter", state.filter);
+    };
+    const isShowFilterTag = (value) => {
+      if (value instanceof Array && value.length === 2) {
+        return value[0] !== null && value[1] !== null && value[0] !== "" && value[1] !== "";
+      } else if (value !== null && value !== "") {
+        return true;
+      }
+      return false;
+    };
+    const formatFilterTag = (value, key = "") => {
+      let unit = "";
+      if (value instanceof Array && value.length === 2) {
+        if (key == "size_limit") {
+          unit = "MB";
+        }
+        return `${value[0]} ~ ${value[1]} ${unit}`;
+      } else {
+        return value;
+      }
     };
     __expose({
       clearSelectedScans
@@ -679,6 +729,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       const _component_v_card_title = _resolveComponent$2("v-card-title");
       const _component_v_col = _resolveComponent$2("v-col");
       const _component_v_text_field = _resolveComponent$2("v-text-field");
+      const _component_v_number_input = _resolveComponent$2("v-number-input");
       const _component_v_row = _resolveComponent$2("v-row");
       const _component_v_card_text = _resolveComponent$2("v-card-text");
       const _component_v_card_actions = _resolveComponent$2("v-card-actions");
@@ -825,7 +876,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
               _createVNode$2(_component_v_dialog, {
                 modelValue: filterDialog.value,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => filterDialog.value = $event),
-                "max-width": "400px"
+                "max-width": "500px"
               }, {
                 default: _withCtx$2(() => [
                   _createVNode$2(_component_v_card, null, {
@@ -846,17 +897,17 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                             }, {
                               default: _withCtx$2(() => [
                                 _createVNode$2(_component_v_col, {
-                                  cols: "4",
+                                  cols: "3",
                                   class: "px-1"
                                 }, {
                                   default: _withCtx$2(() => [
-                                    _createElementVNode$2("span", _hoisted_2$2, _toDisplayString$2(item.title) + "：", 1)
+                                    _createElementVNode$2("span", _hoisted_2$2, _toDisplayString$2(item.title) + ":", 1)
                                   ]),
                                   _: 2
                                 }, 1024),
                                 item.value === "path" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
                                   key: 0,
-                                  cols: "8",
+                                  cols: "9",
                                   class: "px-1"
                                 }, {
                                   default: _withCtx$2(() => [
@@ -874,7 +925,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                                   _: 2
                                 }, 1024)) : item.value === "client_name" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
                                   key: 1,
-                                  cols: "8",
+                                  cols: "9",
                                   class: "px-1"
                                 }, {
                                   default: _withCtx$2(() => [
@@ -894,7 +945,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                                   _: 2
                                 }, 1024)) : item.value === "client" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
                                   key: 2,
-                                  cols: "8",
+                                  cols: "9",
                                   class: "px-1"
                                 }, {
                                   default: _withCtx$2(() => [
@@ -912,6 +963,126 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                                     }, null, 8, ["modelValue", "onUpdate:modelValue", "items", "item-title", "item-value", "label"])
                                   ]),
                                   _: 2
+                                }, 1024)) : item.value === "seeds_limit" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
+                                  key: 3,
+                                  cols: "9",
+                                  class: "px-1"
+                                }, {
+                                  default: _withCtx$2(() => [
+                                    _createVNode$2(_component_v_row, { "no-gutters": "" }, {
+                                      default: _withCtx$2(() => [
+                                        _createVNode$2(_component_v_col, { cols: "5" }, {
+                                          default: _withCtx$2(() => [
+                                            _createVNode$2(_component_v_number_input, {
+                                              modelValue: state.filter[item.value][0],
+                                              "onUpdate:modelValue": ($event) => state.filter[item.value][0] = $event,
+                                              min: 0,
+                                              max: state.filter[item.value][1] || 999999,
+                                              variant: "outlined",
+                                              density: "compact",
+                                              "hide-details": "",
+                                              placeholder: "最小值",
+                                              class: "text-caption",
+                                              "controls-position": "compact",
+                                              "control-variant": "stacked",
+                                              clearable: ""
+                                            }, null, 8, ["modelValue", "onUpdate:modelValue", "max"])
+                                          ]),
+                                          _: 2
+                                        }, 1024),
+                                        _createVNode$2(_component_v_col, {
+                                          cols: "1",
+                                          class: "d-flex align-center justify-center text-caption"
+                                        }, {
+                                          default: _withCtx$2(() => _cache[11] || (_cache[11] = [
+                                            _createTextVNode$2(" ~ ")
+                                          ])),
+                                          _: 1,
+                                          __: [11]
+                                        }),
+                                        _createVNode$2(_component_v_col, { cols: "6" }, {
+                                          default: _withCtx$2(() => [
+                                            _createVNode$2(_component_v_number_input, {
+                                              modelValue: state.filter[item.value][1],
+                                              "onUpdate:modelValue": ($event) => state.filter[item.value][1] = $event,
+                                              min: state.filter[item.value][0] || 0,
+                                              variant: "outlined",
+                                              density: "compact",
+                                              "hide-details": "",
+                                              placeholder: "最大值",
+                                              class: "text-caption",
+                                              "controls-position": "compact",
+                                              "control-variant": "stacked",
+                                              clearable: ""
+                                            }, null, 8, ["modelValue", "onUpdate:modelValue", "min"])
+                                          ]),
+                                          _: 2
+                                        }, 1024)
+                                      ]),
+                                      _: 2
+                                    }, 1024)
+                                  ]),
+                                  _: 2
+                                }, 1024)) : item.value === "size_limit" ? (_openBlock$2(), _createBlock$1(_component_v_col, {
+                                  key: 4,
+                                  cols: "9",
+                                  class: "px-1"
+                                }, {
+                                  default: _withCtx$2(() => [
+                                    _createVNode$2(_component_v_row, { "no-gutters": "" }, {
+                                      default: _withCtx$2(() => [
+                                        _createVNode$2(_component_v_col, { cols: "5" }, {
+                                          default: _withCtx$2(() => [
+                                            _createVNode$2(_component_v_number_input, {
+                                              modelValue: state.filter[item.value][0],
+                                              "onUpdate:modelValue": ($event) => state.filter[item.value][0] = $event,
+                                              min: 0,
+                                              max: state.filter[item.value][1] || 999999999,
+                                              variant: "outlined",
+                                              density: "compact",
+                                              "hide-details": "",
+                                              placeholder: "最小值",
+                                              class: "text-caption",
+                                              "controls-position": "compact",
+                                              "control-variant": "stacked",
+                                              clearable: ""
+                                            }, null, 8, ["modelValue", "onUpdate:modelValue", "max"])
+                                          ]),
+                                          _: 2
+                                        }, 1024),
+                                        _createVNode$2(_component_v_col, {
+                                          cols: "1",
+                                          class: "d-flex align-center justify-center text-caption"
+                                        }, {
+                                          default: _withCtx$2(() => _cache[12] || (_cache[12] = [
+                                            _createTextVNode$2(" ~ ")
+                                          ])),
+                                          _: 1,
+                                          __: [12]
+                                        }),
+                                        _createVNode$2(_component_v_col, { cols: "6" }, {
+                                          default: _withCtx$2(() => [
+                                            _createVNode$2(_component_v_number_input, {
+                                              modelValue: state.filter[item.value][1],
+                                              "onUpdate:modelValue": ($event) => state.filter[item.value][1] = $event,
+                                              min: state.filter[item.value][0] || 0,
+                                              variant: "outlined",
+                                              density: "compact",
+                                              "hide-details": "",
+                                              placeholder: "最大值",
+                                              class: "text-caption",
+                                              "controls-position": "compact",
+                                              "control-variant": "stacked",
+                                              clearable: ""
+                                            }, null, 8, ["modelValue", "onUpdate:modelValue", "min"])
+                                          ]),
+                                          _: 2
+                                        }, 1024)
+                                      ]),
+                                      _: 2
+                                    }, 1024)
+                                  ]),
+                                  _: 2
                                 }, 1024)) : _createCommentVNode$1("", true)
                               ]),
                               _: 2
@@ -927,21 +1098,21 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                               filterDialog.value = false;
                             })
                           }, {
-                            default: _withCtx$2(() => _cache[11] || (_cache[11] = [
+                            default: _withCtx$2(() => _cache[13] || (_cache[13] = [
                               _createTextVNode$2("取消")
                             ])),
                             _: 1,
-                            __: [11]
+                            __: [13]
                           }),
                           _createVNode$2(_component_v_btn, {
                             color: "primary",
                             onClick: applyFilter
                           }, {
-                            default: _withCtx$2(() => _cache[12] || (_cache[12] = [
+                            default: _withCtx$2(() => _cache[14] || (_cache[14] = [
                               _createTextVNode$2("确定")
                             ])),
                             _: 1,
-                            __: [12]
+                            __: [14]
                           })
                         ]),
                         _: 1
@@ -960,7 +1131,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
               _createElementVNode$2("div", _hoisted_3$1, [
                 (_openBlock$2(true), _createElementBlock$2(_Fragment$1, null, _renderList$1(state.filter, (value, key) => {
                   return _openBlock$2(), _createElementBlock$2(_Fragment$1, null, [
-                    value ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
+                    isShowFilterTag(value) ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
                       key: 0,
                       class: "mx-2",
                       closable: "",
@@ -974,30 +1145,36 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                               key: 0,
                               ref_for: true
                             }, props2), {
-                              default: _withCtx$2(() => _cache[13] || (_cache[13] = [
+                              default: _withCtx$2(() => _cache[15] || (_cache[15] = [
                                 _createTextVNode$2("mdi-folder-arrow-left")
                               ])),
                               _: 2,
-                              __: [13]
+                              __: [15]
                             }, 1040)) : key == "client_name" ? (_openBlock$2(), _createBlock$1(_component_v_icon, _mergeProps$1({
                               key: 1,
                               ref_for: true
                             }, props2), {
-                              default: _withCtx$2(() => _cache[14] || (_cache[14] = [
+                              default: _withCtx$2(() => _cache[16] || (_cache[16] = [
                                 _createTextVNode$2("mdi-download")
                               ])),
                               _: 2,
-                              __: [14]
+                              __: [16]
                             }, 1040)) : key == "client" ? (_openBlock$2(), _createBlock$1(_component_v_icon, _mergeProps$1({
                               key: 2,
                               ref_for: true
                             }, props2), {
-                              default: _withCtx$2(() => _cache[15] || (_cache[15] = [
+                              default: _withCtx$2(() => _cache[17] || (_cache[17] = [
                                 _createTextVNode$2("mdi-download-circle")
                               ])),
                               _: 2,
-                              __: [15]
-                            }, 1040)) : _createCommentVNode$1("", true)
+                              __: [17]
+                            }, 1040)) : key == "seeds_limit" ? (_openBlock$2(), _createElementBlock$2("span", _mergeProps$1({
+                              key: 3,
+                              ref_for: true
+                            }, props2, { class: "font-weight-bold mr-1" }), "做种数:", 16)) : key == "size_limit" ? (_openBlock$2(), _createElementBlock$2("span", _mergeProps$1({
+                              key: 4,
+                              ref_for: true
+                            }, props2, { class: "font-weight-bold mr-1" }), "大小:", 16)) : _createCommentVNode$1("", true)
                           ]),
                           default: _withCtx$2(() => [
                             _createTextVNode$2(" " + _toDisplayString$2(getfilterTitleByKey(key)), 1)
@@ -1006,7 +1183,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                         }, 1024)
                       ]),
                       default: _withCtx$2(() => [
-                        _createTextVNode$2(" " + _toDisplayString$2(value), 1)
+                        _createTextVNode$2(" " + _toDisplayString$2(formatFilterTag(value, key)), 1)
                       ]),
                       _: 2
                     }, 1032, ["onClick:close"])) : _createCommentVNode$1("", true)
@@ -1085,23 +1262,23 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                         "text-color": "white",
                         size: "small"
                       }, {
-                        default: _withCtx$2(() => _cache[16] || (_cache[16] = [
+                        default: _withCtx$2(() => _cache[18] || (_cache[18] = [
                           _createTextVNode$2(" 无 Tracker ")
                         ])),
                         _: 1,
-                        __: [16]
+                        __: [18]
                       })
                     ]))
                   ]),
                   "item.status": _withCtx$2(({ item }) => [
                     item.type === "torrent" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
                       key: 0,
-                      color: item.data_missing ? "error" : "success",
+                      color: getStatusColor(item.status),
                       size: "small",
                       "text-color": "white"
                     }, {
                       default: _withCtx$2(() => [
-                        _createTextVNode$2(_toDisplayString$2(item.data_missing ? "缺失源文件" : "包含源文件"), 1)
+                        _createTextVNode$2(_toDisplayString$2(item.status), 1)
                       ]),
                       _: 2
                     }, 1032, ["color"])) : item.type === "file" ? (_openBlock$2(), _createBlock$1(_component_v_chip, {
@@ -1110,12 +1287,15 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                       size: "small",
                       "text-color": "white"
                     }, {
-                      default: _withCtx$2(() => _cache[17] || (_cache[17] = [
+                      default: _withCtx$2(() => _cache[19] || (_cache[19] = [
                         _createTextVNode$2(" 缺失种子 ")
                       ])),
                       _: 1,
-                      __: [17]
+                      __: [19]
                     })) : _createCommentVNode$1("", true)
+                  ]),
+                  "item.seeds": _withCtx$2(({ item }) => [
+                    _createTextVNode$2(_toDisplayString$2(item.type === "torrent" ? item.seeds : "-"), 1)
                   ]),
                   "item.size": _withCtx$2(({ item }) => [
                     _createTextVNode$2(_toDisplayString$2(item.size ? `${_unref$1(formatBytes)(item.size)}` : "未知大小"), 1)
@@ -1125,21 +1305,23 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                       _createElementVNode$2("td", _hoisted_8, [
                         _createVNode$2(_component_v_table, { density: "compact" }, {
                           default: _withCtx$2(() => [
-                            _cache[18] || (_cache[18] = _createElementVNode$2("thead", null, [
+                            _cache[20] || (_cache[20] = _createElementVNode$2("thead", null, [
                               _createElementVNode$2("tr", null, [
                                 _createElementVNode$2("th", { class: "text-left" }, " Hash "),
-                                _createElementVNode$2("th", { class: "text-left" }, " 下载器名称 ")
+                                _createElementVNode$2("th", { class: "text-left" }, " 下载器名称 "),
+                                _createElementVNode$2("th", { class: "text-left" }, " 错误信息 ")
                               ])
                             ], -1)),
                             _createElementVNode$2("tbody", null, [
                               _createElementVNode$2("tr", null, [
                                 _createElementVNode$2("td", _hoisted_9, _toDisplayString$2(item.hash), 1),
-                                _createElementVNode$2("td", _hoisted_10, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1)
+                                _createElementVNode$2("td", _hoisted_10, _toDisplayString$2(`${item.type == "torrent" ? item.client_name : "-"}`), 1),
+                                _createElementVNode$2("td", _hoisted_11, _toDisplayString$2(`${item.type == "torrent" && item.error ? item.error : "-"}`), 1)
                               ])
                             ])
                           ]),
                           _: 2,
-                          __: [18]
+                          __: [20]
                         }, 1024)
                       ])
                     ])
@@ -1177,7 +1359,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-7b3e9abc"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-fcc1f2a0"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -1518,7 +1700,9 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
         filter: {
           path: "",
           client_name: "",
-          client: ""
+          client: "",
+          seeds_limit: [null, null],
+          size_limit: [null, null]
         }
       },
       snackbar: {
@@ -1590,9 +1774,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
     const addToCleanup = (cleanupList) => {
       console.log("添加到待清理", cleanupList.length);
       if (!cleanupList || cleanupList.length == 0) {
-        state.snackbar.message = "添加失败，未选择需要清理的项";
-        state.snackbar.color = "error";
-        state.snackbar.show = true;
+        showNotification("添加失败，未选择需要清理的项", "error");
         return;
       }
       let willCleanupList = cleanupList;
@@ -1603,19 +1785,15 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       let willCleanupList = cleanupRef.value.getCleanupList();
       props.api.post(`plugin/${PLUGIN_ID}/clear`, willCleanupList).then((res) => {
         if (res["code"] != "ok") {
-          state.snackbar.message = `清理失败:${res["message"]}`;
-          state.snackbar.color = "error";
+          showNotification(`清理失败:${res["message"]}`, "error");
         } else {
-          state.snackbar.message = "清理成功";
-          state.snackbar.color = "success";
+          showNotification("清理成功", "success");
           cleanupRef.value.deleteAllRecord();
         }
         state.snackbar.show = true;
       }).catch((e) => {
         console.error("清理出错", e);
-        state.snackbar.message = "清理失败: " + (e.message || "未知错误");
-        state.snackbar.color = "error";
-        state.snackbar.show = true;
+        showNotification("清理失败: " + (e.message || "未知错误"), "error");
       }).finally(() => {
         state.clearing = false;
       });
@@ -1649,7 +1827,40 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       state.scanParams.filter.path = filter.path || "";
       state.scanParams.filter.client_name = filter.client_name || "";
       state.scanParams.filter.client = filter.client || "";
+      state.scanParams.filter.seeds_limit = filter.seeds_limit || [];
+      state.scanParams.filter.size_limit = filter.size_limit || [];
       startScan(false, false, false, true);
+    };
+    const downloadTracker = async () => {
+      let url = `/plugin/${PLUGIN_ID}/tracker-list`;
+      try {
+        const res = await props.api.get(url);
+        console.log("downloadTracker=>>", res);
+        const tracker_list = res.data;
+        if (tracker_list && tracker_list.length > 0) {
+          const fileContent = tracker_list.join("\n");
+          const blob = new Blob([fileContent], { type: "text/plain;charset=utf-8" });
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = blobUrl;
+          link.download = "trackers.txt";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl);
+          showNotification("下载成功！", "success");
+        } else {
+          showNotification("空数据，无法下载", "error");
+        }
+      } catch (err) {
+        showNotification("下载失败！", "error");
+        console.log("downloadTracker error=>>", err);
+      }
+    };
+    const showNotification = (text, color = "success") => {
+      state.snackbar.message = text;
+      state.snackbar.color = color;
+      state.snackbar.show = true;
     };
     const getConfig = () => {
       let url = `/plugin/${PLUGIN_ID}/config`;
@@ -1768,7 +1979,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                       color: "primary",
                       size: "small"
                     }),
-                    _cache[13] || (_cache[13] = _createElementVNode("span", null, "列表区域", -1)),
+                    _cache[14] || (_cache[14] = _createElementVNode("span", null, "列表区域", -1)),
                     _createVNode(_component_v_spacer),
                     _createElementVNode("div", _hoisted_2, [
                       _createVNode(_component_v_btn, {
@@ -1800,6 +2011,33 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                         _: 1
                       }, 8, ["disabled", "loading"]),
                       _createVNode(_component_v_btn, {
+                        color: "secondary",
+                        onClick: downloadTracker,
+                        icon: "",
+                        variant: "tonal",
+                        disabled: state.scaning || state.clearing,
+                        size: "small",
+                        class: "mr-4"
+                      }, {
+                        default: _withCtx(() => [
+                          _createVNode(_component_v_icon, {
+                            icon: "mdi-tray-arrow-down",
+                            size: "small"
+                          }),
+                          _createVNode(_component_v_tooltip, {
+                            activator: "parent",
+                            location: "top"
+                          }, {
+                            default: _withCtx(() => _cache[11] || (_cache[11] = [
+                              _createTextVNode("导出所有Tracker")
+                            ])),
+                            _: 1,
+                            __: [11]
+                          })
+                        ]),
+                        _: 1
+                      }, 8, ["disabled"]),
+                      _createVNode(_component_v_btn, {
                         color: "warning",
                         onClick: resetParams,
                         icon: "",
@@ -1817,11 +2055,11 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                             activator: "parent",
                             location: "top"
                           }, {
-                            default: _withCtx(() => _cache[11] || (_cache[11] = [
+                            default: _withCtx(() => _cache[12] || (_cache[12] = [
                               _createTextVNode("重置选项")
                             ])),
                             _: 1,
-                            __: [11]
+                            __: [12]
                           })
                         ]),
                         _: 1
@@ -1845,20 +2083,20 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                             activator: "parent",
                             location: "top"
                           }, {
-                            default: _withCtx(() => _cache[12] || (_cache[12] = [
+                            default: _withCtx(() => _cache[13] || (_cache[13] = [
                               _createTextVNode("开始清理")
                             ])),
                             _: 1,
-                            __: [12]
+                            __: [13]
                           })
                         ]),
                         _: 1
                       }, 8, ["disabled", "loading"])
                     ]),
-                    _cache[14] || (_cache[14] = _createElementVNode("div", null, null, -1))
+                    _cache[15] || (_cache[15] = _createElementVNode("div", null, null, -1))
                   ]),
                   _: 1,
-                  __: [13, 14]
+                  __: [14, 15]
                 }),
                 _createVNode(_component_v_tabs, {
                   modelValue: state.listTab,
@@ -1870,21 +2108,21 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                       value: "scan",
                       onClick: _cache[2] || (_cache[2] = ($event) => setTab("scan"))
                     }, {
-                      default: _withCtx(() => _cache[15] || (_cache[15] = [
+                      default: _withCtx(() => _cache[16] || (_cache[16] = [
                         _createTextVNode("扫描结果")
                       ])),
                       _: 1,
-                      __: [15]
+                      __: [16]
                     }),
                     _createVNode(_component_v_tab, {
                       value: "cleanup",
                       onClick: _cache[3] || (_cache[3] = ($event) => setTab("cleanup"))
                     }, {
-                      default: _withCtx(() => _cache[16] || (_cache[16] = [
+                      default: _withCtx(() => _cache[17] || (_cache[17] = [
                         _createTextVNode("待清理")
                       ])),
                       _: 1,
-                      __: [16]
+                      __: [17]
                     })
                   ]),
                   _: 1
@@ -1932,6 +2170,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-d84f82d6"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3d2ae210"]]);
 
 export { PageComponent as default };

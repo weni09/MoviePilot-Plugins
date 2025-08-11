@@ -26,7 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.4.3"
+    plugin_version = "1.5.0"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -124,6 +124,13 @@ class SeedCleaner(_PluginBase):
                 "methods": ["GET"],
                 "auth": "bear",
                 "summary": "获取下载器配置"
+            },
+            {
+                "path": "/tracker-list",
+                "endpoint": self.get_all_trackers_list,
+                "methods": ["GET"],
+                "auth": "bear",
+                "summary": "获取tracker列表"
             },
         ]
 
@@ -466,6 +473,20 @@ class SeedCleaner(_PluginBase):
             if search_info.filter.client and key in res_dict.keys():
                 if res_dict[key].client != search_info.filter.client:
                     res_dict.pop(key, None)
+            # 种子大小,过滤
+            if len(search_info.filter.size_limit) == 2 and search_info.filter.size_limit[0] is not None \
+                    and search_info.filter.size_limit[1] is not None:
+                down_limit = search_info.filter.size_limit[0] * 1024 * 1024
+                up_limit = search_info.filter.size_limit[1] * 1024 * 1024
+                if not (down_limit <= torrent_info.total_size <= up_limit) and key in res_dict.keys():
+                    res_dict.pop(key, None)
+            # 种子做种数，过滤
+            if len(search_info.filter.seeds_limit) == 2 and search_info.filter.seeds_limit[0] is not None \
+                    and search_info.filter.seeds_limit[1] is not None:
+                down_limit = search_info.filter.seeds_limit[0]
+                up_limit = search_info.filter.seeds_limit[1]
+                if not (down_limit <= torrent_info.seeds <= up_limit) and key in res_dict.keys():
+                    res_dict.pop(key, None)
             # 构建响应列表
             if len(res_dict) > 0 and key in res_dict.keys():
                 value = res_dict[key]
@@ -479,7 +500,10 @@ class SeedCleaner(_PluginBase):
                     "size": int(value.total_size) or 0,
                     "name": value.name,
                     "path": str(Path(value.save_path) / value.name),
-                    "removeOption": search_info.removeOption  # 种子信息添加删除选项
+                    "removeOption": search_info.removeOption,
+                    "seeds": value.seeds,
+                    "status": value.status,
+                    "error": value.error,
                 })
         return res_list
 
@@ -607,3 +631,14 @@ class SeedCleaner(_PluginBase):
             else:
                 return ResponseFailedModel(message="清理失败")
         return ResponseSuccessModel(message="清理完成")
+
+    def get_all_trackers_list(self) -> ResponseSuccessModel:
+        """
+        获取所有 Tracker 的文本
+        """
+        tracker_set = set()
+        for torrent_info in self.torrent_info_dict.values():
+            if torrent_info.trackers:
+                for tracker in torrent_info.trackers:
+                    tracker_set.add(tracker)
+        return ResponseSuccessModel(message="查询成功", data=list(tracker_set))
