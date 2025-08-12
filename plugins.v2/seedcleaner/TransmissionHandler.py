@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import List, Dict, Optional, Union, Literal
 from urllib.parse import urlparse
 
-from transmission_rpc import Client, Torrent, Status
+from transmission_rpc import Client, Torrent
 from app.plugins.seedcleaner.DefinedConsts import TorrentStatus
 from app.log import logger
 from app.plugins.seedcleaner.DataModel import TorrentModel
