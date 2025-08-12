@@ -26,7 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-    plugin_version = "1.5.0"
+    plugin_version = "1.5.1"
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
@@ -415,15 +415,15 @@ class SeedCleaner(_PluginBase):
                 unique_torrents[info_hash] = record
         return unique_torrents
 
-    def _is_name_match(self, name: str, keyword: str) -> bool:
+    def _is_match_by_regex(self, father_str: str, keyword: str) -> bool:
         """
         使用正则表达式判断 name 是否匹配 keyword
-        :param name: 种子名称
-        :param keyword: 正则表达式字符串
+        :param father_str: 原字符串
+        :param keyword: 正则表达式
         :return: 是否匹配成功
         """
         try:
-            return re.search(keyword, name) is not None
+            return re.search(keyword, father_str) is not None
         except re.error:
             return False
 
@@ -444,7 +444,7 @@ class SeedCleaner(_PluginBase):
             # 新增：名称正则匹配过滤
             if search_info.name:
                 # logger.info(f"使用正则表达式匹配种子名称: {search_info.name}")
-                name_match = self._is_name_match(torrent_info.name, search_info.name)
+                name_match = self._is_match_by_regex(torrent_info.name, search_info.name)
                 if not name_match and key in res_dict:
                     res_dict.pop(key, None)
 
@@ -461,9 +461,10 @@ class SeedCleaner(_PluginBase):
                 tracker_list = search_info.trackerInput.split(";")
                 if not self._is_tracer_match(torrent_info, tracker_list) and key in res_dict.keys():
                     res_dict.pop(key, None)
-            # 路径左匹配，过滤
+            # 路径正则匹配，过滤
             if search_info.filter.path and key in res_dict.keys():
-                if not str(Path(res_dict[key].save_path) / res_dict[key].name).startswith(search_info.filter.path):
+                # 不匹配就删除
+                if not self._is_match_by_regex(str(res_dict[key].save_path), search_info.filter.path):
                     res_dict.pop(key, None)
             # 下载器名称，过滤
             if search_info.filter.client_name and key in res_dict.keys():
