@@ -1,73 +1,73 @@
 /* 覆盖vuetify样式 */
-.label-text[data-v-98e92630] {
+.label-text[data-v-554f2a73] {
   font-size: 0.9rem !important;
   line-height: 1.667;
   letter-spacing: 0.0333333333em !important;
   font-family: "Roboto", sans-serif;
   text-transform: none !important;
 }
-.bg-primary-lighten-5[data-v-98e92630] {
+.bg-primary-lighten-5[data-v-554f2a73] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-98e92630] {
+.border[data-v-554f2a73] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle-2[data-v-98e92630] {
+.text-subtitle-2[data-v-554f2a73] {
   font-size: 0.9rem !important;
   font-weight: 500;
   margin-bottom: 2px;
 }
-.transition-button[data-v-98e92630] {
+.transition-button[data-v-554f2a73] {
   transition: transform 0.3s ease;
 }
-.rotate-180[data-v-98e92630] {
+.rotate-180[data-v-554f2a73] {
   transform: rotate(180deg);
 }
-.size-column[data-v-7b3e9abc] {
+.size-column[data-v-4c8cf3d7] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
 .name-column {
-&[data-v-7b3e9abc] {
+&[data-v-4c8cf3d7] {
   width: 40rem !important;
   max-width: 40rem !important;
   }
-& .name-text[data-v-7b3e9abc]{
+& .name-text[data-v-4c8cf3d7]{
     margin-left: 8px;
     max-width: 35rem;
 }
 }
 /* 覆盖vuetify样式 */
-.size-column[data-v-4ef956ae] {
+.size-column[data-v-6a5d0e37] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
-.name-column[data-v-4ef956ae] {
+.name-column[data-v-6a5d0e37] {
   width: 40rem !important;
   max-width: 40rem !important;
 }
-.name-column .name-text[data-v-4ef956ae] {
+.name-column .name-text[data-v-6a5d0e37] {
   margin-left: 8px;
   max-width: 35rem;
 }/* 覆盖vuetify样式 */
-.plugin-page[data-v-d84f82d6] {
+.plugin-page[data-v-64113703] {
   margin: 0 auto;
   padding: 0.5rem;
 }
-.bg-primary-lighten-5[data-v-d84f82d6] {
+.bg-primary-lighten-5[data-v-64113703] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-d84f82d6] {
+.border[data-v-64113703] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle[data-v-d84f82d6] {
+.text-subtitle[data-v-64113703] {
   font-weight: 500;
   margin-bottom: 2px;
 }
-.text-subtitle-1[data-v-d84f82d6] {
+.text-subtitle-1[data-v-64113703] {
   font-size: 1.1rem !important;
 }
-.text-subtitle-2[data-v-d84f82d6] {
+.text-subtitle-2[data-v-64113703] {
   font-size: 0.9rem !important;
   font-weight: 500;
   margin-bottom: 2px;
