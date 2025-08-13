@@ -700,6 +700,8 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
     const isShowFilterTag = (value) => {
       if (value instanceof Array && value.length === 2) {
         return value[0] !== null && value[1] !== null && value[0] !== "" && value[1] !== "";
+      } else if (value instanceof Number) {
+        return value !== 0;
       } else if (value !== null && value !== "") {
         return true;
       }
@@ -1360,7 +1362,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-5252ff6f"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-a6b48d81"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
