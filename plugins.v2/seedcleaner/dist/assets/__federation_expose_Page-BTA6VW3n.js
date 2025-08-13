@@ -1359,11 +1359,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-<<<<<<<< HEAD:plugins.v2/seedcleaner/dist/assets/__federation_expose_Page-BTA6VW3n.js
 const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-4c8cf3d7"]]);
-========
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-fcc1f2a0"]]);
->>>>>>>> 407fed592d029922aea7c43b899e45b44d4c99cf:plugins.v2/seedcleaner/dist/assets/__federation_expose_Page-BWgtyUAD.js
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -1839,10 +1835,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       let url = `/plugin/${PLUGIN_ID}/tracker-list`;
       try {
         const res = await props.api.get(url);
-<<<<<<<< HEAD:plugins.v2/seedcleaner/dist/assets/__federation_expose_Page-BTA6VW3n.js
-========
-        console.log("downloadTracker=>>", res);
->>>>>>>> 407fed592d029922aea7c43b899e45b44d4c99cf:plugins.v2/seedcleaner/dist/assets/__federation_expose_Page-BWgtyUAD.js
         const tracker_list = res.data;
         if (tracker_list && tracker_list.length > 0) {
           const fileContent = tracker_list.join("\n");
@@ -2177,10 +2169,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-<<<<<<<< HEAD:plugins.v2/seedcleaner/dist/assets/__federation_expose_Page-BTA6VW3n.js
 const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-64113703"]]);
-========
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3d2ae210"]]);
->>>>>>>> 407fed592d029922aea7c43b899e45b44d4c99cf:plugins.v2/seedcleaner/dist/assets/__federation_expose_Page-BWgtyUAD.js
 
 export { PageComponent as default };
