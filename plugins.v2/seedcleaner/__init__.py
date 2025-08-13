@@ -26,11 +26,7 @@ class SeedCleaner(_PluginBase):
     # 插件图标
     plugin_icon = "delete.png"
     # 插件版本
-<<<<<<< HEAD
     plugin_version = "1.5.3"
-=======
-    plugin_version = "1.5.2"
->>>>>>> 407fed592d029922aea7c43b899e45b44d4c99cf
     # 插件作者
     plugin_author = "weni09"
     # 作者主页
