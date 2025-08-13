@@ -555,7 +555,8 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
         client_name: "",
         client: "",
         seeds_limit: [null, null],
-        size_limit: [null, null]
+        size_limit: [null, null],
+        live_time: 0
       },
       currentFilterValues: ["path"]
     });
@@ -1359,7 +1360,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-4c8cf3d7"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-5252ff6f"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -1702,7 +1703,8 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
           client_name: "",
           client: "",
           seeds_limit: [null, null],
-          size_limit: [null, null]
+          size_limit: [null, null],
+          live_time: 0
         }
       },
       snackbar: {
@@ -2169,6 +2171,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-64113703"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-165fa974"]]);
 
 export { PageComponent as default };
