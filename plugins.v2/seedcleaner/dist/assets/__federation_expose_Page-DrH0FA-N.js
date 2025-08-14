@@ -1879,6 +1879,8 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       state.scanParams.filter.client = filter.client || "";
       state.scanParams.filter.seeds_limit = filter.seeds_limit || [];
       state.scanParams.filter.size_limit = filter.size_limit || [];
+      state.scanParams.filter.size_limit = filter.size_limit || [];
+      state.scanParams.filter.live_time = filter.live_time || 0;
       startScan(false, false, false, true);
     };
     const downloadTracker = async () => {
@@ -2219,6 +2221,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-165fa974"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-26b44899"]]);
 
 export { PageComponent as default };

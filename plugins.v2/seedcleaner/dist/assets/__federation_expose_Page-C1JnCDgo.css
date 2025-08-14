@@ -50,24 +50,24 @@
   margin-left: 8px;
   max-width: 35rem;
 }/* 覆盖vuetify样式 */
-.plugin-page[data-v-165fa974] {
+.plugin-page[data-v-26b44899] {
   margin: 0 auto;
   padding: 0.5rem;
 }
-.bg-primary-lighten-5[data-v-165fa974] {
+.bg-primary-lighten-5[data-v-26b44899] {
   background-color: rgba(var(--v-theme-primary), 0.07);
 }
-.border[data-v-165fa974] {
+.border[data-v-26b44899] {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.text-subtitle[data-v-165fa974] {
+.text-subtitle[data-v-26b44899] {
   font-weight: 500;
   margin-bottom: 2px;
 }
-.text-subtitle-1[data-v-165fa974] {
+.text-subtitle-1[data-v-26b44899] {
   font-size: 1.1rem !important;
 }
-.text-subtitle-2[data-v-165fa974] {
+.text-subtitle-2[data-v-26b44899] {
   font-size: 0.9rem !important;
   font-weight: 500;
   margin-bottom: 2px;
