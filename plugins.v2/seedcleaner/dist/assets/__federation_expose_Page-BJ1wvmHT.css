@@ -23,16 +23,16 @@
 .rotate-180[data-v-554f2a73] {
   transform: rotate(180deg);
 }
-.size-column[data-v-489801d8] {
+.size-column[data-v-58ce5e3a] {
   width: 7.5rem !important;
   max-width: 7.5rem !important;
 }
 .name-column {
-&[data-v-489801d8] {
+&[data-v-58ce5e3a] {
   width: 40rem !important;
   max-width: 40rem !important;
   }
-& .name-text[data-v-489801d8]{
+& .name-text[data-v-58ce5e3a]{
     margin-left: 8px;
     max-width: 35rem;
 }

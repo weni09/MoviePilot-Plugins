@@ -544,5 +544,62 @@ const mapTrackers = (trackers) => {
     return tracker;
   });
 };
+const getStrUnit = (value, unit) => {
+  if (value != 0) {
+    return value.toFixed(0) + unit;
+  } else {
+    return "";
+  }
+};
+function formatTimeSince(_targetTime) {
+  let targetTime;
+  if (typeof _targetTime === "string") {
+    targetTime = new Date(_targetTime);
+  } else {
+    targetTime = _targetTime;
+  }
+  const now = /* @__PURE__ */ new Date();
+  const diffMs = now.getTime() - targetTime.getTime();
+  if (diffMs < 0) {
+    return "目标时间在未来";
+  }
+  const seconds = Math.floor(diffMs / 1e3);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const targetYear = targetTime.getFullYear();
+  const targetMonth = targetTime.getMonth();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  let months = (currentYear - targetYear) * 12 + (currentMonth - targetMonth);
+  if (now.getDate() < targetTime.getDate()) {
+    months--;
+  }
+  const years = Math.floor(months / 12);
+  if (seconds < 60) {
+    return `${seconds}秒`;
+  } else if (minutes < 60) {
+    return `${minutes}分钟`;
+  } else if (hours < 24) {
+    const remainingMinutes = minutes % 60;
+    return `${getStrUnit(hours, "小时")}${getStrUnit(remainingMinutes, "分钟")}`;
+  } else if (days < 7) {
+    const remainingHours = hours % 24;
+    return `${getStrUnit(days, "天")}${getStrUnit(remainingHours, "小时")}`;
+  } else if (months < 1) {
+    const remainingDays = days % 7;
+    return `${getStrUnit(weeks, "周")}${getStrUnit(remainingDays, "天")}`;
+  } else if (years < 1) {
+    const remainingWeeks = Math.floor(days % 30 / 7);
+    const remainingDays = days % 7;
+    return `${getStrUnit(months, "月")}${getStrUnit(remainingWeeks, "周")}${getStrUnit(remainingDays, "天")}`;
+  } else {
+    const remainingMonths = months % 12;
+    const remainingWeeks = Math.floor(days % 365 / 30 / 7);
+    const remainingDays = days % 7;
+    return `${getStrUnit(years, "年")}${getStrUnit(remainingMonths, "月")}${getStrUnit(remainingWeeks, "周")}${getStrUnit(remainingDays, "天")}`;
+  }
+}
 
-export { ALL as A, ONLY_TORRENT as O, PLUGIN_ID as P, copyPath as c, formatBytes as f, mapTrackers as m };
+export { ALL as A, ONLY_TORRENT as O, PLUGIN_ID as P, formatTimeSince as a, copyPath as c, formatBytes as f, mapTrackers as m };
