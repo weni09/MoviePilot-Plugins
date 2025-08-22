@@ -824,7 +824,10 @@ const _hoisted_2$4 = { class: "font-weight-medium" };
 const _hoisted_3$4 = { class: "move-buttons" };
 const _hoisted_4$4 = { class: "d-flex radio-styled" };
 const _hoisted_5$4 = { class: "px-3 py-2 text--secondary" };
-const _hoisted_6$4 = { class: "text-caption d-flex align-center text-pink justify-end px-3" };
+const _hoisted_6$4 = {
+  class: "text-caption d-flex align-center justify-end px-3",
+  style: { "color": "#E91E63" }
+};
 const {reactive: reactive$3,ref: ref$2} = await importShared('vue');
 
 const {useDisplay: useDisplay$2} = await importShared('vuetify');
@@ -1162,7 +1165,7 @@ const _sfc_main$4 = /* @__PURE__ */ _defineComponent$4({
   }
 });
 
-const SortDialog = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-bac009e4"]]);
+const SortDialog = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-229113c2"]]);
 
 const {defineComponent:_defineComponent$3} = await importShared('vue');
 
@@ -3156,7 +3159,7 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
                             _: 1
                           }, 8, ["size", "icon", "disabled"]),
                           _createVNode(_component_v_btn, {
-                            color: "pink",
+                            color: "#E91E63",
                             variant: "outlined",
                             size: _unref(smAndDown) ? "x-small" : "small",
                             icon: _unref(smAndDown),
@@ -3272,6 +3275,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-cc6b4edc"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-ac7d2e23"]]);
 
 export { PageComponent as default };
