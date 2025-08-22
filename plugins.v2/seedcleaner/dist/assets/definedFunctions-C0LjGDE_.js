@@ -601,5 +601,28 @@ function formatTimeSince(_targetTime) {
     return `${getStrUnit(years, "年")}${getStrUnit(remainingMonths, "月")}${getStrUnit(remainingWeeks, "周")}${getStrUnit(remainingDays, "天")}`;
   }
 }
+const getStatusColor = (status) => {
+  let error_status = ["缺失源文件", "错误", "已停止", "未知"];
+  if (error_status.includes(status)) {
+    return "error";
+  } else {
+    return "success";
+  }
+};
+const availableColors = ["primary", "pink", "amber", "light-blue", "success", "indigo", "info", "warning", "red", "teal"];
+const getColorByString = (strs) => {
+  let strsArray = strs.sort();
+  let _strs = strsArray.join("");
+  let hash = 0;
+  for (let i = 0; i < _strs.length; i++) {
+    hash = _strs.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash % availableColors.length);
+  return availableColors[index];
+};
+const getRandomColor = (num) => {
+  const index = Math.floor(num % availableColors.length);
+  return availableColors[index];
+};
 
-export { ALL as A, ONLY_TORRENT as O, PLUGIN_ID as P, formatTimeSince as a, copyPath as c, formatBytes as f, mapTrackers as m };
+export { ALL as A, ONLY_TORRENT as O, PLUGIN_ID as P, getStatusColor as a, getColorByString as b, formatTimeSince as c, copyPath as d, formatBytes as f, getRandomColor as g, mapTrackers as m };
