@@ -1449,7 +1449,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                           _createElementVNode$3("div", _hoisted_17$2, [
                             _createVNode$3(_component_v_icon, {
                               size: "14",
-                              color: "cyan",
+                              color: "#00BCD4",
                               class: "mr-1"
                             }, {
                               default: _withCtx$3(() => _cache[7] || (_cache[7] = [
@@ -1466,7 +1466,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                           _createElementVNode$3("div", _hoisted_19$1, [
                             _createVNode$3(_component_v_icon, {
                               size: "14",
-                              color: "teal",
+                              color: "#009688",
                               class: "mr-1"
                             }, {
                               default: _withCtx$3(() => _cache[8] || (_cache[8] = [
@@ -1508,7 +1508,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
   }
 });
 
-const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-a6e4f2ed"]]);
+const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-9c322e5d"]]);
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
