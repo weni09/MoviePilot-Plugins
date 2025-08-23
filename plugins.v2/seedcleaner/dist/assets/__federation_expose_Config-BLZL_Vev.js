@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
-import { P as PLUGIN_ID } from './definedFunctions-C0LjGDE_.js';
+import { P as PLUGIN_ID } from './definedFunctions-D7xVftLV.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
 
 const {defineComponent:_defineComponent} = await importShared('vue');

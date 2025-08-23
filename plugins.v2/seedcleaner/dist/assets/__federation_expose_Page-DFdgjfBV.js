@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import-JrT3xvdd.js';
 import { _ as _export_sfc } from './_plugin-vue_export-helper-pcqpp-6-.js';
-import { g as getRandomColor, f as formatBytes, a as getStatusColor, b as getColorByString, m as mapTrackers, c as formatTimeSince, d as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-C0LjGDE_.js';
+import { g as getRandomColor, f as formatBytes, a as getStatusColor, b as getColorByString, m as mapTrackers, c as formatTimeSince, d as copyPath, O as ONLY_TORRENT, A as ALL, P as PLUGIN_ID } from './definedFunctions-D7xVftLV.js';
 
 const {unref:_unref$5,resolveComponent:_resolveComponent$6,createVNode:_createVNode$6,createElementVNode:_createElementVNode$6,normalizeClass:_normalizeClass$5,withCtx:_withCtx$6,mergeProps:_mergeProps$1,openBlock:_openBlock$6,createElementBlock:_createElementBlock$6} = await importShared('vue');
 
@@ -1169,13 +1169,13 @@ const SortDialog = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data
 
 const {defineComponent:_defineComponent$3} = await importShared('vue');
 
-const {renderList:_renderList$2,Fragment:_Fragment$3,openBlock:_openBlock$3,createElementBlock:_createElementBlock$3,resolveComponent:_resolveComponent$3,withModifiers:_withModifiers$2,createVNode:_createVNode$3,withCtx:_withCtx$3,toDisplayString:_toDisplayString$3,createElementVNode:_createElementVNode$3,createTextVNode:_createTextVNode$3,createBlock:_createBlock$3,createCommentVNode:_createCommentVNode$3,unref:_unref$3,normalizeClass:_normalizeClass$3} = await importShared('vue');
+const {renderList:_renderList$2,Fragment:_Fragment$3,openBlock:_openBlock$3,createElementBlock:_createElementBlock$3,resolveComponent:_resolveComponent$3,withModifiers:_withModifiers$3,createVNode:_createVNode$3,withCtx:_withCtx$3,toDisplayString:_toDisplayString$3,createElementVNode:_createElementVNode$3,createTextVNode:_createTextVNode$3,createBlock:_createBlock$3,createCommentVNode:_createCommentVNode$3,unref:_unref$3,normalizeClass:_normalizeClass$3} = await importShared('vue');
 
 const _hoisted_1$3 = { class: "card-header-horizontal pa-2" };
 const _hoisted_2$3 = { class: "d-flex align-center justify-space-between mb-2" };
 const _hoisted_3$3 = { class: "file-name-horizontal text-body-2" };
-const _hoisted_4$3 = { class: "card-content-horizontal pa-2 pt-0" };
-const _hoisted_5$3 = { class: "d-flex align-center flex-wrap gap-1 mb-1 font-weight-bold" };
+const _hoisted_4$3 = { class: "card-content-horizontal pa-1 pt-0" };
+const _hoisted_5$3 = { class: "d-flex align-center flex-wrap mb-1 font-weight-bold status-labels" };
 const _hoisted_6$3 = { class: "info-grid-horizontal" };
 const _hoisted_7$3 = { class: "info-item" };
 const _hoisted_8$3 = { class: "text-caption" };
@@ -1269,13 +1269,13 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
       return _openBlock$3(), _createElementBlock$3("div", null, [
         !props.loading && props.scanRes.combinedList.length > 0 ? (_openBlock$3(), _createBlock$3(_component_v_row, {
           key: 0,
-          class: "pa-2",
+          class: _normalizeClass$3(_ctx.pa - 2),
           "no-gutters": ""
         }, {
           default: _withCtx$3(() => [
             (_openBlock$3(true), _createElementBlock$3(_Fragment$3, null, _renderList$2(props.scanRes.combinedList, (item, index) => {
               return _openBlock$3(), _createBlock$3(_component_v_col, {
-                key: item.hash || item.path,
+                key: item.hash,
                 cols: "12",
                 sm: "6",
                 md: "4",
@@ -1312,7 +1312,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                                     "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => selectedScansChange($event)),
                                     value: item,
                                     "hide-details": "",
-                                    onClick: _cache[1] || (_cache[1] = _withModifiers$2(() => {
+                                    onClick: _cache[1] || (_cache[1] = _withModifiers$3(() => {
                                     }, ["stop"])),
                                     size: "x-small"
                                   }, null, 8, ["model-value", "value"])
@@ -1337,7 +1337,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                                     size: "x-small",
                                     variant: "text",
                                     color: "primary",
-                                    onClick: _withModifiers$2(($event) => _copyPath(item.path), ["stop"]),
+                                    onClick: _withModifiers$3(($event) => _copyPath(item.path), ["stop"]),
                                     icon: "mdi-content-copy"
                                   }, null, 8, ["onClick"])
                                 ]),
@@ -1352,10 +1352,9 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                         _createElementVNode$3("div", _hoisted_5$3, [
                           item.hasOwnProperty("client") && item.client ? (_openBlock$3(), _createBlock$3(_component_v_chip, {
                             key: 0,
-                            color: item.hasOwnProperty("client") && item.client === "transmission" ? "pink" : "info",
+                            color: item.hasOwnProperty("client") && item.client === "transmission" ? "#E91E63" : "info",
                             size: "x-small",
-                            "text-color": "white",
-                            class: "mr-1"
+                            "text-color": "white"
                           }, {
                             default: _withCtx$3(() => [
                               _createTextVNode$3(_toDisplayString$3(item.client === "transmission" ? "TR" : "QB"), 1)
@@ -1365,7 +1364,8 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                           _createVNode$3(_component_v_chip, {
                             color: _unref$3(getRandomColor)(index),
                             size: "x-small",
-                            "text-color": "white"
+                            "text-color": "white",
+                            class: "ml-1"
                           }, {
                             default: _withCtx$3(() => [
                               _createTextVNode$3(_toDisplayString$3(item.hash.toUpperCase()), 1)
@@ -1500,17 +1500,17 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
             }), 128))
           ]),
           _: 1
-        })) : _createCommentVNode$3("", true)
+        }, 8, ["class"])) : _createCommentVNode$3("", true)
       ]);
     };
   }
 });
 
-const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-a6558a45"]]);
+const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-a391872d"]]);
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
-const {unref:_unref$2,resolveComponent:_resolveComponent$2,createVNode:_createVNode$2,createTextVNode:_createTextVNode$2,withCtx:_withCtx$2,toDisplayString:_toDisplayString$2,openBlock:_openBlock$2,createBlock:_createBlock$2,createCommentVNode:_createCommentVNode$2,normalizeClass:_normalizeClass$2,createElementVNode:_createElementVNode$2,normalizeStyle:_normalizeStyle,createElementBlock:_createElementBlock$2,renderList:_renderList$1,Fragment:_Fragment$2,mergeProps:_mergeProps} = await importShared('vue');
+const {unref:_unref$2,resolveComponent:_resolveComponent$2,createVNode:_createVNode$2,createTextVNode:_createTextVNode$2,withCtx:_withCtx$2,toDisplayString:_toDisplayString$2,openBlock:_openBlock$2,createBlock:_createBlock$2,createCommentVNode:_createCommentVNode$2,normalizeClass:_normalizeClass$2,createElementVNode:_createElementVNode$2,normalizeStyle:_normalizeStyle,withModifiers:_withModifiers$2,createElementBlock:_createElementBlock$2,renderList:_renderList$1,Fragment:_Fragment$2,mergeProps:_mergeProps} = await importShared('vue');
 
 const _hoisted_1$2 = {
   key: 1,
@@ -1731,15 +1731,16 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       if (state.currentPage === void 0 || state.currentPage === null) {
         return;
       }
-      if (!state.currentPage) {
+      let currentPageNum = parseInt(state.currentPage);
+      if (!currentPageNum) {
         showNotification("请输入有效的页码", "error");
         return;
       }
-      if (state.currentPage < 1 || state.currentPage > totalPages.value) {
+      if (currentPageNum < 1 || currentPageNum > totalPages.value) {
         showNotification("页码超出范围", "error");
         return;
       }
-      handlePageChange(state.currentPage);
+      handlePageChange(currentPageNum);
     };
     const toggleSelectAll = () => {
       const currentlyAllSelected = props.scanRes.combinedList.every((item) => isItemSelected(item));
@@ -1847,7 +1848,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
       const _component_v_spacer = _resolveComponent$2("v-spacer");
       const _component_v_select = _resolveComponent$2("v-select");
       const _component_v_pagination = _resolveComponent$2("v-pagination");
-      const _component_v_number_input = _resolveComponent$2("v-number-input");
+      const _component_v_text_field = _resolveComponent$2("v-text-field");
       const _component_v_card_title = _resolveComponent$2("v-card-title");
       const _component_v_tooltip = _resolveComponent$2("v-tooltip");
       const _component_v_skeleton_loader = _resolveComponent$2("v-skeleton-loader");
@@ -1877,7 +1878,6 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 totalComputed.value != "" ? (_openBlock$2(), _createBlock$2(_component_v_chip, {
                   key: 0,
                   size: _unref$2(smAndDown) ? "x-small" : "small",
-                  class: "mr-2 ml-3",
                   color: "info",
                   variant: "flat"
                 }, {
@@ -1886,11 +1886,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                       size: "14",
                       class: "mr-1"
                     }, {
-                      default: _withCtx$2(() => _cache[7] || (_cache[7] = [
+                      default: _withCtx$2(() => _cache[8] || (_cache[8] = [
                         _createTextVNode$2("mdi-database")
                       ])),
                       _: 1,
-                      __: [7]
+                      __: [8]
                     }),
                     _createTextVNode$2(" " + _toDisplayString$2(totalComputed.value), 1)
                   ]),
@@ -1907,11 +1907,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                       size: "14",
                       class: "mr-1"
                     }, {
-                      default: _withCtx$2(() => _cache[8] || (_cache[8] = [
+                      default: _withCtx$2(() => _cache[9] || (_cache[9] = [
                         _createTextVNode$2("mdi-checkbox-multiple-marked")
                       ])),
                       _: 1,
-                      __: [8]
+                      __: [9]
                     }),
                     _createTextVNode$2(" " + _toDisplayString$2(`已选择 ${state.selectedScans.length}项: ${selectedScansSize.value}`), 1)
                   ]),
@@ -1930,7 +1930,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   variant: "underlined",
                   density: "compact",
                   size: _unref$2(smAndDown) ? "x-small" : "small",
-                  style: _normalizeStyle(_unref$2(smAndDown) ? "max-width: 75px;" : "max-width: 120px;")
+                  style: _normalizeStyle(_unref$2(smAndDown) ? "max-width: 63px;" : "max-width: 120px;")
                 }, null, 8, ["modelValue", "size", "style"]),
                 _createVNode$2(_component_v_pagination, {
                   modelValue: __props.scanParams.page,
@@ -1950,51 +1950,49 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   elevation: 5
                 }, null, 8, ["modelValue", "length", "density", "total-visible", "class"]),
                 _createElementVNode$2("div", _hoisted_2$2, [
-                  _createVNode$2(_component_v_number_input, {
-                    class: "ml-3",
-                    "control-variant": "hidden",
+                  _createVNode$2(_component_v_text_field, {
+                    class: _normalizeClass$2(_unref$2(smAndDown) ? "ml-1" : "ml-3"),
                     variant: "underlined",
                     density: "compact",
                     "hide-details": "",
                     size: _unref$2(smAndDown) ? "x-small" : "small",
-                    placeholder: `共 ${totalPages.value} 页`,
-                    "max-width": 140,
-                    clearable: "",
+                    label: `共 ${totalPages.value} 页`,
+                    "max-width": _unref$2(smAndDown) ? 100 : 130,
                     modelValue: state.currentPage,
-                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => state.currentPage = $event)
+                    "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.currentPage = $event)
                   }, {
                     "prepend-inner": _withCtx$2(() => [
-                      _createVNode$2(_component_v_chip, {
-                        color: "grey-darken-3",
-                        size: "x-small",
-                        variant: "elevated",
-                        class: "go-page-prepend",
-                        onClick: goToPage
-                      }, {
-                        default: _withCtx$2(() => _cache[9] || (_cache[9] = [
-                          _createTextVNode$2("去")
-                        ])),
-                        _: 1,
-                        __: [9]
-                      })
-                    ]),
-                    "append-inner": _withCtx$2(() => [
-                      _createVNode$2(_component_v_chip, {
-                        color: "grey-darken-3 cursor-pointer",
-                        size: "x-small",
-                        variant: "elevated",
-                        class: "go-page-append",
-                        onClick: goToPage
+                      _createVNode$2(_component_v_icon, {
+                        size: "20",
+                        class: "mr-1 cursor-pointer go-page-append",
+                        onClick: goToPage,
+                        color: "primary",
+                        title: "跳转到"
                       }, {
                         default: _withCtx$2(() => _cache[10] || (_cache[10] = [
-                          _createTextVNode$2("页")
+                          _createTextVNode$2("mdi-arrow-right-bold-circle")
                         ])),
                         _: 1,
                         __: [10]
                       })
                     ]),
+                    "append-inner": _withCtx$2(() => [
+                      _createVNode$2(_component_v_icon, {
+                        size: "20",
+                        class: "mr-1 cursor-pointer go-page-append",
+                        onClick: _cache[2] || (_cache[2] = _withModifiers$2(($event) => state.currentPage = void 0, ["stop"])),
+                        color: "#009688",
+                        title: "清除"
+                      }, {
+                        default: _withCtx$2(() => _cache[11] || (_cache[11] = [
+                          _createTextVNode$2("mdi-close-circle")
+                        ])),
+                        _: 1,
+                        __: [11]
+                      })
+                    ]),
                     _: 1
-                  }, 8, ["size", "placeholder", "modelValue"])
+                  }, 8, ["class", "size", "label", "max-width", "modelValue"])
                 ])
               ])) : _createCommentVNode$2("", true)
             ]),
@@ -2047,7 +2045,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                 !props.loading && props.scanRes.combinedList.length > 0 ? (_openBlock$2(), _createBlock$2(DataListCard, {
                   key: 0,
                   selectedScans: state.selectedScans,
-                  "onUpdate:selectedScans": _cache[3] || (_cache[3] = ($event) => state.selectedScans = $event),
+                  "onUpdate:selectedScans": _cache[4] || (_cache[4] = ($event) => state.selectedScans = $event),
                   scanRes: props.scanRes,
                   loading: props.loading,
                   onCopyPath: _copyPath,
@@ -2055,8 +2053,8 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   ref: dataListCardRef
                 }, null, 8, ["selectedScans", "scanRes", "loading"])) : !props.loading && props.scanRes.combinedList.length === 0 ? (_openBlock$2(), _createElementBlock$2("div", _hoisted_7$2, [
                   _createVNode$2(_component_v_icon, { icon: "mdi-database-off" }),
-                  _cache[11] || (_cache[11] = _createElementVNode$2("div", { class: "text-h6 mb-2" }, "暂无数据", -1)),
-                  _cache[12] || (_cache[12] = _createElementVNode$2("div", { class: "text-body-2" }, "当前筛选条件下没有找到匹配的种子或文件", -1))
+                  _cache[12] || (_cache[12] = _createElementVNode$2("div", { class: "text-h6 mb-2" }, "暂无数据", -1)),
+                  _cache[13] || (_cache[13] = _createElementVNode$2("div", { class: "text-body-2" }, "当前筛选条件下没有找到匹配的种子或文件", -1))
                 ])) : (_openBlock$2(), _createElementBlock$2("div", _hoisted_8$2, [
                   _createVNode$2(_component_v_skeleton_loader, { type: "card@8" })
                 ]))
@@ -2066,7 +2064,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
           }),
           _createVNode$2(_component_v_snackbar, {
             modelValue: state.snackbar.show,
-            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => state.snackbar.show = $event),
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => state.snackbar.show = $event),
             timeout: 3e3,
             color: state.snackbar.color,
             location: state.snackbar.location
@@ -2078,7 +2076,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
           }, 8, ["modelValue", "color", "location"]),
           _createVNode$2(FilterDialog, {
             dialogShow: state.filterDialog,
-            "onUpdate:dialogShow": _cache[5] || (_cache[5] = ($event) => state.filterDialog = $event),
+            "onUpdate:dialogShow": _cache[6] || (_cache[6] = ($event) => state.filterDialog = $event),
             filter: state.filter,
             initialConfig: props.initialConfig,
             onFilterChange: filterChange,
@@ -2086,7 +2084,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
           }, null, 8, ["dialogShow", "filter", "initialConfig"]),
           _createVNode$2(SortDialog, {
             dialogShow: state.sortDialog,
-            "onUpdate:dialogShow": _cache[6] || (_cache[6] = ($event) => state.sortDialog = $event),
+            "onUpdate:dialogShow": _cache[7] || (_cache[7] = ($event) => state.sortDialog = $event),
             onApplySort: applySort
           }, null, 8, ["dialogShow"])
         ]),
@@ -2096,7 +2094,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-fa49b221"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-a6f3cbc6"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
@@ -2678,7 +2676,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
       scanResultsRef.value.clearSelectedScans();
     };
     const startScan = (isPageChange = false, isPageSizeChange = false, isSortChanged = false, filterChanged = false) => {
-      console.log("开始扫描", `扫描参数: ${toolbarRef.value.state},isPageChange: ${isPageChange}`);
       state.scaning = true;
       initData();
       if (!isPageChange) {
@@ -3275,6 +3272,6 @@ const _sfc_main = /* @__PURE__ */ _defineComponent({
   }
 });
 
-const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-ac7d2e23"]]);
+const PageComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-ccbe3425"]]);
 
 export { PageComponent as default };

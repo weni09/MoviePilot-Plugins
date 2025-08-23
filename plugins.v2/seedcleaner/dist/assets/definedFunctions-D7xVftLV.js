@@ -609,7 +609,7 @@ const getStatusColor = (status) => {
     return "success";
   }
 };
-const availableColors = ["primary", "pink", "amber", "light-blue", "success", "indigo", "info", "warning", "red", "teal"];
+const availableColors = ["primary", "#E91E63", "#FFC107", "#03A9F4", "success", "#3F51B5", "info", "warning", "#F44336", "#009688"];
 const getColorByString = (strs) => {
   let strsArray = strs.sort();
   let _strs = strsArray.join("");
