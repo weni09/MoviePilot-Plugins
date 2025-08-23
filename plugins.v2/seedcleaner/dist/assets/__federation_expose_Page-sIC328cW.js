@@ -1171,7 +1171,7 @@ const {defineComponent:_defineComponent$3} = await importShared('vue');
 
 const {renderList:_renderList$2,Fragment:_Fragment$3,openBlock:_openBlock$3,createElementBlock:_createElementBlock$3,resolveComponent:_resolveComponent$3,withModifiers:_withModifiers$3,createVNode:_createVNode$3,withCtx:_withCtx$3,toDisplayString:_toDisplayString$3,createElementVNode:_createElementVNode$3,createTextVNode:_createTextVNode$3,createBlock:_createBlock$3,createCommentVNode:_createCommentVNode$3,unref:_unref$3,normalizeClass:_normalizeClass$3} = await importShared('vue');
 
-const _hoisted_1$3 = { class: "card-header-horizontal pa-2" };
+const _hoisted_1$3 = { class: "card-header-horizontal pa-1" };
 const _hoisted_2$3 = { class: "d-flex align-center justify-space-between mb-2" };
 const _hoisted_3$3 = { class: "file-name-horizontal text-body-2" };
 const _hoisted_4$3 = { class: "card-content-horizontal pa-1 pt-0" };
@@ -1298,7 +1298,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                       _createElementVNode$3("div", _hoisted_1$3, [
                         _createElementVNode$3("div", _hoisted_2$3, [
                           _createVNode$3(_component_v_row, {
-                            class: "d-flex align-center",
+                            class: "d-flex align-center ma-0",
                             gutters: "no-gutters"
                           }, {
                             default: _withCtx$3(() => [
@@ -1314,6 +1314,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                                     "hide-details": "",
                                     onClick: _cache[1] || (_cache[1] = _withModifiers$3(() => {
                                     }, ["stop"])),
+                                    density: "compact",
                                     size: "x-small"
                                   }, null, 8, ["model-value", "value"])
                                 ]),
@@ -1336,6 +1337,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                                   _createVNode$3(_component_v_btn, {
                                     size: "x-small",
                                     variant: "text",
+                                    density: "compact",
                                     color: "primary",
                                     onClick: _withModifiers$3(($event) => _copyPath(item.path), ["stop"]),
                                     icon: "mdi-content-copy"
@@ -1506,7 +1508,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
   }
 });
 
-const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-a391872d"]]);
+const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-a6e4f2ed"]]);
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
@@ -1957,7 +1959,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                     "hide-details": "",
                     size: _unref$2(smAndDown) ? "x-small" : "small",
                     label: `共 ${totalPages.value} 页`,
-                    "max-width": _unref$2(smAndDown) ? 100 : 130,
+                    "max-width": _unref$2(smAndDown) ? 120 : 145,
                     modelValue: state.currentPage,
                     "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => state.currentPage = $event)
                   }, {
@@ -2094,7 +2096,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-a6f3cbc6"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-e00d279d"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
