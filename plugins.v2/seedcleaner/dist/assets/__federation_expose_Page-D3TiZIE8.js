@@ -1356,7 +1356,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                             key: 0,
                             color: item.hasOwnProperty("client") && item.client === "transmission" ? "#E91E63" : "info",
                             size: "x-small",
-                            "text-color": "white"
+                            variant: "tonal"
                           }, {
                             default: _withCtx$3(() => [
                               _createTextVNode$3(_toDisplayString$3(item.client === "transmission" ? "TR" : "QB"), 1)
@@ -1366,8 +1366,8 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
                           _createVNode$3(_component_v_chip, {
                             color: _unref$3(getRandomColor)(index),
                             size: "x-small",
-                            "text-color": "white",
-                            class: "ml-1"
+                            class: "ml-1",
+                            variant: "tonal"
                           }, {
                             default: _withCtx$3(() => [
                               _createTextVNode$3(_toDisplayString$3(item.hash.toUpperCase()), 1)
@@ -1508,7 +1508,7 @@ const _sfc_main$3 = /* @__PURE__ */ _defineComponent$3({
   }
 });
 
-const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-9c322e5d"]]);
+const DataListCard = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-e1a13621"]]);
 
 const {defineComponent:_defineComponent$2} = await importShared('vue');
 
@@ -1946,11 +1946,11 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
                   size: "small",
                   "prev-icon": "mdi-arrow-left-circle",
                   "next-icon": "mdi-arrow-right-circle",
-                  density: _unref$2(smAndDown) ? "compact" : "comfortable",
+                  density: "comfortable",
                   "total-visible": _unref$2(smAndDown) ? 1 : 7,
                   class: _normalizeClass$2([_unref$2(smAndDown) ? "ml-1" : "ml-2"]),
                   elevation: 5
-                }, null, 8, ["modelValue", "length", "density", "total-visible", "class"]),
+                }, null, 8, ["modelValue", "length", "total-visible", "class"]),
                 _createElementVNode$2("div", _hoisted_2$2, [
                   _createVNode$2(_component_v_text_field, {
                     class: _normalizeClass$2(_unref$2(smAndDown) ? "ml-1" : "ml-3"),
@@ -2096,7 +2096,7 @@ const _sfc_main$2 = /* @__PURE__ */ _defineComponent$2({
   }
 });
 
-const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-e00d279d"]]);
+const ScanResults = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-2b21aea7"]]);
 
 const {defineComponent:_defineComponent$1} = await importShared('vue');
 
